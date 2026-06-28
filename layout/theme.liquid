@@ -68,9 +68,12 @@ t4sp-theme t4s-wrapper__{{ settings.general_layout }} rtl_{{ isRTL }} swatch_col
     {{- 'gcc-premium.css' | asset_url | stylesheet_tag -}}
     <script src="{{ 'gcc-premium.js' | asset_url }}" defer="defer"></script>
 
-    {%- comment -%} Preconnect for Arabic Google Fonts {%- endcomment -%}
+    <!-- ZenoHome Premium Assets -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {{ 'zh-premium.css' | asset_url | stylesheet_tag }}
+    {{ 'zh-fonts.css' | asset_url | stylesheet_tag }}
 
     {%- comment -%} Organization JSON-LD {%- endcomment -%}
     <script id="gcc-schema-org" type="text/plain">
@@ -92,7 +95,7 @@ t4sp-theme t4s-wrapper__{{ settings.general_layout }} rtl_{{ isRTL }} swatch_col
 
   </head>
 
-  <body class="template-{{ request.page_type | handle }} {{ class_lazy }}"{% if body_img != blank %} data-bgset="{{ body_img | image_url: width: 1 }}" data-optimumx="2" data-sizes="auto"{% endif -%}>
+  <body class="template-{{ request.page_type | handle }} {{ class_lazy }}"{% if body_img != blank %} data-bgset="{{ body_img | image_url: width: 1 }}" data-optimumx="2" data-sizes="auto"{% endif %}{% if template.name == 'product' %} data-zh-product-handle="{{ product.handle }}" data-zh-product-title="{{ product.title | escape }}" data-zh-product-price="{{ product.price }}"{% endif %}>
     <a class="skip-to-content-link visually-hidden" href="#MainContent">{{ "accessibility.skip_to_text" | t }}</a>
     <div class="t4s-close-overlay t4s-op-0"></div>
 
@@ -148,6 +151,9 @@ t4sp-theme t4s-wrapper__{{ settings.general_layout }} rtl_{{ isRTL }} swatch_col
     {%- endif -%}
 
     {%- render 'render_bottom' -%}
+
+    <script src="{{ 'zh-premium.js' | asset_url }}" defer="defer"></script>
+    {%- render 'zh-cart-drawer' -%}
 
   {%- render "ecom_footer"-%}</body>
 </html>
