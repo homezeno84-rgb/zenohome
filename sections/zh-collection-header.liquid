@@ -1,0 +1,364 @@
+{%- liquid
+  assign banner_height_class = 'zh-coll-banner--' | append: section.settings.banner_height
+  assign has_banner_image = false
+  if collection.image != blank
+    assign has_banner_image = true
+  endif
+  assign product_count = collection.products_count
+-%}
+
+{%- comment -%} ── JSON-LD BREADCRUMB ── {%- endcomment -%}
+{%- if section.settings.show_breadcrumbs -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": {{ shop.name | json }},
+        "item": {{ request.origin | append: routes.root_url | json }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": {{ collection.title | json }},
+        "item": {{ request.origin | append: collection.url | json }}
+      }
+    ]
+  }
+  </script>
+{%- endif -%}
+
+<div class="zh-coll-header" data-zh-collection-header>
+
+  {%- comment -%} ── COLLECTION BANNER ── {%- endcomment -%}
+  {%- if section.settings.show_banner -%}
+    <div
+      class="zh-coll-banner {{ banner_height_class }}"
+      role="img"
+      aria-label="{{ collection.title | escape }}"
+    >
+      {%- if has_banner_image -%}
+        {{
+          collection.image
+          | image_url: width: 1800
+          | image_tag:
+            class: 'zh-coll-banner__img',
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '600, 800, 1000, 1200, 1400, 1800',
+            sizes: '100vw',
+            alt: collection.image.alt | default: collection.title | escape
+        }}
+      {%- else -%}
+        <div class="zh-coll-banner__placeholder" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" width="80" height="80" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+      {%- endif -%}
+
+      <div class="zh-coll-banner__overlay" aria-hidden="true"></div>
+
+      <div class="zh-coll-banner__content">
+        {%- if section.settings.show_breadcrumbs -%}
+          <nav
+            class="zh-coll-banner__breadcrumbs zh-breadcrumbs"
+            aria-label="{{ 'general.breadcrumbs.title' | t | default: 'Breadcrumbs' }}"
+          >
+            <ol class="zh-breadcrumbs__list" role="list">
+              <li class="zh-breadcrumbs__item">
+                <a href="{{ routes.root_url }}" class="zh-breadcrumbs__link">
+                  {{ 'general.breadcrumbs.home' | t | default: 'Home' }}
+                </a>
+                <span class="zh-breadcrumbs__separator" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" aria-hidden="true">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </span>
+              </li>
+              <li class="zh-breadcrumbs__item zh-breadcrumbs__item--current" aria-current="page">
+                <span class="zh-breadcrumbs__current">{{ collection.title }}</span>
+              </li>
+            </ol>
+          </nav>
+        {%- endif -%}
+
+        <h1 class="zh-coll-banner__title">{{ collection.title }}</h1>
+
+        {%- if section.settings.show_product_count -%}
+          <p class="zh-coll-banner__count">
+            {%- if product_count == 1 -%}
+              {{ 'collections.general.items_with_count.one' | t: count: product_count | default: '1 product' }}
+            {%- else -%}
+              {{ 'collections.general.items_with_count.other' | t: count: product_count | default: product_count | append: ' products' }}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- else -%}
+    {%- comment -%} No banner: just breadcrumbs + title inline {%- endcomment -%}
+    <div class="zh-coll-header__simple">
+      {%- if section.settings.show_breadcrumbs -%}
+        <nav
+          class="zh-breadcrumbs"
+          aria-label="{{ 'general.breadcrumbs.title' | t | default: 'Breadcrumbs' }}"
+        >
+          <ol class="zh-breadcrumbs__list" role="list">
+            <li class="zh-breadcrumbs__item">
+              <a href="{{ routes.root_url }}" class="zh-breadcrumbs__link">
+                {{ 'general.breadcrumbs.home' | t | default: 'Home' }}
+              </a>
+              <span class="zh-breadcrumbs__separator" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" aria-hidden="true">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </span>
+            </li>
+            <li class="zh-breadcrumbs__item zh-breadcrumbs__item--current" aria-current="page">
+              <span class="zh-breadcrumbs__current">{{ collection.title }}</span>
+            </li>
+          </ol>
+        </nav>
+      {%- endif -%}
+
+      <h1 class="zh-coll-header__title">{{ collection.title }}</h1>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ── DESCRIPTION ── {%- endcomment -%}
+  {%- if section.settings.show_collection_description and collection.description != blank -%}
+    <div class="zh-coll-desc" data-zh-coll-desc>
+      <div class="zh-coll-desc__text" id="zh-coll-desc-text">
+        {{ collection.description }}
+      </div>
+      <button
+        class="zh-coll-desc__toggle"
+        data-zh-desc-toggle
+        aria-expanded="false"
+        aria-controls="zh-coll-desc-text"
+        type="button"
+      >
+        <span class="zh-coll-desc__toggle-more">
+          {{ 'collections.general.show_more' | t | default: 'Show more' }}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </span>
+        <span class="zh-coll-desc__toggle-less" hidden>
+          {{ 'collections.general.show_less' | t | default: 'Show less' }}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+            <polyline points="18 15 12 9 6 15"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ── TOOLBAR: Sort / Filter / Layout ── {%- endcomment -%}
+  {%- assign show_toolbar = false -%}
+  {%- if section.settings.show_sort or section.settings.show_filter_toggle or section.settings.layout_toggle or section.settings.show_product_count and section.settings.show_banner == false -%}
+    {%- assign show_toolbar = true -%}
+  {%- endif -%}
+
+  {%- if show_toolbar -%}
+    <div class="zh-coll-toolbar" role="toolbar" aria-label="{{ 'collections.general.toolbar' | t | default: 'Collection tools' }}">
+
+      <div class="zh-coll-toolbar__start">
+        {%- comment -%} Filter toggle {%- endcomment -%}
+        {%- if section.settings.show_filter_toggle -%}
+          <button
+            class="zh-coll-toolbar__filter-btn"
+            data-zh-filter-toggle
+            aria-expanded="false"
+            aria-controls="zh-filter-sidebar"
+            type="button"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="16" height="16">
+              <line x1="4" y1="6" x2="20" y2="6"/>
+              <line x1="8" y1="12" x2="20" y2="12"/>
+              <line x1="12" y1="18" x2="20" y2="18"/>
+              <circle cx="4" cy="6" r="1.5" fill="currentColor"/>
+              <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+              <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
+            </svg>
+            <span>{{ 'collections.general.filter' | t | default: 'Filter' }}</span>
+          </button>
+        {%- endif -%}
+
+        {%- comment -%} Product count {%- endcomment -%}
+        {%- if section.settings.show_product_count -%}
+          <p class="zh-coll-toolbar__count" aria-live="polite" aria-atomic="true">
+            {%- if product_count == 1 -%}
+              {{ 'collections.general.showing_count.one' | t: count: product_count | default: 'Showing 1 product' }}
+            {%- else -%}
+              {{ 'collections.general.showing_count.other' | t: count: product_count | default: 'Showing ' | append: product_count | append: ' products' }}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+      </div>
+
+      <div class="zh-coll-toolbar__end">
+
+        {%- comment -%} Sort by {%- endcomment -%}
+        {%- if section.settings.show_sort -%}
+          <div class="zh-coll-toolbar__sort">
+            <label for="zh-sort-by" class="zh-coll-toolbar__sort-label">
+              {{ 'collections.general.sort_by_label' | t | default: 'Sort by:' }}
+            </label>
+            <div class="zh-coll-toolbar__sort-wrap">
+              <select
+                id="zh-sort-by"
+                name="sort_by"
+                class="zh-coll-toolbar__sort-select"
+                aria-label="{{ 'collections.general.sort_by_label' | t | default: 'Sort by' }}"
+                data-zh-sort-select
+              >
+                {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+                {%- for option in collection.sort_options -%}
+                  <option
+                    value="{{ option.value }}"
+                    {% if option.value == current_sort %}selected{% endif %}
+                  >
+                    {{ option.name }}
+                  </option>
+                {%- endfor -%}
+              </select>
+              <svg class="zh-coll-toolbar__sort-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Layout toggle (grid / list) {%- endcomment -%}
+        {%- if section.settings.layout_toggle -%}
+          <div
+            class="zh-coll-toolbar__layout"
+            role="group"
+            aria-label="{{ 'collections.general.layout_toggle' | t | default: 'Product layout' }}"
+          >
+            <button
+              class="zh-coll-toolbar__layout-btn zh-coll-toolbar__layout-btn--grid zh-coll-toolbar__layout-btn--active"
+              data-zh-layout="grid"
+              aria-pressed="true"
+              aria-label="{{ 'collections.general.grid_view' | t | default: 'Grid view' }}"
+              type="button"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="16" height="16">
+                <rect x="3" y="3" width="8" height="8" rx="1"/>
+                <rect x="13" y="3" width="8" height="8" rx="1"/>
+                <rect x="3" y="13" width="8" height="8" rx="1"/>
+                <rect x="13" y="13" width="8" height="8" rx="1"/>
+              </svg>
+            </button>
+            <button
+              class="zh-coll-toolbar__layout-btn zh-coll-toolbar__layout-btn--list"
+              data-zh-layout="list"
+              aria-pressed="false"
+              aria-label="{{ 'collections.general.list_view' | t | default: 'List view' }}"
+              type="button"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="16" height="16">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  {%- endif -%}
+
+</div>
+{%- comment -%} end .zh-coll-header {%- endcomment -%}
+
+{% schema %}
+{
+  "name": "ZH Collection Header",
+  "tag": "div",
+  "class": "zh-coll-header-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_banner",
+      "default": true,
+      "label": "Show collection banner"
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner height",
+      "default": "medium",
+      "options": [
+        { "value": "small",  "label": "Small  (30vh)" },
+        { "value": "medium", "label": "Medium (50vh)" },
+        { "value": "large",  "label": "Large  (70vh)" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "default": true,
+      "label": "Show breadcrumbs"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": true,
+      "label": "Show collection description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "default": true,
+      "label": "Show product count"
+    },
+    {
+      "type": "header",
+      "content": "Toolbar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "default": true,
+      "label": "Show sort dropdown"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter_toggle",
+      "default": true,
+      "label": "Show filter toggle button"
+    },
+    {
+      "type": "checkbox",
+      "id": "layout_toggle",
+      "default": true,
+      "label": "Show grid / list layout toggle"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ZH Collection Header"
+    }
+  ]
+}
+{% endschema %}

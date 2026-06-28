@@ -1,0 +1,465 @@
+{% comment %} ZenoHome – FAQ section with structured data {% endcomment %}
+
+<link rel="stylesheet" href="{{ 'zh-premium.css' | asset_url }}">
+
+{%- liquid
+  assign dir = 'ltr'
+  assign text_align = 'left'
+  assign chevron_side = 'right'
+  if request.locale.iso_code == 'ar'
+    assign dir = 'rtl'
+    assign text_align = 'right'
+    assign chevron_side = 'left'
+  endif
+-%}
+
+<section
+  class="zh-faq zh-faq--{{ section.settings.layout }}"
+  data-zh-faq
+  dir="{{ dir }}"
+  style="
+    background-color: {{ section.settings.background }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="zh-container">
+
+    {%- if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.subtitle != blank -%}
+      <div class="zh-section-header" style="text-align: {{ text_align }};">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="zh-eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      {%- if section.settings.layout == 'two-col' -%}
+
+        {%- assign half = section.blocks.size | divided_by: 2 -%}
+        {%- assign remainder = section.blocks.size | modulo: 2 -%}
+        {%- assign col_one_count = half -%}
+        {%- if remainder > 0 -%}
+          {%- assign col_one_count = half | plus: 1 -%}
+        {%- endif -%}
+
+        <div class="zh-faq-two-col">
+          <div class="zh-faq-col">
+            {%- for block in section.blocks -%}
+              {%- if forloop.index <= col_one_count -%}
+                <div
+                  class="zh-faq-item{% if section.settings.open_first and forloop.first %} is-open{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  {%- if block.settings.category != blank -%}
+                    <p class="zh-faq-category">{{ block.settings.category }}</p>
+                  {%- endif -%}
+                  <button
+                    class="zh-faq-question"
+                    aria-expanded="{% if section.settings.open_first and forloop.first %}true{% else %}false{% endif %}"
+                    type="button"
+                  >
+                    <span class="zh-faq-question-text">{{ block.settings.question }}</span>
+                    <span class="zh-faq-chevron" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </span>
+                  </button>
+                  <div
+                    class="zh-faq-answer"
+                    style="{% if section.settings.open_first and forloop.first %}max-height: 1000px;{% else %}max-height: 0;{% endif %}"
+                  >
+                    <div class="zh-faq-answer-inner">
+                      {{ block.settings.answer }}
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <div class="zh-faq-col">
+            {%- for block in section.blocks -%}
+              {%- if forloop.index > col_one_count -%}
+                <div
+                  class="zh-faq-item"
+                  {{ block.shopify_attributes }}
+                >
+                  {%- if block.settings.category != blank -%}
+                    <p class="zh-faq-category">{{ block.settings.category }}</p>
+                  {%- endif -%}
+                  <button
+                    class="zh-faq-question"
+                    aria-expanded="false"
+                    type="button"
+                  >
+                    <span class="zh-faq-question-text">{{ block.settings.question }}</span>
+                    <span class="zh-faq-chevron" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </span>
+                  </button>
+                  <div class="zh-faq-answer" style="max-height: 0;">
+                    <div class="zh-faq-answer-inner">
+                      {{ block.settings.answer }}
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+      {%- else -%}
+
+        <div class="zh-faq-single-col">
+          {%- for block in section.blocks -%}
+            <div
+              class="zh-faq-item{% if section.settings.open_first and forloop.first %} is-open{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.category != blank -%}
+                <p class="zh-faq-category">{{ block.settings.category }}</p>
+              {%- endif -%}
+              <button
+                class="zh-faq-question"
+                aria-expanded="{% if section.settings.open_first and forloop.first %}true{% else %}false{% endif %}"
+                type="button"
+              >
+                <span class="zh-faq-question-text">{{ block.settings.question }}</span>
+                <span class="zh-faq-chevron" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+              </button>
+              <div
+                class="zh-faq-answer"
+                style="{% if section.settings.open_first and forloop.first %}max-height: 1000px;{% else %}max-height: 0;{% endif %}"
+              >
+                <div class="zh-faq-answer-inner">
+                  {{ block.settings.answer }}
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% comment %} Structured Data – FAQPage {% endcomment %}
+{%- if section.blocks.size > 0 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {%- for block in section.blocks -%}
+      {%- assign answer_text = block.settings.answer | strip_html | strip | escape -%}
+      {
+        "@type": "Question",
+        "name": {{ block.settings.question | json }},
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": {{ answer_text | json }}
+        }
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+{%- endif -%}
+
+<style>
+  #shopify-section-{{ section.id }} .zh-section-header {
+    max-width: 680px;
+    margin-bottom: 48px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #C9A84C;
+    margin-bottom: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-section-title {
+    font-size: clamp(26px, 3vw, 40px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+  }
+
+  #shopify-section-{{ section.id }} .zh-section-subtitle {
+    font-size: 17px;
+    color: #666;
+    line-height: 1.7;
+  }
+
+  /* Single column */
+  #shopify-section-{{ section.id }} .zh-faq-single-col {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Two column */
+  #shopify-section-{{ section.id }} .zh-faq-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 48px;
+    align-items: start;
+  }
+
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} .zh-faq-two-col {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* FAQ item */
+  #shopify-section-{{ section.id }} .zh-faq-item {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-item:first-child {
+    border-top: 1px solid rgba(0,0,0,0.1);
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-category {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #C9A84C;
+    padding-top: 20px;
+    margin-bottom: -8px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 22px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    cursor: pointer;
+    text-align: {% if dir == 'rtl' %}right{% else %}left{% endif %};
+    color: #1a1a1a;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+  }
+
+  [dir="rtl"] #shopify-section-{{ section.id }} .zh-faq-question {
+    flex-direction: row-reverse;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-question:hover {
+    color: #C9A84C;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-question-text {
+    flex: 1;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-chevron {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+    color: #C9A84C;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-item.is-open .zh-faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Answer */
+  #shopify-section-{{ section.id }} .zh-faq-answer {
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-answer-inner {
+    padding-bottom: 22px;
+    color: #555;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-answer-inner p {
+    margin-bottom: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-answer-inner p:last-child {
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-answer-inner a {
+    color: #C9A84C;
+    text-decoration: underline;
+  }
+
+  #shopify-section-{{ section.id }} .zh-faq-answer-inner ul,
+  #shopify-section-{{ section.id }} .zh-faq-answer-inner ol {
+    padding-inline-start: 20px;
+    margin-bottom: 12px;
+  }
+</style>
+
+<script>
+(function() {
+  var section = document.getElementById('shopify-section-{{ section.id }}');
+  if (!section) return;
+  var faqEl = section.querySelector('[data-zh-faq]');
+  if (!faqEl) return;
+
+  faqEl.addEventListener('click', function(e) {
+    var btn = e.target.closest('.zh-faq-question');
+    if (!btn) return;
+
+    var item = btn.closest('.zh-faq-item');
+    var answer = item.querySelector('.zh-faq-answer');
+    var isOpen = item.classList.contains('is-open');
+
+    item.classList.toggle('is-open', !isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+    answer.style.maxHeight = isOpen ? '0' : answer.scrollHeight + 'px';
+  });
+})();
+</script>
+
+<script src="{{ 'zh-premium.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "zh-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Got Questions?"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "single-col", "label": "Single Column" },
+        { "value": "two-col", "label": "Two Columns" }
+      ],
+      "default": "single-col"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "Open First Item by Default",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "limit": 20,
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is your return policy?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>We offer a 30-day return policy on all items in their original condition. Items must be unused and in original packaging. Contact our support team to initiate a return.</p>"
+        },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Category (optional grouping label)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day return policy on all items in their original condition. Items must be unused and in original packaging.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer delivery across the GCC?",
+            "answer": "<p>Yes! We deliver to Saudi Arabia, UAE, Kuwait, Qatar, Bahrain, and Oman. Delivery times vary by emirate or region.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How do I track my order?",
+            "answer": "<p>Once your order ships, you will receive an email with a tracking link. You can also track orders from your account page.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

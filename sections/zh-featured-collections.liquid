@@ -1,145 +1,655 @@
-{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
-{{ 'zh-sections.js' | asset_url | script_tag }}
+{% comment %}
+  ZenoHome – Featured Collections
+  Section: zh-featured-collections.liquid
+  Supports RTL (Arabic) and LTR (English)
+{% endcomment %}
+
+{{ 'zh-premium.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign cols = section.settings.columns | default: 3
-  assign pt = section.settings.padding_top | default: 64
-  assign pb = section.settings.padding_bottom | default: 64
+  assign section_dir = 'ltr'
+  if request.locale.iso_code == 'ar'
+    assign section_dir = 'rtl'
+  endif
 -%}
 
 <section
-  class="zh-section zh-featured-collections-section"
-  id="zh-feat-coll-{{ section.id }}"
-  style="padding-top:{{ pt }}px;padding-bottom:{{ pb }}px;background:{{ section.settings.background_color | default: '#FAFAF8' }};"
+  id="zh-featured-collections-{{ section.id }}"
+  class="zh-featured-collections zh-section"
+  dir="{{ section_dir }}"
+  style="
+    --zh-fc-bg: {{ section.settings.background_color }};
+    --zh-fc-pt: {{ section.settings.padding_top }}px;
+    --zh-fc-pb: {{ section.settings.padding_bottom }}px;
+    --zh-fc-columns: {{ section.settings.columns }};
+  "
 >
   <div class="zh-container">
-    {%- if section.settings.title != blank -%}
-      <header class="zh-section-header zh-anim">
-        {%- if section.settings.eyebrow != blank -%}<span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-        <h2 class="zh-section-title">{{ section.settings.title }}</h2>
-        {%- if section.settings.subtitle != blank -%}<p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
-        <span class="zh-section-divider"></span>
-      </header>
+
+    {%- if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.subtitle != blank -%}
+      <div class="zh-section-header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="zh-eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+      </div>
     {%- endif -%}
 
-    <div class="zh-feat-coll-grid" style="grid-template-columns:repeat({{ cols }},1fr);">
-      {%- for block in section.blocks -%}
-        {%- assign coll = collections[block.settings.collection] -%}
-        {%- assign title = block.settings.custom_title | default: coll.title | default: 'Collection' -%}
-        {%- assign btn_text = block.settings.button_text | default: 'Shop Collection' -%}
-        <div class="zh-feat-coll-card zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}" {{ block.shopify_attributes }}>
-          <a href="{{ coll.url | default: '#' }}" class="zh-feat-coll-card__link">
-            <div class="zh-feat-coll-card__media">
-              {%- if block.settings.custom_image != blank -%}
-                {{ block.settings.custom_image | image_url: width: 800 | image_tag: class: 'zh-feat-coll-card__img', loading: 'lazy', widths: '400,600,800', alt: title }}
-              {%- elsif coll.image != blank -%}
-                {{ coll.image | image_url: width: 800 | image_tag: class: 'zh-feat-coll-card__img', loading: 'lazy', widths: '400,600,800', alt: title }}
-              {%- elsif coll != blank and coll.products.first.featured_image != blank -%}
-                {{ coll.products.first.featured_image | image_url: width: 800 | image_tag: class: 'zh-feat-coll-card__img', loading: 'lazy', alt: title }}
-              {%- else -%}
-                {{ 'collection-1' | placeholder_svg_tag: 'zh-feat-coll-card__img zh-feat-coll-card__placeholder' }}
-              {%- endif -%}
-              <div class="zh-feat-coll-card__overlay">
-                <span class="zh-feat-coll-card__btn">{{ btn_text }}</span>
+    {%- if section.blocks.size > 0 -%}
+      <div class="zh-fc-grid zh-fc-grid--{{ section.settings.style }}">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign coll = block.settings.collection
+            assign card_image = block.settings.custom_image
+            if card_image == blank and coll != blank
+              assign card_image = coll.featured_image
+            endif
+            assign card_title = block.settings.custom_title
+            if card_title == blank and coll != blank
+              assign card_title = coll.title
+            endif
+            assign card_description = block.settings.custom_description
+            if card_description == blank and coll != blank
+              assign card_description = coll.description
+            endif
+            assign card_url = block.settings.button_url
+            if card_url == blank and coll != blank
+              assign card_url = coll.url
+            endif
+          -%}
+
+          <div class="zh-fc-card zh-fc-card--{{ section.settings.style }}" {{ block.shopify_attributes }}>
+            {%- if section.settings.style == 'minimal' -%}
+
+              <a href="{{ card_url | default: '#' }}" class="zh-fc-card__link" aria-label="{{ card_title | escape }}">
+                <div class="zh-fc-card__media">
+                  {%- if card_image != blank -%}
+                    {{
+                      card_image
+                      | image_url: width: 800
+                      | image_tag:
+                        loading: 'lazy',
+                        class: 'zh-fc-card__image',
+                        alt: card_image.alt | default: card_title | escape,
+                        widths: '400, 600, 800'
+                    }}
+                  {%- else -%}
+                    <div class="zh-fc-card__placeholder">
+                      {{ 'collection-1' | placeholder_svg_tag: 'zh-placeholder-svg' }}
+                    </div>
+                  {%- endif -%}
+                  <div class="zh-fc-card__minimal-overlay">
+                    <span class="zh-fc-card__minimal-title">{{ card_title }}</span>
+                  </div>
+                </div>
+              </a>
+
+            {%- elsif section.settings.style == 'overlay' -%}
+
+              <a href="{{ card_url | default: '#' }}" class="zh-fc-card__link" aria-label="{{ card_title | escape }}">
+                <div class="zh-fc-card__media">
+                  {%- if card_image != blank -%}
+                    {{
+                      card_image
+                      | image_url: width: 800
+                      | image_tag:
+                        loading: 'lazy',
+                        class: 'zh-fc-card__image',
+                        alt: card_image.alt | default: card_title | escape,
+                        widths: '400, 600, 800'
+                    }}
+                  {%- else -%}
+                    <div class="zh-fc-card__placeholder">
+                      {{ 'collection-2' | placeholder_svg_tag: 'zh-placeholder-svg' }}
+                    </div>
+                  {%- endif -%}
+                  <div class="zh-fc-card__overlay"></div>
+                  <div class="zh-fc-card__overlay-content">
+                    {%- if block.settings.badge != blank -%}
+                      <span class="zh-fc-card__badge">{{ block.settings.badge }}</span>
+                    {%- endif -%}
+                    <h3 class="zh-fc-card__title">{{ card_title }}</h3>
+                    {%- if section.settings.show_product_count and coll != blank -%}
+                      <p class="zh-fc-card__count">{{ coll.products_count }} {{ 'sections.featured_collections.products' | t: default: 'Products' }}</p>
+                    {%- endif -%}
+                    {%- if section.settings.show_description and card_description != blank -%}
+                      <p class="zh-fc-card__description">{{ card_description | strip_html | truncate: 100 }}</p>
+                    {%- endif -%}
+                    <span class="zh-fc-card__btn zh-fc-card__btn--ghost">{{ block.settings.button_text | default: 'Explore' }}</span>
+                  </div>
+                </div>
+              </a>
+
+            {%- else -%}
+              {{- '<!-- card style -->' -}}
+              <div class="zh-fc-card__media">
+                {%- if card_image != blank -%}
+                  {{
+                    card_image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'zh-fc-card__image',
+                      alt: card_image.alt | default: card_title | escape,
+                      widths: '400, 600, 800'
+                  }}
+                {%- else -%}
+                  <div class="zh-fc-card__placeholder">
+                    {{ 'collection-3' | placeholder_svg_tag: 'zh-placeholder-svg' }}
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.badge != blank -%}
+                  <span class="zh-fc-card__badge">{{ block.settings.badge }}</span>
+                {%- endif -%}
               </div>
-            </div>
-            <div class="zh-feat-coll-card__info">
-              <h3 class="zh-feat-coll-card__title">{{ title }}</h3>
-              {%- if section.settings.show_product_count and coll != blank -%}
-                <span class="zh-feat-coll-card__count">{{ coll.products_count }} {{ 'collections.general.items' | t | default: 'items' }}</span>
-              {%- endif -%}
-            </div>
-          </a>
-        </div>
-      {%- else -%}
-        <p class="zh-no-blocks">Add collection cards in the Theme Editor.</p>
-      {%- endfor -%}
-    </div>
+
+              <div class="zh-fc-card__info">
+                <h3 class="zh-fc-card__title">{{ card_title }}</h3>
+                {%- if section.settings.show_product_count and coll != blank -%}
+                  <p class="zh-fc-card__count">{{ coll.products_count }} {{ 'sections.featured_collections.products' | t: default: 'Products' }}</p>
+                {%- endif -%}
+                {%- if section.settings.show_description and card_description != blank -%}
+                  <p class="zh-fc-card__description">{{ card_description | strip_html | truncate: 120 }}</p>
+                {%- endif -%}
+                <a href="{{ card_url | default: '#' }}" class="zh-fc-card__btn">
+                  {{ block.settings.button_text | default: 'Explore' }}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    {%- if section_dir == 'rtl' -%}
+                      <path d="M9 3L5 7L9 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    {%- else -%}
+                      <path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    {%- endif -%}
+                  </svg>
+                </a>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="zh-empty-state">
+        <p>Add collection blocks in the theme editor to display your collections.</p>
+      </div>
+    {%- endif -%}
+
   </div>
 </section>
 
 <style>
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-grid {
-    display: grid; gap: 24px;
+  #zh-featured-collections-{{ section.id }} {
+    background-color: var(--zh-fc-bg, #FFFFFF);
+    padding-top: var(--zh-fc-pt, 60px);
+    padding-bottom: var(--zh-fc-pb, 60px);
   }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card {
-    border-radius: 12px; overflow: hidden;
-    box-shadow: var(--zh-shadow-sm);
+
+  #zh-featured-collections-{{ section.id }} .zh-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: clamp(16px, 4vw, 64px);
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-section-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #C9A84C;
+    margin: 0 0 12px;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    color: #1A1A1A;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-section-subtitle {
+    font-size: 1rem;
+    color: #666;
+    margin: 0 auto;
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--zh-fc-columns, 3), 1fr);
+    gap: 24px;
+  }
+
+  /* CARD STYLE */
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card {
+    border-radius: 6px;
+    overflow: hidden;
     background: #fff;
-    transition: box-shadow .35s, transform .35s;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card:hover { box-shadow: var(--zh-shadow-xl); transform: translateY(-5px); }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card__link { display: block; text-decoration: none; }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card__media {
-    position: relative; overflow: hidden; aspect-ratio: 4/3;
-    background: var(--zh-bg-soft,#f5f5f5);
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card:hover {
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
   }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card__img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    transition: transform .55s cubic-bezier(.22,1,.36,1);
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card .zh-fc-card__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
   }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card:hover .zh-feat-coll-card__img { transform: scale(1.07); }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card__overlay {
-    position: absolute; inset: 0;
-    background: rgba(26,26,46,.45);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; transition: opacity .35s;
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card .zh-fc-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
   }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card:hover .zh-feat-coll-card__overlay { opacity: 1; }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card__btn {
-    padding: 12px 28px;
-    background: var(--zh-gold,#C9A84C); color: #fff;
-    font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-    border-radius: 4px;
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card:hover .zh-fc-card__image {
+    transform: scale(1.05);
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card .zh-fc-card__info {
+    padding: 20px 24px;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card .zh-fc-card__title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 6px;
+    color: #1A1A1A;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card .zh-fc-card__count {
+    font-size: 0.8rem;
+    color: #999;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card .zh-fc-card__description {
+    font-size: 0.875rem;
+    color: #666;
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card .zh-fc-card__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #C9A84C;
+    text-decoration: none;
+    transition: gap 0.25s ease;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--card .zh-fc-card__btn:hover {
+    gap: 10px;
+  }
+
+  /* OVERLAY STYLE */
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay {
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay .zh-fc-card__link {
+    display: block;
+    text-decoration: none;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay .zh-fc-card__media {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay .zh-fc-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay:hover .zh-fc-card__image {
+    transform: scale(1.06);
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay .zh-fc-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%);
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay .zh-fc-card__overlay-content {
+    position: absolute;
+    bottom: 0;
+    inset-inline: 0;
+    padding: 28px 24px;
+    color: #fff;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay .zh-fc-card__title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #fff;
+    margin: 0 0 6px;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay .zh-fc-card__count {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.75);
+    margin: 0 0 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay .zh-fc-card__description {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card__btn--ghost {
+    display: inline-flex;
+    padding: 8px 18px;
+    border: 1.5px solid rgba(255,255,255,0.7);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--overlay:hover .zh-fc-card__btn--ghost {
+    background: rgba(255,255,255,0.15);
+    border-color: #fff;
+  }
+
+  /* MINIMAL STYLE */
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--minimal .zh-fc-card__link {
+    display: block;
+    text-decoration: none;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--minimal .zh-fc-card__media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 6px;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--minimal .zh-fc-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--minimal:hover .zh-fc-card__image {
+    transform: scale(1.06);
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--minimal .zh-fc-card__minimal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.35s ease;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--minimal:hover .zh-fc-card__minimal-overlay {
+    background: rgba(0,0,0,0.35);
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--minimal .zh-fc-card__minimal-title {
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-align: center;
+    opacity: 0;
     transform: translateY(8px);
-    transition: transform .35s;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    padding: 0 20px;
   }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card:hover .zh-feat-coll-card__btn { transform: none; }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card__info { padding: 20px 24px; }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card__title {
-    font-family: var(--zh-font-display,'Cormorant Garant',serif);
-    font-size: 1.2rem; font-weight: 600;
-    color: var(--zh-dark,#1A1A2E); margin: 0 0 4px;
-    transition: color .25s;
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card--minimal:hover .zh-fc-card__minimal-title {
+    opacity: 1;
+    transform: translateY(0);
   }
-  [dir="rtl"] #zh-feat-coll-{{ section.id }} .zh-feat-coll-card__title { font-family: var(--zh-font-ar,'Cairo',sans-serif); }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card:hover .zh-feat-coll-card__title { color: var(--zh-gold,#C9A84C); }
-  #zh-feat-coll-{{ section.id }} .zh-feat-coll-card__count { font-size: .78rem; color: var(--zh-text-muted,#888); }
-  @media(max-width:1024px){ #zh-feat-coll-{{ section.id }} .zh-feat-coll-grid { grid-template-columns: repeat(2,1fr); } }
-  @media(max-width:480px){ #zh-feat-coll-{{ section.id }} .zh-feat-coll-grid { grid-template-columns: 1fr; } }
+
+  /* Shared badge */
+  #zh-featured-collections-{{ section.id }} .zh-fc-card__badge {
+    position: absolute;
+    top: 12px;
+    inset-inline-start: 12px;
+    background: #C9A84C;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    z-index: 1;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-fc-card__placeholder {
+    width: 100%;
+    height: 100%;
+    background: #EDE8DF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-placeholder-svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  #zh-featured-collections-{{ section.id }} .zh-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 900px) {
+    #zh-featured-collections-{{ section.id }} .zh-fc-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 540px) {
+    #zh-featured-collections-{{ section.id }} .zh-fc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
+
+<script src="{{ 'zh-premium.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
-  "name": "ZH Featured Collections",
+  "name": "Featured Collections",
+  "tag": "section",
+  "class": "zh-section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
-    { "type": "text", "id": "title", "label": "Title", "default": "Shop Collections" },
-    { "type": "textarea", "id": "subtitle", "label": "Subtitle" },
-    { "type": "select", "id": "columns", "label": "Columns", "options": [{ "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }], "default": "3" },
-    { "type": "checkbox", "id": "show_product_count", "label": "Show Product Count", "default": true },
-    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#FAFAF8" },
-    { "type": "range", "id": "padding_top", "label": "Padding Top (px)", "min": 0, "max": 120, "step": 8, "default": 64 },
-    { "type": "range", "id": "padding_bottom", "label": "Padding Bottom (px)", "min": 0, "max": 120, "step": 8, "default": 64 }
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Our Collections"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Card Style",
+      "options": [
+        { "value": "card", "label": "Card (image top)" },
+        { "value": "overlay", "label": "Overlay (text over image)" },
+        { "value": "minimal", "label": "Minimal (title on hover)" }
+      ],
+      "default": "card"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Display Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Show Product Count",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show Description",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    }
   ],
   "blocks": [
     {
-      "type": "collection_card", "name": "Collection Card",
+      "type": "collection",
+      "name": "Collection",
       "settings": [
-        { "type": "collection", "id": "collection", "label": "Collection" },
-        { "type": "text", "id": "custom_title", "label": "Custom Title (optional)" },
-        { "type": "image_picker", "id": "custom_image", "label": "Custom Image (optional)" },
-        { "type": "text", "id": "button_text", "label": "Button Text", "default": "Shop Collection" }
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image (overrides collection image)"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom Title (overrides collection title)"
+        },
+        {
+          "type": "textarea",
+          "id": "custom_description",
+          "label": "Custom Description"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Explore"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL (overrides collection URL)"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge Text"
+        }
       ]
     }
   ],
-  "presets": [{
-    "name": "ZH Featured Collections",
-    "blocks": [
-      { "type": "collection_card", "settings": { "button_text": "Shop Now" } },
-      { "type": "collection_card", "settings": { "button_text": "Shop Now" } },
-      { "type": "collection_card", "settings": { "button_text": "Shop Now" } }
-    ]
-  }]
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "blocks": [
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" }
+      ]
+    }
+  ]
 }
 {% endschema %}

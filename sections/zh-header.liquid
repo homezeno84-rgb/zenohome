@@ -1,0 +1,771 @@
+{%- liquid
+  assign sticky_class = ''
+  assign transparent_class = ''
+  if section.settings.sticky
+    assign sticky_class = 'zh-header--sticky'
+  endif
+  if section.settings.transparent_on_hero
+    assign transparent_class = 'zh-header--transparent'
+  endif
+-%}
+
+{%- comment -%} ── ANNOUNCEMENT BAR ── {%- endcomment -%}
+{%- if section.settings.announcement_text != blank -%}
+  <div
+    class="zh-announcement"
+    style="background-color: {{ section.settings.announcement_bg }}; color: {{ section.settings.announcement_color }};"
+    role="region"
+    aria-label="{{ 'sections.header.announcement' | t | default: 'Announcement' }}"
+  >
+    {%- if section.settings.announcement_url != blank -%}
+      <a href="{{ section.settings.announcement_url }}" class="zh-announcement__link">
+        {{ section.settings.announcement_text }}
+      </a>
+    {%- else -%}
+      <p class="zh-announcement__text">{{ section.settings.announcement_text }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{%- comment -%} ── MAIN HEADER ── {%- endcomment -%}
+<header
+  class="zh-header {{ sticky_class }} {{ transparent_class }}"
+  data-zh-header
+  style="background-color: {{ section.settings.header_bg }}; color: {{ section.settings.header_text_color }};"
+  role="banner"
+>
+  <div class="zh-header__inner">
+
+    {%- comment -%} ── LOGO ── {%- endcomment -%}
+    <div class="zh-header__logo" style="--logo-width: {{ section.settings.logo_width }}px; --logo-mobile-width: {{ section.settings.logo_mobile_width }}px;">
+      <a href="{{ routes.root_url }}" class="zh-header__logo-link" aria-label="{{ shop.name }}">
+        {%- if section.settings.logo != blank -%}
+          {{
+            section.settings.logo
+            | image_url: width: 600
+            | image_tag:
+              class: 'zh-header__logo-img',
+              loading: 'eager',
+              fetchpriority: 'high',
+              widths: '180, 240, 300, 360, 600',
+              sizes: '(max-width: 768px) {{ section.settings.logo_mobile_width }}px, {{ section.settings.logo_width }}px',
+              alt: shop.name
+          }}
+        {%- else -%}
+          <span class="zh-header__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- comment -%} ── DESKTOP NAV ── {%- endcomment -%}
+    <nav class="zh-nav" aria-label="{{ 'sections.header.main_nav' | t | default: 'Main navigation' }}">
+      <ul class="zh-nav__list" role="list">
+        {%- for link in linklists[section.settings.menu].links -%}
+          {%- liquid
+            assign has_mega = false
+            assign mega_block = nil
+            for block in section.blocks
+              if block.type == 'mega_menu' and block.settings.trigger_label == link.title
+                assign has_mega = true
+                assign mega_block = block
+              endif
+            endfor
+          -%}
+
+          <li
+            class="zh-nav__item{% if has_mega %} zh-nav__item--mega{% endif %}{% if link.active %} zh-nav__item--active{% endif %}"
+            {% if has_mega %}data-zh-mega-trigger="{{ mega_block.id }}"{% endif %}
+          >
+            <a
+              href="{{ link.url }}"
+              class="zh-nav__link{% if link.active %} zh-nav__link--active{% endif %}"
+              {% if has_mega %}aria-haspopup="true" aria-expanded="false" aria-controls="zh-mega-{{ mega_block.id }}"{% endif %}
+              {% if link.active %}aria-current="page"{% endif %}
+            >
+              {{ link.title }}
+              {%- if has_mega -%}
+                <svg class="zh-nav__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              {%- endif -%}
+            </a>
+
+            {%- if has_mega -%}
+              {%- liquid
+                assign num_cols = mega_block.settings.columns | default: 3
+                assign col_headings = '' | split: ''
+                assign col_links_raw = '' | split: ''
+              -%}
+              <div
+                id="zh-mega-{{ mega_block.id }}"
+                class="zh-mega"
+                data-zh-mega-panel="{{ mega_block.id }}"
+                aria-hidden="true"
+                role="region"
+                aria-label="{{ mega_block.settings.trigger_label }} {{ 'sections.header.submenu' | t | default: 'submenu' }}"
+                {{ mega_block.shopify_attributes }}
+              >
+                <div class="zh-mega__inner">
+                  <div class="zh-mega__cols" style="--mega-cols: {{ num_cols }};">
+
+                    {%- comment -%} Column 1 {%- endcomment -%}
+                    {%- if mega_block.settings.col1_heading != blank or mega_block.settings.col1_links != blank -%}
+                      <div class="zh-mega__col">
+                        {%- if mega_block.settings.col1_heading != blank -%}
+                          <p class="zh-mega__col-heading">{{ mega_block.settings.col1_heading }}</p>
+                        {%- endif -%}
+                        {%- if mega_block.settings.col1_links != blank -%}
+                          <ul class="zh-mega__col-links" role="list">
+                            {%- assign col1_lines = mega_block.settings.col1_links | newline_to_br | split: '<br />' -%}
+                            {%- for line in col1_lines -%}
+                              {%- assign line_trimmed = line | strip -%}
+                              {%- if line_trimmed != blank -%}
+                                {%- assign parts = line_trimmed | split: '|' -%}
+                                {%- assign link_label = parts[0] | strip -%}
+                                {%- assign link_href = parts[1] | strip | default: '#' -%}
+                                <li><a href="{{ link_href }}" class="zh-mega__col-link">{{ link_label }}</a></li>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+
+                    {%- comment -%} Column 2 {%- endcomment -%}
+                    {%- if num_cols >= 2 and (mega_block.settings.col2_heading != blank or mega_block.settings.col2_links != blank) -%}
+                      <div class="zh-mega__col">
+                        {%- if mega_block.settings.col2_heading != blank -%}
+                          <p class="zh-mega__col-heading">{{ mega_block.settings.col2_heading }}</p>
+                        {%- endif -%}
+                        {%- if mega_block.settings.col2_links != blank -%}
+                          <ul class="zh-mega__col-links" role="list">
+                            {%- assign col2_lines = mega_block.settings.col2_links | newline_to_br | split: '<br />' -%}
+                            {%- for line in col2_lines -%}
+                              {%- assign line_trimmed = line | strip -%}
+                              {%- if line_trimmed != blank -%}
+                                {%- assign parts = line_trimmed | split: '|' -%}
+                                {%- assign link_label = parts[0] | strip -%}
+                                {%- assign link_href = parts[1] | strip | default: '#' -%}
+                                <li><a href="{{ link_href }}" class="zh-mega__col-link">{{ link_label }}</a></li>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+
+                    {%- comment -%} Column 3 {%- endcomment -%}
+                    {%- if num_cols >= 3 and (mega_block.settings.col3_heading != blank or mega_block.settings.col3_links != blank) -%}
+                      <div class="zh-mega__col">
+                        {%- if mega_block.settings.col3_heading != blank -%}
+                          <p class="zh-mega__col-heading">{{ mega_block.settings.col3_heading }}</p>
+                        {%- endif -%}
+                        {%- if mega_block.settings.col3_links != blank -%}
+                          <ul class="zh-mega__col-links" role="list">
+                            {%- assign col3_lines = mega_block.settings.col3_links | newline_to_br | split: '<br />' -%}
+                            {%- for line in col3_lines -%}
+                              {%- assign line_trimmed = line | strip -%}
+                              {%- if line_trimmed != blank -%}
+                                {%- assign parts = line_trimmed | split: '|' -%}
+                                {%- assign link_label = parts[0] | strip -%}
+                                {%- assign link_href = parts[1] | strip | default: '#' -%}
+                                <li><a href="{{ link_href }}" class="zh-mega__col-link">{{ link_label }}</a></li>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+
+                    {%- comment -%} Column 4 {%- endcomment -%}
+                    {%- if num_cols >= 4 and (mega_block.settings.col4_heading != blank or mega_block.settings.col4_links != blank) -%}
+                      <div class="zh-mega__col">
+                        {%- if mega_block.settings.col4_heading != blank -%}
+                          <p class="zh-mega__col-heading">{{ mega_block.settings.col4_heading }}</p>
+                        {%- endif -%}
+                        {%- if mega_block.settings.col4_links != blank -%}
+                          <ul class="zh-mega__col-links" role="list">
+                            {%- assign col4_lines = mega_block.settings.col4_links | newline_to_br | split: '<br />' -%}
+                            {%- for line in col4_lines -%}
+                              {%- assign line_trimmed = line | strip -%}
+                              {%- if line_trimmed != blank -%}
+                                {%- assign parts = line_trimmed | split: '|' -%}
+                                {%- assign link_label = parts[0] | strip -%}
+                                {%- assign link_href = parts[1] | strip | default: '#' -%}
+                                <li><a href="{{ link_href }}" class="zh-mega__col-link">{{ link_label }}</a></li>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+
+                  </div>
+                  {%- comment -%} ── Feature image ── {%- endcomment -%}
+                  {%- if mega_block.settings.image != blank -%}
+                    <div class="zh-mega__feature">
+                      <a href="{{ mega_block.settings.image_url | default: '#' }}" class="zh-mega__feature-link">
+                        {{
+                          mega_block.settings.image
+                          | image_url: width: 600
+                          | image_tag:
+                            class: 'zh-mega__feature-img',
+                            loading: 'lazy',
+                            widths: '300, 400, 500, 600',
+                            sizes: '300px',
+                            alt: mega_block.settings.image_heading | default: mega_block.settings.trigger_label
+                        }}
+                        {%- if mega_block.settings.image_heading != blank -%}
+                          <span class="zh-mega__feature-heading">{{ mega_block.settings.image_heading }}</span>
+                        {%- endif -%}
+                      </a>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    {%- comment -%} ── HEADER ICONS ── {%- endcomment -%}
+    <div class="zh-header__icons" role="group" aria-label="{{ 'sections.header.utility_nav' | t | default: 'Utility navigation' }}">
+
+      {%- comment -%} Search {%- endcomment -%}
+      {%- if section.settings.show_search -%}
+        <button
+          class="zh-header__icon zh-header__icon--search"
+          data-zh-search-toggle
+          aria-label="{{ 'general.search.search' | t | default: 'Search' }}"
+          aria-expanded="false"
+          aria-controls="zh-search-panel"
+          type="button"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="22" height="22">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      {%- endif -%}
+
+      {%- comment -%} Wishlist {%- endcomment -%}
+      {%- if section.settings.show_wishlist -%}
+        <a
+          href="{{ routes.root_url }}pages/wishlist"
+          class="zh-header__icon zh-header__icon--wishlist"
+          aria-label="{{ 'customer.wishlist.title' | t | default: 'Wishlist' }}"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="22" height="22">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span class="zh-header__wishlist-count" id="zh-wishlist-count" aria-live="polite" style="display:none;">0</span>
+        </a>
+      {%- endif -%}
+
+      {%- comment -%} Account {%- endcomment -%}
+      <a
+        href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+        class="zh-header__icon zh-header__icon--account"
+        aria-label="{%- if customer -%}{{ 'customer.account.title' | t | default: 'Account' }}{%- else -%}{{ 'customer.login.title' | t | default: 'Log in' }}{%- endif -%}"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="22" height="22">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
+
+      {%- comment -%} Cart {%- endcomment -%}
+      <button
+        class="zh-header__icon zh-header__icon--cart"
+        data-zh-open-cart
+        aria-label="{{ 'sections.cart_icon_bubble.title' | t | default: 'Cart' }} ({{ cart.item_count }} {{ 'sections.cart_icon_bubble.items_count' | t: count: cart.item_count | default: 'items' }})"
+        aria-expanded="false"
+        aria-controls="zh-cart-drawer"
+        type="button"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="22" height="22">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <span
+          class="zh-header__cart-count{% if cart.item_count == 0 %} zh-header__cart-count--hidden{% endif %}"
+          id="zh-cart-count-header"
+          aria-hidden="true"
+        >{{ cart.item_count }}</span>
+      </button>
+
+      {%- comment -%} Locale selector {%- endcomment -%}
+      {%- if section.settings.show_locale and localization.available_languages.size > 1 -%}
+        <div class="zh-header__locale">
+          {%- form 'localization', id: 'zh-locale-form-desktop' -%}
+            <select
+              name="locale_code"
+              class="zh-header__locale-select"
+              aria-label="{{ 'sections.header.language' | t | default: 'Language' }}"
+              onchange="this.form.submit();"
+            >
+              {%- for language in localization.available_languages -%}
+                <option
+                  value="{{ language.iso_code }}"
+                  {% if language.iso_code == localization.language.iso_code %}selected{% endif %}
+                >
+                  {{ language.endonym_name | capitalize }}
+                </option>
+              {%- endfor -%}
+            </select>
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Hamburger (mobile) {%- endcomment -%}
+      <button
+        class="zh-header__icon zh-header__hamburger"
+        data-zh-menu-toggle
+        aria-label="{{ 'sections.header.menu' | t | default: 'Menu' }}"
+        aria-expanded="false"
+        aria-controls="zh-mobile-nav"
+        type="button"
+      >
+        <svg class="zh-hamburger__icon zh-hamburger__icon--open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="24" height="24">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <svg class="zh-hamburger__icon zh-hamburger__icon--close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="24" height="24">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+    </div>
+    {%- comment -%} end .zh-header__icons {%- endcomment -%}
+
+  </div>
+  {%- comment -%} end .zh-header__inner {%- endcomment -%}
+</header>
+
+{%- comment -%} ── SEARCH PANEL ── {%- endcomment -%}
+{%- if section.settings.show_search -%}
+  <div
+    id="zh-search-panel"
+    class="zh-search-panel"
+    data-zh-search-panel
+    role="search"
+    aria-label="{{ 'general.search.search' | t | default: 'Search' }}"
+    aria-hidden="true"
+  >
+    <div class="zh-search-panel__inner">
+      <form action="{{ routes.search_url }}" method="get" class="zh-search-panel__form" role="search">
+        <label for="zh-search-input" class="visually-hidden">{{ 'general.search.placeholder' | t | default: 'Search our store' }}</label>
+        <input
+          id="zh-search-input"
+          type="search"
+          name="q"
+          class="zh-search-panel__input"
+          placeholder="{{ 'general.search.placeholder' | t | default: 'Search our store...' }}"
+          aria-label="{{ 'general.search.search' | t | default: 'Search' }}"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        >
+        <input type="hidden" name="type" value="product">
+        <button type="submit" class="zh-search-panel__submit" aria-label="{{ 'general.search.submit' | t | default: 'Submit search' }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </form>
+      <button
+        class="zh-search-panel__close"
+        data-zh-search-close
+        aria-label="{{ 'accessibility.close' | t | default: 'Close search' }}"
+        type="button"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div id="zh-search-results" class="zh-search-panel__results" aria-live="polite" aria-atomic="true"></div>
+  </div>
+{%- endif -%}
+
+{%- comment -%} ── MOBILE NAV ── {%- endcomment -%}
+<nav
+  id="zh-mobile-nav"
+  class="zh-mobile-nav"
+  data-zh-mobile-nav
+  aria-label="{{ 'sections.header.main_nav' | t | default: 'Main navigation' }}"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="zh-mobile-nav__header">
+    <span class="zh-mobile-nav__title">{{ 'sections.header.menu' | t | default: 'Menu' }}</span>
+    <button
+      class="zh-mobile-nav__close"
+      data-zh-menu-toggle
+      aria-label="{{ 'accessibility.close' | t | default: 'Close menu' }}"
+      type="button"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="22" height="22">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <ul class="zh-mobile-nav__list" role="list">
+    {%- for link in linklists[section.settings.menu].links -%}
+      {%- liquid
+        assign mob_has_mega = false
+        assign mob_mega_block = nil
+        for block in section.blocks
+          if block.type == 'mega_menu' and block.settings.trigger_label == link.title
+            assign mob_has_mega = true
+            assign mob_mega_block = block
+          endif
+        endfor
+        assign has_children = false
+        if link.links.size > 0
+          assign has_children = true
+        endif
+      -%}
+      <li class="zh-mobile-nav__item{% if mob_has_mega or has_children %} zh-mobile-nav__item--has-children{% endif %}">
+        <div class="zh-mobile-nav__item-inner">
+          <a href="{{ link.url }}" class="zh-mobile-nav__link{% if link.active %} zh-mobile-nav__link--active{% endif %}">
+            {{ link.title }}
+          </a>
+          {%- if mob_has_mega or has_children -%}
+            <button
+              class="zh-mobile-nav__expand"
+              aria-expanded="false"
+              aria-label="{{ 'accessibility.expand_submenu' | t | default: 'Expand submenu for' }} {{ link.title }}"
+              type="button"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="16" height="16">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          {%- endif -%}
+        </div>
+
+        {%- if mob_has_mega -%}
+          <ul class="zh-mobile-nav__sub" role="list" hidden>
+            {%- assign all_col_links = mob_mega_block.settings.col1_links | append: '
+' | append: mob_mega_block.settings.col2_links | append: '
+' | append: mob_mega_block.settings.col3_links | append: '
+' | append: mob_mega_block.settings.col4_links -%}
+            {%- assign mob_lines = all_col_links | newline_to_br | split: '<br />' -%}
+            {%- for mob_line in mob_lines -%}
+              {%- assign mob_line_trim = mob_line | strip -%}
+              {%- if mob_line_trim != blank -%}
+                {%- assign mob_parts = mob_line_trim | split: '|' -%}
+                {%- assign mob_label = mob_parts[0] | strip -%}
+                {%- assign mob_href = mob_parts[1] | strip | default: '#' -%}
+                <li><a href="{{ mob_href }}" class="zh-mobile-nav__sub-link">{{ mob_label }}</a></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- elsif has_children -%}
+          <ul class="zh-mobile-nav__sub" role="list" hidden>
+            {%- for child_link in link.links -%}
+              <li><a href="{{ child_link.url }}" class="zh-mobile-nav__sub-link{% if child_link.active %} zh-mobile-nav__sub-link--active{% endif %}">{{ child_link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  {%- comment -%} Mobile locale selector {%- endcomment -%}
+  {%- if section.settings.show_locale and localization.available_languages.size > 1 -%}
+    <div class="zh-mobile-nav__locale">
+      {%- form 'localization', id: 'zh-locale-form-mobile' -%}
+        <select
+          name="locale_code"
+          class="zh-mobile-nav__locale-select"
+          aria-label="{{ 'sections.header.language' | t | default: 'Language' }}"
+          onchange="this.form.submit();"
+        >
+          {%- for language in localization.available_languages -%}
+            <option
+              value="{{ language.iso_code }}"
+              {% if language.iso_code == localization.language.iso_code %}selected{% endif %}
+            >
+              {{ language.endonym_name | capitalize }}
+            </option>
+          {%- endfor -%}
+        </select>
+      {%- endform -%}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Mobile account / cart links {%- endcomment -%}
+  <div class="zh-mobile-nav__footer">
+    <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="zh-mobile-nav__footer-link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      {%- if customer -%}
+        {{ 'customer.account.title' | t | default: 'Account' }}
+      {%- else -%}
+        {{ 'customer.login.title' | t | default: 'Log in' }}
+      {%- endif -%}
+    </a>
+  </div>
+</nav>
+
+{%- comment -%} Mobile nav overlay {%- endcomment -%}
+<div class="zh-mobile-nav__overlay" data-zh-menu-overlay aria-hidden="true"></div>
+
+{% schema %}
+{
+  "name": "ZH Header",
+  "tag": "div",
+  "class": "zh-header-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "default": 180,
+      "unit": "px",
+      "label": "Logo width (desktop)"
+    },
+    {
+      "type": "range",
+      "id": "logo_mobile_width",
+      "min": 60,
+      "max": 200,
+      "step": 10,
+      "default": 120,
+      "unit": "px",
+      "label": "Logo width (mobile)"
+    },
+    {
+      "type": "header",
+      "content": "Behaviour"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "default": true,
+      "label": "Sticky header"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_on_hero",
+      "default": false,
+      "label": "Transparent over hero"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Main menu"
+    },
+    {
+      "type": "collection",
+      "id": "mega_menu_collection",
+      "label": "Mega menu feature collection (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "default": true,
+      "label": "Show search"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "default": true,
+      "label": "Show wishlist"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_locale",
+      "default": true,
+      "label": "Show language selector"
+    },
+    {
+      "type": "header",
+      "content": "Announcement bar"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "placeholder": "Free shipping on orders over $150"
+    },
+    {
+      "type": "url",
+      "id": "announcement_url",
+      "label": "Announcement link"
+    },
+    {
+      "type": "color",
+      "id": "announcement_bg",
+      "default": "#1A1A2E",
+      "label": "Announcement background"
+    },
+    {
+      "type": "color",
+      "id": "announcement_color",
+      "default": "#C9A84C",
+      "label": "Announcement text color"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "header_bg",
+      "default": "#ffffff",
+      "label": "Header background"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "default": "#1A1A2E",
+      "label": "Header text color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu",
+      "name": "Mega Menu",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "trigger_label",
+          "label": "Nav link label (must match exactly)",
+          "info": "Enter the nav link title that should open this mega menu. Case-sensitive."
+        },
+        {
+          "type": "header",
+          "content": "Feature image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Feature image"
+        },
+        {
+          "type": "text",
+          "id": "image_heading",
+          "label": "Image heading"
+        },
+        {
+          "type": "url",
+          "id": "image_url",
+          "label": "Image link"
+        },
+        {
+          "type": "range",
+          "id": "columns",
+          "min": 2,
+          "max": 4,
+          "step": 1,
+          "default": 3,
+          "label": "Number of link columns"
+        },
+        {
+          "type": "header",
+          "content": "Column 1"
+        },
+        {
+          "type": "text",
+          "id": "col1_heading",
+          "label": "Column 1 heading"
+        },
+        {
+          "type": "textarea",
+          "id": "col1_links",
+          "label": "Column 1 links",
+          "info": "One per line. Format: Label|/url"
+        },
+        {
+          "type": "header",
+          "content": "Column 2"
+        },
+        {
+          "type": "text",
+          "id": "col2_heading",
+          "label": "Column 2 heading"
+        },
+        {
+          "type": "textarea",
+          "id": "col2_links",
+          "label": "Column 2 links",
+          "info": "One per line. Format: Label|/url"
+        },
+        {
+          "type": "header",
+          "content": "Column 3"
+        },
+        {
+          "type": "text",
+          "id": "col3_heading",
+          "label": "Column 3 heading"
+        },
+        {
+          "type": "textarea",
+          "id": "col3_links",
+          "label": "Column 3 links",
+          "info": "One per line. Format: Label|/url"
+        },
+        {
+          "type": "header",
+          "content": "Column 4"
+        },
+        {
+          "type": "text",
+          "id": "col4_heading",
+          "label": "Column 4 heading"
+        },
+        {
+          "type": "textarea",
+          "id": "col4_links",
+          "label": "Column 4 links",
+          "info": "One per line. Format: Label|/url"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ZH Header"
+    }
+  ]
+}
+{% endschema %}

@@ -1,111 +1,687 @@
-{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
-{{ 'zh-sections.js' | asset_url | script_tag }}
+{{ 'zh-premium.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
   assign coll = collections[section.settings.collection]
-  assign limit = section.settings.products_count | default: 8
-  assign cols = section.settings.columns | default: 4
-  assign pt = section.settings.padding_top | default: 64
-  assign pb = section.settings.padding_bottom | default: 64
+  assign products_to_show = section.settings.products_to_show
+  assign layout = section.settings.layout
 -%}
 
 <section
-  class="zh-section zh-new-arrivals-section"
   id="zh-new-arrivals-{{ section.id }}"
-  style="padding-top:{{ pt }}px;padding-bottom:{{ pb }}px;background:{{ section.settings.background_color | default: '#FAFAF8' }};"
+  class="zh-new-arrivals"
+  style="
+    background-color: {{ section.settings.background_color }};
+    --pt: {{ section.settings.padding_top }}px;
+    --pb: {{ section.settings.padding_bottom }}px;
+    --cols: {{ section.settings.columns }};
+  "
 >
   <div class="zh-container">
-    {%- if section.settings.title != blank -%}
-      <header class="zh-section-header zh-anim">
-        {%- if section.settings.eyebrow != blank -%}<span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-        <h2 class="zh-section-title">{{ section.settings.title }}</h2>
-        {%- if section.settings.subtitle != blank -%}<p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
-        <span class="zh-section-divider"></span>
-      </header>
-    {%- endif -%}
 
-    <div class="zh-product-grid zh-na-grid" style="grid-template-columns:repeat({{ cols }},1fr);">
-      {%- if coll != blank -%}
-        {%- assign sorted_products = coll.products | sort: 'published_at' | reverse -%}
-        {%- for product in sorted_products limit: limit -%}
-          {%- assign on_sale = false -%}
-          {%- if product.compare_at_price > product.price -%}{%- assign on_sale = true -%}{%- assign discount_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}{%- endif -%}
-          <article class="zh-product-card zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}">
-            <div class="zh-product-card__media">
-              <a href="{{ product.url }}">
-                {%- if product.featured_image -%}
-                  {{ product.featured_image | image_url: width: 600 | image_tag: class: 'img-primary', loading: 'lazy', alt: product.title }}
-                  {%- if product.images[1] -%}{{ product.images[1] | image_url: width: 600 | image_tag: class: 'img-secondary', loading: 'lazy' }}{%- endif -%}
-                {%- else -%}{{ 'product-1' | placeholder_svg_tag: 'img-primary' }}{%- endif -%}
-              </a>
-              <div class="zh-product-card__badges">
-                <span class="zh-badge zh-badge--new">{{ section.settings.new_badge_text | default: 'New' }}</span>
-                {%- if on_sale -%}<span class="zh-badge zh-badge--sale">-{{ discount_pct }}%</span>{%- endif -%}
-              </div>
-            </div>
-            <div class="zh-product-card__info">
-              {%- if product.vendor != blank -%}<div class="zh-product-card__vendor">{{ product.vendor }}</div>{%- endif -%}
-              <h3 class="zh-product-card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
-              <div class="zh-product-card__price">
-                {%- if on_sale -%}
-                  <span class="zh-price zh-price--sale">{{ product.price | money }}</span>
-                  <span class="zh-price zh-price--compare">{{ product.compare_at_price | money }}</span>
-                {%- else -%}
-                  <span class="zh-price">{{ product.price | money }}</span>
-                {%- endif -%}
-              </div>
-            </div>
-          </article>
-        {%- endfor -%}
-      {%- else -%}
-        {%- for i in (1..limit) -%}
-          <article class="zh-product-card">
-            <div class="zh-product-card__media">
-              {{ 'product-1' | placeholder_svg_tag: 'img-primary' }}
-              <div class="zh-product-card__badges"><span class="zh-badge zh-badge--new">New</span></div>
-            </div>
-            <div class="zh-product-card__info">
-              <h3 class="zh-product-card__title">New Arrival {{ i }}</h3>
-              <div class="zh-product-card__price"><span class="zh-price">SAR 799</span></div>
-            </div>
-          </article>
-        {%- endfor -%}
+    {%- comment -%} Section header {%- endcomment -%}
+    <div class="zh-section-header zh-anim">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="zh-section-header__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="zh-section-header__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      <div class="zh-section-header__divider" aria-hidden="true">
+        <span class="zh-section-header__divider-line"></span>
+        <span class="zh-section-header__divider-diamond"></span>
+        <span class="zh-section-header__divider-line"></span>
+      </div>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="zh-section-header__subtitle">{{ section.settings.subtitle }}</p>
       {%- endif -%}
     </div>
 
-    {%- if section.settings.show_view_all and coll != blank -%}
-      <div style="text-align:center;margin-top:40px;" class="zh-anim">
-        <a href="{{ coll.url }}" class="zh-btn zh-btn--primary">{{ section.settings.view_all_text | default: 'View All New Arrivals' }}</a>
+    {%- comment -%} Tabs (optional) {%- endcomment -%}
+    {%- if section.settings.show_tabs and section.blocks.size > 0 -%}
+      <div class="zh-tabs" data-zh-tabs role="tablist" aria-label="{{ section.settings.title | escape }}">
+        {%- for block in section.blocks -%}
+          <button
+            class="zh-tabs__tab{% if forloop.index0 == 0 %} is-active{% endif %}"
+            data-zh-tab="{{ forloop.index0 }}"
+            data-collection="{{ block.settings.collection }}"
+            role="tab"
+            type="button"
+            aria-selected="{% if forloop.index0 == 0 %}true{% else %}false{% endif %}"
+            aria-controls="zh-na-panel-{{ section.id }}-{{ forloop.index0 }}"
+            id="zh-na-tab-{{ section.id }}-{{ forloop.index0 }}"
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.label | default: block.settings.collection }}
+          </button>
+        {%- endfor -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- assign tab_coll = collections[block.settings.collection] -%}
+        <div
+          class="zh-new-arrivals__panel{% if forloop.index0 == 0 %} is-active{% endif %}"
+          id="zh-na-panel-{{ section.id }}-{{ forloop.index0 }}"
+          role="tabpanel"
+          aria-labelledby="zh-na-tab-{{ section.id }}-{{ forloop.index0 }}"
+          data-zh-panel="{{ forloop.index0 }}"
+        >
+          {%- if layout == 'carousel' -%}
+            <div class="zh-carousel" data-zh-carousel>
+              <div class="zh-carousel__track">
+                {%- if tab_coll != blank and tab_coll.products.size > 0 -%}
+                  {%- for product in tab_coll.products limit: products_to_show -%}
+                    <div class="zh-carousel__item">
+                      {%- render 'zh-product-card',
+                        product: product,
+                        show_quick_add: true,
+                        show_wishlist: true,
+                        show_rating: true
+                      -%}
+                    </div>
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- for i in (1..4) -%}
+                    <div class="zh-carousel__item zh-product-card zh-product-card--placeholder">
+                      <div class="zh-product-card__image-wrap">
+                        {{ 'product-' | append: i | placeholder_svg_tag: 'zh-product-card__placeholder-img' }}
+                      </div>
+                      <div class="zh-product-card__info">
+                        <p class="zh-product-card__title">{{ 'onboarding.product_title' | t | default: 'New Arrival' }}</p>
+                        <p class="zh-product-card__price">{{ 1990 | money }}</p>
+                      </div>
+                    </div>
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+              <button class="zh-carousel__arrow zh-carousel__arrow--prev" data-zh-carousel-prev type="button" aria-label="{{ 'general.slider.previous_slide' | t | default: 'Previous' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="zh-carousel__arrow zh-carousel__arrow--next" data-zh-carousel-next type="button" aria-label="{{ 'general.slider.next_slide' | t | default: 'Next' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
+          {%- else -%}
+            <div class="zh-product-grid">
+              {%- if tab_coll != blank and tab_coll.products.size > 0 -%}
+                {%- for product in tab_coll.products limit: products_to_show -%}
+                  <div class="zh-product-grid__item zh-anim" style="--anim-delay: {{ forloop.index0 | times: 60 }}ms;">
+                    {%- render 'zh-product-card',
+                      product: product,
+                      show_quick_add: true,
+                      show_wishlist: true,
+                      show_rating: true
+                    -%}
+                  </div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for i in (1..4) -%}
+                  <div class="zh-product-grid__item zh-product-card zh-product-card--placeholder zh-anim" style="--anim-delay: {{ forloop.index0 | times: 60 }}ms;">
+                    <div class="zh-product-card__image-wrap">
+                      {{ 'product-' | append: i | placeholder_svg_tag: 'zh-product-card__placeholder-img' }}
+                    </div>
+                    <div class="zh-product-card__info">
+                      <p class="zh-product-card__title">{{ 'onboarding.product_title' | t | default: 'New Arrival' }}</p>
+                      <p class="zh-product-card__price">{{ 1990 | money }}</p>
+                    </div>
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+
+    {%- else -%}
+
+      {%- comment -%} No tabs — main collection {%- endcomment -%}
+      {%- if layout == 'carousel' -%}
+        <div class="zh-carousel" data-zh-carousel>
+          <div class="zh-carousel__track">
+            {%- if coll != blank and coll.products.size > 0 -%}
+              {%- for product in coll.products limit: products_to_show -%}
+                <div class="zh-carousel__item">
+                  {%- render 'zh-product-card',
+                    product: product,
+                    show_quick_add: true,
+                    show_wishlist: true,
+                    show_rating: true
+                  -%}
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for i in (1..6) -%}
+                <div class="zh-carousel__item zh-product-card zh-product-card--placeholder">
+                  <div class="zh-product-card__image-wrap">
+                    {{ 'product-' | append: i | placeholder_svg_tag: 'zh-product-card__placeholder-img' }}
+                  </div>
+                  <div class="zh-product-card__info">
+                    <p class="zh-product-card__title">{{ 'onboarding.product_title' | t | default: 'New Arrival' }}</p>
+                    <p class="zh-product-card__price">{{ 1990 | money }}</p>
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+          <button class="zh-carousel__arrow zh-carousel__arrow--prev" data-zh-carousel-prev type="button" aria-label="{{ 'general.slider.previous_slide' | t | default: 'Previous' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="zh-carousel__arrow zh-carousel__arrow--next" data-zh-carousel-next type="button" aria-label="{{ 'general.slider.next_slide' | t | default: 'Next' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      {%- else -%}
+        <div class="zh-product-grid">
+          {%- if coll != blank and coll.products.size > 0 -%}
+            {%- for product in coll.products limit: products_to_show -%}
+              <div class="zh-product-grid__item zh-anim" style="--anim-delay: {{ forloop.index0 | times: 60 }}ms;">
+                {%- render 'zh-product-card',
+                  product: product,
+                  show_quick_add: true,
+                  show_wishlist: true,
+                  show_rating: true
+                -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              <div class="zh-product-grid__item zh-product-card zh-product-card--placeholder zh-anim" style="--anim-delay: {{ forloop.index0 | times: 60 }}ms;">
+                <div class="zh-product-card__image-wrap">
+                  {{ 'product-' | append: i | placeholder_svg_tag: 'zh-product-card__placeholder-img' }}
+                </div>
+                <div class="zh-product-card__info">
+                  <p class="zh-product-card__title">{{ 'onboarding.product_title' | t | default: 'New Arrival' }}</p>
+                  <p class="zh-product-card__price">{{ 1990 | money }}</p>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    {%- endif -%}
+
+    {%- comment -%} View All {%- endcomment -%}
+    {%- if section.settings.show_view_all and section.settings.view_all_text != blank -%}
+      <div class="zh-new-arrivals__view-all zh-anim">
+        <a
+          href="{{ section.settings.view_all_url | default: coll.url | default: '#' }}"
+          class="zh-btn-view-all"
+        >
+          {{ section.settings.view_all_text }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
       </div>
     {%- endif -%}
+
   </div>
 </section>
 
 <style>
-  #zh-new-arrivals-{{ section.id }} .zh-na-grid { display:grid;gap:24px; }
-  #zh-new-arrivals-{{ section.id }} .zh-product-card__title a { text-decoration:none;color:inherit; }
-  #zh-new-arrivals-{{ section.id }} .zh-product-card__title a:hover { color:var(--zh-gold,#C9A84C); }
-  @media(max-width:1200px){ #zh-new-arrivals-{{ section.id }} .zh-na-grid { grid-template-columns:repeat(3,1fr); } }
-  @media(max-width:768px){ #zh-new-arrivals-{{ section.id }} .zh-na-grid { grid-template-columns:repeat(2,1fr);gap:16px; } }
+  #zh-new-arrivals-{{ section.id }} {
+    padding-top: var(--pt, 60px);
+    padding-bottom: var(--pb, 60px);
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* Section header */
+  #zh-new-arrivals-{{ section.id }} .zh-section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-section-header__eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #C9A84C;
+    margin: 0 0 0.6rem;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-section-header__title {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    color: #1A1A2E;
+    margin: 0 0 1rem;
+    line-height: 1.15;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-section-header__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-section-header__divider-line {
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: #C9A84C;
+    opacity: 0.5;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-section-header__divider-diamond {
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: #C9A84C;
+    transform: rotate(45deg);
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-section-header__subtitle {
+    font-size: 1rem;
+    color: #555;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* Tabs */
+  #zh-new-arrivals-{{ section.id }} .zh-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e8e8e0;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-tabs__tab {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    background: none;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    letter-spacing: 0.04em;
+    margin-bottom: -2px;
+    border-bottom: 2px solid transparent;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-tabs__tab.is-active {
+    color: #C9A84C;
+    border-bottom-color: #C9A84C;
+  }
+
+  /* Tab panels */
+  #zh-new-arrivals-{{ section.id }} .zh-new-arrivals__panel {
+    display: none;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-new-arrivals__panel.is-active {
+    display: block;
+  }
+
+  /* Product grid */
+  #zh-new-arrivals-{{ section.id }} .zh-product-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 4), 1fr);
+    gap: 1.5rem;
+  }
+
+  /* Placeholder cards */
+  #zh-new-arrivals-{{ section.id }} .zh-product-card--placeholder .zh-product-card__image-wrap {
+    aspect-ratio: 3 / 4;
+    background: #f0ede8;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-product-card--placeholder .zh-product-card__info {
+    padding: 0.75rem 0;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-product-card--placeholder .zh-product-card__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1A1A2E;
+    margin: 0 0 0.25rem;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-product-card--placeholder .zh-product-card__price {
+    font-size: 0.85rem;
+    color: #C9A84C;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  /* Carousel */
+  #zh-new-arrivals-{{ section.id }} .zh-carousel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    padding-bottom: 0.5rem;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__item {
+    flex: 0 0 calc(25% - 1rem);
+    scroll-snap-align: start;
+    min-width: 220px;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__item .zh-product-card__image-wrap {
+    aspect-ratio: 3 / 4;
+    background: #f0ede8;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__item .zh-product-card__placeholder-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__item .zh-product-card__info {
+    padding: 0.75rem 0;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__item .zh-product-card__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1A1A2E;
+    margin: 0 0 0.25rem;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__item .zh-product-card__price {
+    font-size: 0.85rem;
+    color: #C9A84C;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__arrow {
+    position: absolute;
+    top: 35%;
+    transform: translateY(-50%);
+    z-index: 5;
+    background: #fff;
+    border: 1px solid #e0ddd8;
+    color: #1A1A2E;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    transition: background 0.2s, box-shadow 0.2s;
+    padding: 0;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__arrow:hover {
+    background: #C9A84C;
+    color: #fff;
+    border-color: #C9A84C;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__arrow--prev {
+    left: -22px;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-carousel__arrow--next {
+    right: -22px;
+  }
+
+  [dir="rtl"] #zh-new-arrivals-{{ section.id }} .zh-carousel__arrow--prev { left: auto; right: -22px; }
+  [dir="rtl"] #zh-new-arrivals-{{ section.id }} .zh-carousel__arrow--next { right: auto; left: -22px; }
+
+  /* View All */
+  #zh-new-arrivals-{{ section.id }} .zh-new-arrivals__view-all {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-btn-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #1A1A2E;
+    text-decoration: none;
+    border-bottom: 2px solid #C9A84C;
+    padding-bottom: 0.2rem;
+    transition: color 0.2s, gap 0.2s;
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-btn-view-all:hover {
+    color: #C9A84C;
+    gap: 0.75rem;
+  }
+
+  /* Scroll animation */
+  #zh-new-arrivals-{{ section.id }} .zh-anim {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+    transition-delay: var(--anim-delay, 0ms);
+  }
+
+  #zh-new-arrivals-{{ section.id }} .zh-anim.zh-anim--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 1023px) {
+    #zh-new-arrivals-{{ section.id }} .zh-product-grid {
+      grid-template-columns: repeat({{ section.settings.columns | minus: 1 | at_least: 2 }}, 1fr);
+    }
+
+    #zh-new-arrivals-{{ section.id }} .zh-carousel__item {
+      flex: 0 0 calc(33.333% - 1rem);
+    }
+  }
+
+  @media (max-width: 767px) {
+    #zh-new-arrivals-{{ section.id }} .zh-product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    #zh-new-arrivals-{{ section.id }} .zh-carousel__item {
+      flex: 0 0 calc(50% - 0.625rem);
+    }
+
+    #zh-new-arrivals-{{ section.id }} .zh-carousel__arrow {
+      display: none;
+    }
+  }
 </style>
+
+<script src="{{ 'zh-premium.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
   "name": "ZH New Arrivals",
+  "tag": "section",
+  "class": "zh-section-new-arrivals",
+  "max_blocks": 5,
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Just Landed" },
-    { "type": "text", "id": "title", "label": "Title", "default": "New Arrivals" },
-    { "type": "textarea", "id": "subtitle", "label": "Subtitle" },
-    { "type": "collection", "id": "collection", "label": "Collection" },
-    { "type": "range", "id": "products_count", "label": "Products to Show", "min": 4, "max": 16, "step": 4, "default": 8 },
-    { "type": "select", "id": "columns", "label": "Columns", "options": [{ "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }], "default": "4" },
-    { "type": "text", "id": "new_badge_text", "label": "New Badge Text", "default": "New" },
-    { "type": "checkbox", "id": "show_view_all", "label": "Show View All Button", "default": true },
-    { "type": "text", "id": "view_all_text", "label": "View All Text", "default": "View All New Arrivals" },
-    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#FAFAF8" },
-    { "type": "range", "id": "padding_top", "label": "Padding Top (px)", "min": 0, "max": 120, "step": 8, "default": 64 },
-    { "type": "range", "id": "padding_bottom", "label": "Padding Bottom (px)", "min": 0, "max": 120, "step": 8, "default": 64 }
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Source Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to Show",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (Desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "sort_by",
+      "label": "Sort Products By",
+      "options": [
+        { "value": "created-descending", "label": "Newest First" },
+        { "value": "manual",             "label": "Manual (collection order)" },
+        { "value": "best-selling",       "label": "Best Selling" }
+      ],
+      "default": "created-descending",
+      "info": "Note: sort_by applies in product collection context; use a sorted collection or filter in JS for full support."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout Style",
+      "options": [
+        { "value": "grid",     "label": "Grid" },
+        { "value": "carousel", "label": "Carousel (Scrollable)" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "header",
+      "content": "Tabs"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tabs",
+      "label": "Show Category Tabs",
+      "default": false,
+      "info": "Add tab blocks below to enable"
+    },
+    {
+      "type": "header",
+      "content": "View All"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All Button Text",
+      "default": "View All New Arrivals"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "View All URL (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Colors & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FAFAF8"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
   ],
-  "presets": [{ "name": "ZH New Arrivals" }]
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab Label",
+          "default": "Category"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ZH New Arrivals"
+    }
+  ]
 }
 {% endschema %}
