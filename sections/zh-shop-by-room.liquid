@@ -1,0 +1,180 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign layout = section.settings.layout | default: 'grid'
+  assign pt = section.settings.padding_top | default: 64
+  assign pb = section.settings.padding_bottom | default: 64
+-%}
+
+<section
+  class="zh-section zh-shop-room-section zh-shop-room--{{ layout }}"
+  id="zh-shop-room-{{ section.id }}"
+  style="padding-top:{{ pt }}px;padding-bottom:{{ pb }}px;background:{{ section.settings.background_color | default: '#ffffff' }};"
+>
+  <div class="zh-container">
+    {%- if section.settings.title != blank -%}
+      <header class="zh-section-header zh-anim">
+        {%- if section.settings.eyebrow != blank -%}<span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+        {%- if section.settings.subtitle != blank -%}<p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+        <span class="zh-section-divider"></span>
+      </header>
+    {%- endif -%}
+
+    {%- if layout == 'carousel' -%}
+      <div class="zh-shop-room__carousel zh-scroll-x">
+        {%- for block in section.blocks -%}
+          <a href="{{ block.settings.link_url | default: '#' }}" class="zh-room-card zh-room-card--carousel zh-anim zh-anim-delay-{{ forloop.index | modulo: 5 | plus: 1 }}" {{ block.shopify_attributes }}>
+            {%- render 'zh-room-card-inner', block: block -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- elsif layout == 'masonry' -%}
+      <div class="zh-shop-room__masonry">
+        {%- for block in section.blocks -%}
+          <a href="{{ block.settings.link_url | default: '#' }}" class="zh-room-card zh-room-card--masonry zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}" {{ block.shopify_attributes }}>
+            {%- render 'zh-room-card-inner', block: block -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="zh-shop-room__grid">
+        {%- for block in section.blocks -%}
+          <a href="{{ block.settings.link_url | default: '#' }}" class="zh-room-card zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}" {{ block.shopify_attributes }}>
+            <div class="zh-room-card__media">
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 800 | image_tag: class: 'zh-room-card__img', loading: 'lazy', widths: '400,600,800', sizes: '(max-width:768px) 100vw, 50vw', alt: block.settings.room_name }}
+              {%- else -%}
+                <div class="zh-room-card__placeholder"></div>
+              {%- endif -%}
+              <div class="zh-room-card__overlay"></div>
+              <div class="zh-room-card__content">
+                {%- if block.settings.room_name != blank -%}
+                  <h3 class="zh-room-card__name">{{ block.settings.room_name }}</h3>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <p class="zh-room-card__desc">{{ block.settings.description }}</p>
+                {%- endif -%}
+                <span class="zh-room-card__btn">
+                  {{ 'collections.general.shop_now' | t | default: 'Shop Now' }}
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #zh-shop-room-{{ section.id }} .zh-shop-room__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns | default: 3 }}, 1fr);
+    gap: 20px;
+  }
+  #zh-shop-room-{{ section.id }} .zh-room-card { display: block; text-decoration: none; border-radius: 12px; overflow: hidden; }
+  #zh-shop-room-{{ section.id }} .zh-room-card__media {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+  }
+  #zh-shop-room-{{ section.id }} .zh-room-card:first-child .zh-room-card__media { aspect-ratio: 3/5; }
+  #zh-shop-room-{{ section.id }} .zh-room-card__img, #zh-shop-room-{{ section.id }} .zh-room-card__placeholder {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform .6s cubic-bezier(.22,1,.36,1);
+  }
+  #zh-shop-room-{{ section.id }} .zh-room-card__placeholder { background: linear-gradient(135deg,var(--zh-dark,#1A1A2E),#3a3a5c); }
+  #zh-shop-room-{{ section.id }} .zh-room-card:hover .zh-room-card__img { transform: scale(1.07); }
+  #zh-shop-room-{{ section.id }} .zh-room-card__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,26,46,.85) 0%, rgba(26,26,46,.1) 60%, transparent 100%);
+    transition: opacity .4s;
+  }
+  #zh-shop-room-{{ section.id }} .zh-room-card__content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 28px 24px;
+    transform: translateY(8px);
+    transition: transform .4s cubic-bezier(.22,1,.36,1);
+  }
+  [dir="rtl"] #zh-shop-room-{{ section.id }} .zh-room-card__content { text-align: right; }
+  #zh-shop-room-{{ section.id }} .zh-room-card:hover .zh-room-card__content { transform: none; }
+  #zh-shop-room-{{ section.id }} .zh-room-card__name {
+    font-family: var(--zh-font-display,'Cormorant Garant',serif);
+    font-size: 1.5rem; font-weight: 600;
+    color: #fff; margin: 0 0 8px; line-height: 1.2;
+  }
+  [dir="rtl"] #zh-shop-room-{{ section.id }} .zh-room-card__name { font-family: var(--zh-font-ar,'Cairo',sans-serif); }
+  #zh-shop-room-{{ section.id }} .zh-room-card__desc {
+    font-size: .85rem; color: rgba(255,255,255,.75);
+    line-height: 1.5; margin: 0 0 14px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .35s .1s, transform .35s .1s;
+  }
+  #zh-shop-room-{{ section.id }} .zh-room-card:hover .zh-room-card__desc { opacity: 1; transform: none; }
+  #zh-shop-room-{{ section.id }} .zh-room-card__btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: .72rem; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--zh-gold,#C9A84C);
+    border-bottom: 1px solid var(--zh-gold,#C9A84C);
+    padding-bottom: 2px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .3s .2s, transform .3s .2s, gap .2s;
+  }
+  #zh-shop-room-{{ section.id }} .zh-room-card:hover .zh-room-card__btn { opacity: 1; transform: none; gap: 10px; }
+  /* Carousel */
+  #zh-shop-room-{{ section.id }} .zh-shop-room__carousel { display: flex; gap: 20px; padding-bottom: 12px; }
+  #zh-shop-room-{{ section.id }} .zh-room-card--carousel { flex: 0 0 300px; }
+  #zh-shop-room-{{ section.id }} .zh-room-card--carousel .zh-room-card__media { aspect-ratio: 3/4; }
+  /* Masonry */
+  #zh-shop-room-{{ section.id }} .zh-shop-room__masonry { columns: 3; column-gap: 20px; }
+  #zh-shop-room-{{ section.id }} .zh-room-card--masonry { break-inside: avoid; margin-bottom: 20px; }
+  @media(max-width:1024px){
+    #zh-shop-room-{{ section.id }} .zh-shop-room__grid { grid-template-columns: repeat(2,1fr); }
+    #zh-shop-room-{{ section.id }} .zh-shop-room__masonry { columns: 2; }
+  }
+  @media(max-width:600px){
+    #zh-shop-room-{{ section.id }} .zh-shop-room__grid { grid-template-columns: 1fr; }
+    #zh-shop-room-{{ section.id }} .zh-shop-room__masonry { columns: 1; }
+    #zh-shop-room-{{ section.id }} .zh-room-card:first-child .zh-room-card__media { aspect-ratio: 3/4; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "ZH Shop by Room",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Explore" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Shop by Room" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle" },
+    { "type": "select", "id": "layout", "label": "Layout", "options": [{ "value": "grid", "label": "Grid" }, { "value": "masonry", "label": "Masonry" }, { "value": "carousel", "label": "Horizontal Carousel" }], "default": "grid" },
+    { "type": "select", "id": "columns", "label": "Grid Columns", "options": [{ "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }], "default": "3" },
+    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "label": "Padding Top (px)", "min": 0, "max": 120, "step": 8, "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding Bottom (px)", "min": 0, "max": 120, "step": 8, "default": 64 }
+  ],
+  "blocks": [
+    {
+      "type": "room", "name": "Room Card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Room Image" },
+        { "type": "text", "id": "room_name", "label": "Room Name", "default": "Living Room" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "url", "id": "link_url", "label": "Link URL" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "ZH Shop by Room",
+    "blocks": [
+      { "type": "room", "settings": { "room_name": "Living Room" } },
+      { "type": "room", "settings": { "room_name": "Bedroom" } },
+      { "type": "room", "settings": { "room_name": "Dining Room" } },
+      { "type": "room", "settings": { "room_name": "Home Office" } }
+    ]
+  }]
+}
+{% endschema %}

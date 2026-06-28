@@ -1,0 +1,181 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign pt = section.settings.padding_top | default: 64
+  assign pb = section.settings.padding_bottom | default: 64
+-%}
+
+<section
+  class="zh-section zh-before-after-section"
+  id="zh-ba-{{ section.id }}"
+  style="padding-top:{{ pt }}px;padding-bottom:{{ pb }}px;background:{{ section.settings.background_color | default: '#FAFAF8' }};"
+>
+  <div class="zh-container">
+    {%- if section.settings.title != blank -%}
+      <header class="zh-section-header zh-anim">
+        {%- if section.settings.eyebrow != blank -%}<span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+        {%- if section.settings.subtitle != blank -%}<p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+        <span class="zh-section-divider"></span>
+      </header>
+    {%- endif -%}
+
+    <div class="zh-ba-grid">
+      {%- for block in section.blocks -%}
+        <div class="zh-ba-item zh-anim zh-anim-delay-{{ forloop.index }}" {{ block.shopify_attributes }}>
+          <div class="zh-ba-comparison" data-zh-before-after>
+            <div class="zh-ba-before">
+              {%- if block.settings.image_before != blank -%}
+                {{ block.settings.image_before | image_url: width: 1000 | image_tag: class: 'zh-ba-img', loading: 'lazy', alt: block.settings.before_label | default: 'Before' }}
+              {%- else -%}
+                <div class="zh-ba-img-placeholder"></div>
+              {%- endif -%}
+              <span class="zh-ba-label zh-ba-label--before">{{ block.settings.before_label | default: 'Before' }}</span>
+            </div>
+            <div class="zh-ba-after">
+              {%- if block.settings.image_after != blank -%}
+                {{ block.settings.image_after | image_url: width: 1000 | image_tag: class: 'zh-ba-img', loading: 'lazy', alt: block.settings.after_label | default: 'After' }}
+              {%- else -%}
+                <div class="zh-ba-img-placeholder zh-ba-img-placeholder--after"></div>
+              {%- endif -%}
+              <span class="zh-ba-label zh-ba-label--after">{{ block.settings.after_label | default: 'After' }}</span>
+            </div>
+            <div class="zh-ba-handle" role="slider" aria-label="Before/After comparison slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">
+              <div class="zh-ba-handle__line"></div>
+              <div class="zh-ba-handle__knob">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path d="M8 9l-4 3 4 3M16 9l4 3-4 3"/>
+                </svg>
+              </div>
+              <div class="zh-ba-handle__line"></div>
+            </div>
+          </div>
+          {%- if block.settings.caption != blank -%}
+            <p class="zh-ba-caption">{{ block.settings.caption }}</p>
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        <p class="zh-no-blocks">Add before/after comparisons in the Theme Editor.</p>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #zh-ba-{{ section.id }} .zh-ba-grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns | default: 1 }}, 1fr);
+    gap: 32px;
+  }
+  #zh-ba-{{ section.id }} .zh-ba-comparison {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--zh-radius-xl,12px);
+    box-shadow: var(--zh-shadow-lg);
+    cursor: ew-resize;
+    aspect-ratio: 16/9;
+    user-select: none;
+  }
+  #zh-ba-{{ section.id }} .zh-ba-before,
+  #zh-ba-{{ section.id }} .zh-ba-after {
+    position: absolute; inset: 0;
+  }
+  #zh-ba-{{ section.id }} .zh-ba-after {
+    clip-path: inset(0 50% 0 0);
+  }
+  #zh-ba-{{ section.id }} .zh-ba-img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    pointer-events: none;
+  }
+  #zh-ba-{{ section.id }} .zh-ba-img-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg,#e8e0d0,#c8b890);
+  }
+  #zh-ba-{{ section.id }} .zh-ba-img-placeholder--after {
+    background: linear-gradient(135deg,var(--zh-dark,#1A1A2E),var(--zh-dark-light,#2A2A40));
+  }
+  #zh-ba-{{ section.id }} .zh-ba-label {
+    position: absolute; top: 16px;
+    font-size: .7rem; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+  #zh-ba-{{ section.id }} .zh-ba-label--before {
+    left: 16px;
+    background: rgba(255,255,255,.9); color: var(--zh-dark,#1A1A2E);
+  }
+  #zh-ba-{{ section.id }} .zh-ba-label--after {
+    right: 16px;
+    background: var(--zh-dark,#1A1A2E); color: #fff;
+  }
+  [dir="rtl"] #zh-ba-{{ section.id }} .zh-ba-label--before { left: auto; right: 16px; }
+  [dir="rtl"] #zh-ba-{{ section.id }} .zh-ba-label--after { right: auto; left: 16px; }
+  #zh-ba-{{ section.id }} .zh-ba-handle {
+    position: absolute; top: 0; bottom: 0;
+    left: 50%; transform: translateX(-50%);
+    width: 44px;
+    display: flex; flex-direction: column; align-items: center;
+    cursor: ew-resize; z-index: 10;
+    touch-action: none;
+  }
+  #zh-ba-{{ section.id }} .zh-ba-handle__line {
+    flex: 1; width: 2px;
+    background: linear-gradient(to bottom,transparent,#fff,transparent);
+  }
+  #zh-ba-{{ section.id }} .zh-ba-handle__knob {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,.25);
+    color: var(--zh-dark,#1A1A2E);
+    flex-shrink: 0;
+    border: 2px solid var(--zh-gold,#C9A84C);
+    transition: transform .2s;
+  }
+  #zh-ba-{{ section.id }} .zh-ba-handle:hover .zh-ba-handle__knob { transform: scale(1.08); }
+  #zh-ba-{{ section.id }} .zh-ba-caption {
+    text-align: center; font-size: .85rem;
+    color: var(--zh-text-mid,#555); margin: 16px 0 0;
+    font-style: italic;
+  }
+  @media(max-width:768px){
+    #zh-ba-{{ section.id }} .zh-ba-grid { grid-template-columns: 1fr; }
+    #zh-ba-{{ section.id }} .zh-ba-comparison { aspect-ratio: 4/3; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "ZH Before & After",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "title", "label": "Section Title", "default": "Transformation Gallery" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle" },
+    { "type": "select", "id": "columns", "label": "Columns", "options": [{ "value": "1", "label": "1" }, { "value": "2", "label": "2" }], "default": "1" },
+    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#FAFAF8" },
+    { "type": "range", "id": "padding_top", "label": "Padding Top (px)", "min": 0, "max": 120, "step": 8, "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding Bottom (px)", "min": 0, "max": 120, "step": 8, "default": 64 }
+  ],
+  "blocks": [
+    {
+      "type": "comparison", "name": "Before/After Pair",
+      "settings": [
+        { "type": "image_picker", "id": "image_before", "label": "Before Image" },
+        { "type": "image_picker", "id": "image_after", "label": "After Image" },
+        { "type": "text", "id": "before_label", "label": "Before Label", "default": "Before" },
+        { "type": "text", "id": "after_label", "label": "After Label", "default": "After" },
+        { "type": "text", "id": "caption", "label": "Caption (optional)" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "ZH Before & After",
+    "blocks": [{ "type": "comparison", "settings": { "before_label": "Before", "after_label": "After" } }]
+  }]
+}
+{% endschema %}

@@ -1,0 +1,184 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign layout = section.settings.layout | default: 'centered'
+  assign pt = section.settings.padding_top | default: 80
+  assign pb = section.settings.padding_bottom | default: 80
+-%}
+
+<section
+  class="zh-section zh-newsletter-section zh-newsletter--{{ layout }}"
+  id="zh-newsletter-{{ section.id }}"
+  style="
+    padding-top:{{ pt }}px;padding-bottom:{{ pb }}px;
+    {% if section.settings.bg_image != blank %}
+    background-image: url('{{ section.settings.bg_image | image_url: width: 1600 }}');
+    background-size: cover; background-position: center;
+    {% else %}
+    background: {{ section.settings.background_color | default: '#1A1A2E' }};
+    {% endif %}
+  "
+>
+  {%- if section.settings.bg_image != blank -%}
+    <div class="zh-newsletter__overlay" style="background:rgba(26,26,46,{{ section.settings.overlay_opacity | default: 70 | divided_by: 100.0 }});position:absolute;inset:0;"></div>
+  {%- endif -%}
+
+  <div class="zh-container" style="position:relative;z-index:2;">
+    {%- if layout == 'centered' -%}
+      <div class="zh-newsletter__centered zh-anim">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="zh-newsletter__eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="zh-newsletter__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtext != blank -%}
+          <p class="zh-newsletter__sub">{{ section.settings.subtext }}</p>
+        {%- endif -%}
+        {%- render 'zh-newsletter-form', section: section -%}
+      </div>
+    {%- else -%}
+      <div class="zh-newsletter__split">
+        {%- if section.settings.split_image != blank -%}
+          <div class="zh-newsletter__split-img zh-anim">
+            {{ section.settings.split_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400,600,800', sizes: '50vw' }}
+          </div>
+        {%- endif -%}
+        <div class="zh-newsletter__split-content zh-anim zh-anim-delay-2">
+          {%- if section.settings.eyebrow != blank -%}
+            <span class="zh-newsletter__eyebrow">{{ section.settings.eyebrow }}</span>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="zh-newsletter__heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.subtext != blank -%}
+            <p class="zh-newsletter__sub">{{ section.settings.subtext }}</p>
+          {%- endif -%}
+          {%- render 'zh-newsletter-form', section: section -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- capture newsletter_form -%}
+  {%- form 'customer', id: 'zh-nl-form-' | append: section.id -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <div class="zh-newsletter__fields">
+      {%- if section.settings.show_name_field -%}
+        <input
+          type="text" name="contact[first_name]"
+          class="zh-newsletter__input"
+          placeholder="{{ section.settings.name_placeholder | default: 'Your Name' }}"
+          aria-label="Name"
+        >
+      {%- endif -%}
+      <div class="zh-newsletter__email-row">
+        <input
+          type="email" name="contact[email]"
+          class="zh-newsletter__input"
+          placeholder="{{ section.settings.placeholder | default: 'Your email address' }}"
+          required aria-label="Email"
+        >
+        <button type="submit" class="zh-btn zh-btn--gold zh-newsletter__submit">
+          {{ section.settings.button_text | default: 'Subscribe' }}
+        </button>
+      </div>
+    </div>
+    {%- if form.posted_successfully? -%}
+      <p class="zh-newsletter__success">{{ section.settings.success_message | default: 'Thank you for subscribing!' }}</p>
+    {%- endif -%}
+    {%- if form.errors -%}
+      <p class="zh-newsletter__error">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+  {%- endform -%}
+{%- endcapture -%}
+
+<style>
+  #zh-newsletter-{{ section.id }} { position:relative; }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__centered {
+    max-width: 640px; margin-inline: auto; text-align: center;
+  }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__eyebrow {
+    display:inline-block;font-size:.72rem;font-weight:700;
+    letter-spacing:.2em;text-transform:uppercase;
+    color:var(--zh-gold,#C9A84C);margin-bottom:12px;
+  }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__heading {
+    font-family:var(--zh-font-display,'Cormorant Garant',serif);
+    font-size:clamp(1.75rem,3.5vw,3rem);font-weight:600;
+    color:{{ section.settings.text_color | default: '#ffffff' }};
+    line-height:1.2;margin:0 0 16px;
+  }
+  [dir="rtl"] #zh-newsletter-{{ section.id }} .zh-newsletter__heading { font-family:var(--zh-font-ar,'Cairo',sans-serif); }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__sub {
+    font-size:1rem;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:32px;
+  }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__fields { display:flex;flex-direction:column;gap:12px; }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__email-row { display:flex;gap:0; }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__input {
+    flex:1;min-width:0;
+    height:52px;padding:0 20px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:4px 0 0 4px;
+    color:#fff;font-size:.9rem;
+    outline:none;transition:border-color .25s,background .25s;
+    font-family:inherit;
+  }
+  [dir="rtl"] #zh-newsletter-{{ section.id }} .zh-newsletter__input { border-radius:0 4px 4px 0; }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__input::placeholder { color:rgba(255,255,255,.5); }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__input:focus { background:rgba(255,255,255,.18);border-color:var(--zh-gold,#C9A84C); }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__submit { border-radius:0 4px 4px 0; height:52px;white-space:nowrap; }
+  [dir="rtl"] #zh-newsletter-{{ section.id }} .zh-newsletter__submit { border-radius:4px 0 0 4px; }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__success {
+    margin-top:16px;color:var(--zh-gold,#C9A84C);font-weight:600;text-align:center;
+  }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__error { margin-top:12px;color:#f87171;font-size:.85rem; }
+  /* Split layout */
+  #zh-newsletter-{{ section.id }} .zh-newsletter__split {
+    display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;
+  }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__split-img { border-radius:12px;overflow:hidden; }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__split-img img { width:100%;height:100%;object-fit:cover;display:block;border-radius:12px; }
+  #zh-newsletter-{{ section.id }} .zh-newsletter__split-content { color:#fff; }
+  #zh-newsletter-{{ section.id }} .zh-newsletter--split .zh-newsletter__heading,
+  #zh-newsletter-{{ section.id }} .zh-newsletter--split .zh-newsletter__sub { text-align:left; }
+  [dir="rtl"] #zh-newsletter-{{ section.id }} .zh-newsletter--split .zh-newsletter__heading,
+  [dir="rtl"] #zh-newsletter-{{ section.id }} .zh-newsletter--split .zh-newsletter__sub { text-align:right; }
+  @media(max-width:900px){
+    #zh-newsletter-{{ section.id }} .zh-newsletter__split { grid-template-columns:1fr;gap:32px; }
+  }
+  @media(max-width:500px){
+    #zh-newsletter-{{ section.id }} .zh-newsletter__email-row { flex-direction:column;gap:12px; }
+    #zh-newsletter-{{ section.id }} .zh-newsletter__input,
+    #zh-newsletter-{{ section.id }} .zh-newsletter__submit { border-radius:4px; }
+    #zh-newsletter-{{ section.id }} .zh-newsletter__submit { width:100%; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "GCC Newsletter",
+  "settings": [
+    { "type": "select", "id": "layout", "label": "Layout", "options": [{ "value": "centered", "label": "Centered" }, { "value": "split", "label": "Split (image + form)" }], "default": "centered" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Stay Connected" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Join the ZenoHome Community" },
+    { "type": "textarea", "id": "subtext", "label": "Subtext", "default": "Get exclusive offers, design inspiration and early access to new arrivals." },
+    { "type": "checkbox", "id": "show_name_field", "label": "Show Name Field", "default": false },
+    { "type": "text", "id": "name_placeholder", "label": "Name Placeholder", "default": "Your Name" },
+    { "type": "text", "id": "placeholder", "label": "Email Placeholder", "default": "Your email address" },
+    { "type": "text", "id": "button_text", "label": "Button Text", "default": "Subscribe" },
+    { "type": "text", "id": "success_message", "label": "Success Message", "default": "Thank you for subscribing!" },
+    { "type": "image_picker", "id": "split_image", "label": "Split Layout Image" },
+    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#1A1A2E" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background Image" },
+    { "type": "range", "id": "overlay_opacity", "label": "Image Overlay Opacity (%)", "min": 30, "max": 90, "step": 5, "default": 70 },
+    { "type": "color", "id": "text_color", "label": "Text Color", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "label": "Padding Top (px)", "min": 0, "max": 160, "step": 8, "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding Bottom (px)", "min": 0, "max": 160, "step": 8, "default": 80 }
+  ],
+  "presets": [{ "name": "GCC Newsletter" }]
+}
+{% endschema %}

@@ -1,0 +1,106 @@
+<!-- sections/zh-instagram.liquid -->
+{%- liquid
+  assign se = section.settings
+-%}
+
+<section class="zh-instagram" style="padding:64px 0;background:var(--zh-bg-soft);" data-gcc-reveal>
+  <div class="t4s-container">
+    <div class="zh-section-header">
+      {%- if se.eyebrow != blank -%}
+        <div class="zh-section-header__eyebrow">{{ se.eyebrow }}</div>
+      {%- endif -%}
+      <h2 class="zh-section-header__title">{{ se.title | default: 'Follow Us on Instagram' }}</h2>
+      {%- if se.handle != blank -%}
+        <a href="https://instagram.com/{{ se.handle | remove: '@' }}"
+           target="_blank"
+           rel="noopener noreferrer"
+           style="color:var(--zh-teal);font-size:14px;font-weight:500;margin-top:8px;display:inline-block;">
+          @{{ se.handle | remove: '@' }}
+        </a>
+      {%- endif -%}
+      <div class="zh-divider"></div>
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div style="display:grid;grid-template-columns:repeat({{ se.columns | default: 6 }},1fr);gap:6px;border-radius:var(--zh-radius-lg);overflow:hidden;">
+        {%- for block in section.blocks -%}
+          {%- assign b = block.settings -%}
+          <a href="{{ b.link | default: '#' }}"
+             target="_blank"
+             rel="noopener noreferrer"
+             style="display:block;aspect-ratio:1;overflow:hidden;position:relative;"
+             {{ block.shopify_attributes }}>
+            {%- if b.image != blank -%}
+              <img src="{{ b.image | image_url: width: 400 }}"
+                   alt="{{ b.alt | default: 'Instagram photo' | escape }}"
+                   loading="lazy"
+                   width="400" height="400"
+                   style="width:100%;height:100%;object-fit:cover;transition:transform .42s cubic-bezier(.25,.46,.45,.94);"
+                   onmouseenter="this.style.transform='scale(1.08)'"
+                   onmouseleave="this.style.transform='scale(1)'">
+              <div style="position:absolute;inset:0;background:rgba(15,118,110,0);transition:background .28s;display:flex;align-items:center;justify-content:center;"
+                   onmouseenter="this.style.background='rgba(15,118,110,.35)'"
+                   onmouseleave="this.style.background='rgba(15,118,110,0)'">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" width="28" height="28" style="opacity:0;transition:opacity .28s;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0'" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </div>
+            {%- else -%}
+              <div style="background:var(--zh-bg-soft);width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--zh-border)" stroke-width="1.5" width="32" height="32" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+              </div>
+            {%- endif -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if se.handle != blank -%}
+      <div style="text-align:center;margin-top:32px;">
+        <a href="https://instagram.com/{{ se.handle | remove: '@' }}"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="zh-btn-ghost">
+          {{ 'general.newsletter_form.view_on_instagram' | t | default: 'View on Instagram' }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Instagram Gallery",
+  "tag": "section",
+  "class": "zh-section-instagram",
+  "settings": [
+    { "type": "text",  "id": "eyebrow", "label": "Eyebrow",      "default": "Instagram" },
+    { "type": "text",  "id": "title",   "label": "Title",         "default": "Follow Our Journey" },
+    { "type": "text",  "id": "handle",  "label": "@handle",       "default": "zenohome" },
+    { "type": "range", "id": "columns", "label": "Columns",       "min": 3, "max": 8, "step": 1, "default": 6 }
+  ],
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Photo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "url",          "id": "link",  "label": "Link" },
+        { "type": "text",         "id": "alt",   "label": "Alt text" }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Instagram Gallery",
+      "blocks": [
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

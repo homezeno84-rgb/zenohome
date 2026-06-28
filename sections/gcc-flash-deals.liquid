@@ -1,0 +1,119 @@
+<!-- sections/gcc-flash-deals.liquid -->
+{%- liquid
+  assign se_stts   = section.settings
+  assign collection = collections[se_stts.collection]
+  assign end_time   = se_stts.end_time
+-%}
+
+<section class="t4s-section-inner gcc-flash-deals" data-gcc-reveal>
+  <div class="t4s-container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
+      <div>
+        {%- if se_stts.label != blank -%}
+          <div style="color:var(--gcc-gold);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">
+            <svg style="width:16px;height:16px;vertical-align:middle;margin-inline-end:6px;" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            {{ se_stts.label | default: 'Flash Deals' }}
+          </div>
+        {%- endif -%}
+        <h2 class="gcc-flash-deals__title" style="font-size:clamp(1.6rem,3vw,2.4rem);margin:0;color:#fff;">
+          {{ se_stts.title | default: 'Today\'s Best Offers' }}
+        </h2>
+      </div>
+
+      {%- if end_time != blank -%}
+        <div class="gcc-countdown" data-gcc-countdown="{{ end_time }}" aria-label="{{ 'sections.countdown.label' | t | default: 'Deal ends in' }}">
+          <div class="gcc-countdown__unit">
+            <div class="gcc-countdown__number" data-gcc-days>00</div>
+            <div class="gcc-countdown__label">{{ 'sections.countdown.days' | t | default: 'Days' }}</div>
+          </div>
+          <span style="color:var(--gcc-gold-light);font-size:1.4rem;font-weight:700;line-height:1;">:</span>
+          <div class="gcc-countdown__unit">
+            <div class="gcc-countdown__number" data-gcc-hours>00</div>
+            <div class="gcc-countdown__label">{{ 'sections.countdown.hours' | t | default: 'Hrs' }}</div>
+          </div>
+          <span style="color:var(--gcc-gold-light);font-size:1.4rem;font-weight:700;line-height:1;">:</span>
+          <div class="gcc-countdown__unit">
+            <div class="gcc-countdown__number" data-gcc-minutes>00</div>
+            <div class="gcc-countdown__label">{{ 'sections.countdown.mins' | t | default: 'Min' }}</div>
+          </div>
+          <span style="color:var(--gcc-gold-light);font-size:1.4rem;font-weight:700;line-height:1;">:</span>
+          <div class="gcc-countdown__unit">
+            <div class="gcc-countdown__number" data-gcc-seconds>00</div>
+            <div class="gcc-countdown__label">{{ 'sections.countdown.secs' | t | default: 'Sec' }}</div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;" data-gcc-reveal-stagger>
+      {%- if collection != blank -%}
+        {%- for product in collection.products limit: se_stts.products_count -%}
+          {%- assign price = product.price -%}
+          {%- assign compare = product.compare_at_price -%}
+          {%- assign discount = 0 -%}
+          {%- if compare > price -%}
+            {%- assign discount = compare | minus: price | times: 100 | divided_by: compare -%}
+          {%- endif -%}
+          <a href="{{ product.url }}" class="gcc-deal-card" style="background:rgba(255,255,255,.05);border-radius:12px;border:1px solid rgba(201,168,76,.15);overflow:hidden;text-decoration:none;color:inherit;transition:transform .3s,box-shadow .3s;display:block;">
+            <div style="position:relative;aspect-ratio:1;overflow:hidden;background:rgba(255,255,255,.03);">
+              {%- if product.featured_image -%}
+                <img src="{{ product.featured_image | image_url: width: 400 }}"
+                     alt="{{ product.featured_image.alt | escape }}"
+                     width="400" height="400"
+                     loading="lazy"
+                     style="width:100%;height:100%;object-fit:cover;transition:transform .4s;">
+              {%- endif -%}
+              {%- if discount > 0 -%}
+                <span style="position:absolute;top:10px;inset-inline-start:10px;background:var(--gcc-gold);color:var(--gcc-navy);padding:3px 8px;border-radius:4px;font-size:12px;font-weight:700;">
+                  -{{ discount }}%
+                </span>
+              {%- endif -%}
+            </div>
+            <div style="padding:12px;">
+              <div style="font-weight:600;font-size:14px;color:rgba(255,255,255,.9);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                {{ product.title }}
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span style="color:var(--gcc-gold-light);font-weight:700;font-size:16px;">{{ price | money }}</span>
+                {%- if compare > price -%}
+                  <span style="color:rgba(255,255,255,.4);text-decoration:line-through;font-size:13px;">{{ compare | money }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          </a>
+        {%- else -%}
+          <p style="color:rgba(255,255,255,.5);grid-column:1/-1;text-align:center;padding:40px 0;">
+            {{ 'sections.featured_collection.no_products' | t | default: 'No products found.' }}
+          </p>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if se_stts.view_all_text != blank and collection.url != blank -%}
+      <div style="text-align:center;margin-top:32px;">
+        <a href="{{ collection.url }}" class="t4s-btn" style="background:var(--gcc-gold);color:var(--gcc-navy);border:none;padding:12px 32px;font-weight:700;border-radius:8px;text-decoration:none;display:inline-block;">
+          {{ se_stts.view_all_text }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Flash Deals (GCC)",
+  "tag": "section",
+  "class": "gcc-section-flash-deals",
+  "settings": [
+    { "type": "text",       "id": "label",          "label": "Badge Label",      "default": "Flash Deals" },
+    { "type": "text",       "id": "title",          "label": "Section Title",    "default": "Today's Best Offers" },
+    { "type": "collection", "id": "collection",     "label": "Collection" },
+    { "type": "range",      "id": "products_count", "label": "Products",         "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "text",       "id": "end_time",       "label": "Countdown End (ISO 8601)", "info": "e.g. 2025-12-31T23:59:59+03:00" },
+    { "type": "text",       "id": "view_all_text",  "label": "View All Button",  "default": "View All Deals" }
+  ],
+  "presets": [
+    { "name": "Flash Deals (GCC)" }
+  ]
+}
+{% endschema %}

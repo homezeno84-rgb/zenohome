@@ -1,0 +1,111 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign coll = collections[section.settings.collection]
+  assign limit = section.settings.products_count | default: 8
+  assign cols = section.settings.columns | default: 4
+  assign pt = section.settings.padding_top | default: 64
+  assign pb = section.settings.padding_bottom | default: 64
+-%}
+
+<section
+  class="zh-section zh-new-arrivals-section"
+  id="zh-new-arrivals-{{ section.id }}"
+  style="padding-top:{{ pt }}px;padding-bottom:{{ pb }}px;background:{{ section.settings.background_color | default: '#FAFAF8' }};"
+>
+  <div class="zh-container">
+    {%- if section.settings.title != blank -%}
+      <header class="zh-section-header zh-anim">
+        {%- if section.settings.eyebrow != blank -%}<span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+        {%- if section.settings.subtitle != blank -%}<p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+        <span class="zh-section-divider"></span>
+      </header>
+    {%- endif -%}
+
+    <div class="zh-product-grid zh-na-grid" style="grid-template-columns:repeat({{ cols }},1fr);">
+      {%- if coll != blank -%}
+        {%- assign sorted_products = coll.products | sort: 'published_at' | reverse -%}
+        {%- for product in sorted_products limit: limit -%}
+          {%- assign on_sale = false -%}
+          {%- if product.compare_at_price > product.price -%}{%- assign on_sale = true -%}{%- assign discount_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}{%- endif -%}
+          <article class="zh-product-card zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}">
+            <div class="zh-product-card__media">
+              <a href="{{ product.url }}">
+                {%- if product.featured_image -%}
+                  {{ product.featured_image | image_url: width: 600 | image_tag: class: 'img-primary', loading: 'lazy', alt: product.title }}
+                  {%- if product.images[1] -%}{{ product.images[1] | image_url: width: 600 | image_tag: class: 'img-secondary', loading: 'lazy' }}{%- endif -%}
+                {%- else -%}{{ 'product-1' | placeholder_svg_tag: 'img-primary' }}{%- endif -%}
+              </a>
+              <div class="zh-product-card__badges">
+                <span class="zh-badge zh-badge--new">{{ section.settings.new_badge_text | default: 'New' }}</span>
+                {%- if on_sale -%}<span class="zh-badge zh-badge--sale">-{{ discount_pct }}%</span>{%- endif -%}
+              </div>
+            </div>
+            <div class="zh-product-card__info">
+              {%- if product.vendor != blank -%}<div class="zh-product-card__vendor">{{ product.vendor }}</div>{%- endif -%}
+              <h3 class="zh-product-card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+              <div class="zh-product-card__price">
+                {%- if on_sale -%}
+                  <span class="zh-price zh-price--sale">{{ product.price | money }}</span>
+                  <span class="zh-price zh-price--compare">{{ product.compare_at_price | money }}</span>
+                {%- else -%}
+                  <span class="zh-price">{{ product.price | money }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..limit) -%}
+          <article class="zh-product-card">
+            <div class="zh-product-card__media">
+              {{ 'product-1' | placeholder_svg_tag: 'img-primary' }}
+              <div class="zh-product-card__badges"><span class="zh-badge zh-badge--new">New</span></div>
+            </div>
+            <div class="zh-product-card__info">
+              <h3 class="zh-product-card__title">New Arrival {{ i }}</h3>
+              <div class="zh-product-card__price"><span class="zh-price">SAR 799</span></div>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all and coll != blank -%}
+      <div style="text-align:center;margin-top:40px;" class="zh-anim">
+        <a href="{{ coll.url }}" class="zh-btn zh-btn--primary">{{ section.settings.view_all_text | default: 'View All New Arrivals' }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #zh-new-arrivals-{{ section.id }} .zh-na-grid { display:grid;gap:24px; }
+  #zh-new-arrivals-{{ section.id }} .zh-product-card__title a { text-decoration:none;color:inherit; }
+  #zh-new-arrivals-{{ section.id }} .zh-product-card__title a:hover { color:var(--zh-gold,#C9A84C); }
+  @media(max-width:1200px){ #zh-new-arrivals-{{ section.id }} .zh-na-grid { grid-template-columns:repeat(3,1fr); } }
+  @media(max-width:768px){ #zh-new-arrivals-{{ section.id }} .zh-na-grid { grid-template-columns:repeat(2,1fr);gap:16px; } }
+</style>
+
+{% schema %}
+{
+  "name": "ZH New Arrivals",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Just Landed" },
+    { "type": "text", "id": "title", "label": "Title", "default": "New Arrivals" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_count", "label": "Products to Show", "min": 4, "max": 16, "step": 4, "default": 8 },
+    { "type": "select", "id": "columns", "label": "Columns", "options": [{ "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }], "default": "4" },
+    { "type": "text", "id": "new_badge_text", "label": "New Badge Text", "default": "New" },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show View All Button", "default": true },
+    { "type": "text", "id": "view_all_text", "label": "View All Text", "default": "View All New Arrivals" },
+    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#FAFAF8" },
+    { "type": "range", "id": "padding_top", "label": "Padding Top (px)", "min": 0, "max": 120, "step": 8, "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding Bottom (px)", "min": 0, "max": 120, "step": 8, "default": 64 }
+  ],
+  "presets": [{ "name": "ZH New Arrivals" }]
+}
+{% endschema %}

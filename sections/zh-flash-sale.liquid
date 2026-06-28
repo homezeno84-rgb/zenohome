@@ -1,0 +1,325 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign coll = collections[section.settings.collection]
+  assign limit = section.settings.products_to_show | default: 6
+  assign pt = section.settings.padding_top | default: 64
+  assign pb = section.settings.padding_bottom | default: 64
+-%}
+
+<section
+  class="zh-section zh-flash-sale-section"
+  id="zh-flash-sale-{{ section.id }}"
+  style="
+    padding-top: {{ pt }}px;
+    padding-bottom: {{ pb }}px;
+    {% if section.settings.bg_image != blank %}
+    background-image: url('{{ section.settings.bg_image | image_url: width: 1600 }}');
+    background-size: cover; background-position: center;
+    {% else %}
+    background: {{ section.settings.background_color | default: '#1A1A2E' }};
+    {% endif %}
+  "
+>
+  {%- if section.settings.bg_image != blank -%}
+    <div class="zh-flash-sale__bg-overlay" style="background: rgba(26,26,46,{{ section.settings.overlay_opacity | default: 80 | divided_by: 100.0 }});"></div>
+  {%- endif -%}
+
+  <div class="zh-container" style="position: relative; z-index: 2;">
+    <div class="zh-flash-sale__header">
+      <div class="zh-flash-sale__title-block zh-anim">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="zh-flash-sale__eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="zh-flash-sale__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.end_date != blank -%}
+        <div class="zh-flash-sale__countdown-wrap zh-anim zh-anim-delay-2">
+          <p class="zh-flash-sale__ends-label">{{ section.settings.ends_label | default: 'Ends In:' }}</p>
+          <div
+            class="zh-countdown"
+            data-zh-countdown
+            data-end-time="{{ section.settings.end_date }}"
+            aria-label="Countdown timer"
+          >
+            <div class="zh-countdown__box">
+              <span class="zh-countdown__num" data-cd-days>00</span>
+              <span class="zh-countdown__label">{{ 'general.countdown.days' | t | default: 'Days' }}</span>
+            </div>
+            <span class="zh-countdown__sep" aria-hidden="true">:</span>
+            <div class="zh-countdown__box">
+              <span class="zh-countdown__num" data-cd-hours>00</span>
+              <span class="zh-countdown__label">{{ 'general.countdown.hours' | t | default: 'Hrs' }}</span>
+            </div>
+            <span class="zh-countdown__sep" aria-hidden="true">:</span>
+            <div class="zh-countdown__box">
+              <span class="zh-countdown__num" data-cd-minutes>00</span>
+              <span class="zh-countdown__label">{{ 'general.countdown.minutes' | t | default: 'Min' }}</span>
+            </div>
+            <span class="zh-countdown__sep" aria-hidden="true">:</span>
+            <div class="zh-countdown__box">
+              <span class="zh-countdown__num" data-cd-seconds>00</span>
+              <span class="zh-countdown__label">{{ 'general.countdown.seconds' | t | default: 'Sec' }}</span>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="zh-flash-sale__grid">
+      {%- if coll != blank -%}
+        {%- for product in coll.products limit: limit -%}
+          {%- liquid
+            assign on_sale = false
+            if product.compare_at_price > product.price
+              assign on_sale = true
+              assign discount_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
+            endif
+          -%}
+          <article class="zh-product-card zh-flash-sale__card zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}">
+            <div class="zh-product-card__media">
+              <a href="{{ product.url }}">
+                {%- if product.featured_image -%}
+                  {{ product.featured_image | image_url: width: 500 | image_tag:
+                    class: 'img-primary',
+                    alt: product.title,
+                    loading: 'lazy',
+                    widths: '250,400,500'
+                  }}
+                  {%- if product.images[1] -%}
+                    {{ product.images[1] | image_url: width: 500 | image_tag: class: 'img-secondary', loading: 'lazy' }}
+                  {%- endif -%}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'img-primary' }}
+                {%- endif -%}
+              </a>
+              <div class="zh-product-card__badges">
+                {%- if on_sale -%}
+                  <span class="zh-badge zh-badge--sale">-{{ discount_pct }}%</span>
+                {%- endif -%}
+              </div>
+            </div>
+            <div class="zh-product-card__info">
+              <h3 class="zh-product-card__title">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
+              <div class="zh-product-card__price">
+                {%- if on_sale -%}
+                  <span class="zh-price zh-price--sale">{{ product.price | money }}</span>
+                  <span class="zh-price zh-price--compare">{{ product.compare_at_price | money }}</span>
+                {%- else -%}
+                  <span class="zh-price">{{ product.price | money }}</span>
+                {%- endif -%}
+              </div>
+              {%- if product.available -%}
+                <button
+                  class="zh-flash-sale__add-btn zh-btn zh-btn--gold zh-btn--sm"
+                  data-variant-id="{{ product.variants.first.id }}"
+                  onclick="fetch('/cart/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:{{ product.variants.first.id }},quantity:1})}).then(()=>document.dispatchEvent(new CustomEvent('cart:refresh')))"
+                >
+                  {{ 'products.product.add_to_cart' | t | default: 'Add to Cart' }}
+                </button>
+              {%- else -%}
+                <span class="zh-flash-sale__sold-out">{{ 'products.product.sold_out' | t | default: 'Sold Out' }}</span>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..limit) -%}
+          <article class="zh-product-card zh-flash-sale__card">
+            <div class="zh-product-card__media">{{ 'product-1' | placeholder_svg_tag: 'img-primary' }}</div>
+            <div class="zh-product-card__info">
+              <h3 class="zh-product-card__title">Sale Product {{ i }}</h3>
+              <div class="zh-product-card__price">
+                <span class="zh-price zh-price--sale">SAR 299</span>
+                <span class="zh-price zh-price--compare">SAR 499</span>
+              </div>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all and coll != blank -%}
+      <div class="zh-flash-sale__footer zh-anim">
+        <a href="{{ coll.url }}" class="zh-btn zh-btn--outline-gold">{{ section.settings.view_all_text | default: 'Shop All Sale' }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #zh-flash-sale-{{ section.id }} { position: relative; }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__bg-overlay { position: absolute; inset: 0; z-index: 1; }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 24px;
+    margin-bottom: 40px;
+  }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__eyebrow {
+    display: inline-block;
+    font-size: .7rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--zh-gold, #C9A84C);
+    margin-bottom: 8px;
+  }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__title {
+    font-family: var(--zh-font-display, 'Cormorant Garant', serif);
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    font-weight: 700; color: #fff; margin: 0;
+    line-height: 1.1;
+  }
+  [dir="rtl"] #zh-flash-sale-{{ section.id }} .zh-flash-sale__title { font-family: var(--zh-font-ar, 'Cairo', sans-serif); }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__ends-label {
+    font-size: .75rem; font-weight: 600; letter-spacing: .15em;
+    text-transform: uppercase; color: rgba(255,255,255,.65);
+    margin-bottom: 10px; text-align: center;
+  }
+  #zh-flash-sale-{{ section.id }} .zh-countdown__box {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(201,168,76,.35);
+    border-radius: 6px;
+    min-width: 72px;
+  }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns | default: 4 }}, 1fr);
+    gap: 20px;
+  }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__card {
+    background: rgba(255,255,255,.05);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,.1);
+  }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__card .zh-product-card__title a,
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__card .zh-product-card__title { color: #fff; }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__add-btn { width: 100%; margin-top: 12px; }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__sold-out {
+    display: block; margin-top: 12px;
+    font-size: .78rem; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: rgba(255,255,255,.4);
+    text-align: center;
+  }
+  #zh-flash-sale-{{ section.id }} .zh-flash-sale__footer { text-align: center; margin-top: 40px; }
+  @media (max-width: 1024px) { #zh-flash-sale-{{ section.id }} .zh-flash-sale__grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) {
+    #zh-flash-sale-{{ section.id }} .zh-flash-sale__grid { grid-template-columns: repeat(2, 1fr); }
+    #zh-flash-sale-{{ section.id }} .zh-flash-sale__header { flex-direction: column; align-items: flex-start; }
+    [dir="rtl"] #zh-flash-sale-{{ section.id }} .zh-flash-sale__header { align-items: flex-end; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "ZH Flash Sale",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Label",
+      "default": "Limited Time"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Flash Sale"
+    },
+    {
+      "type": "text",
+      "id": "ends_label",
+      "label": "Countdown Label",
+      "default": "Ends In:"
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "Sale End Date & Time",
+      "info": "Format: YYYY-MM-DDTHH:MM:SS e.g. 2025-12-31T23:59:59",
+      "default": "2025-12-31T23:59:59"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Sale Collection"
+    },
+    {
+      "type": "select",
+      "id": "products_to_show",
+      "label": "Products to Show",
+      "options": [
+        { "value": "4", "label": "4" },
+        { "value": "6", "label": "6" },
+        { "value": "8", "label": "8" }
+      ],
+      "default": "6"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#1A1A2E"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image (optional)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image Overlay Opacity (%)",
+      "min": 30, "max": 95, "step": 5, "default": 75
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All Button Text",
+      "default": "Shop All Sale"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top (px)",
+      "min": 0, "max": 120, "step": 8, "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom (px)",
+      "min": 0, "max": 120, "step": 8, "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "ZH Flash Sale",
+      "settings": {
+        "title": "Flash Sale",
+        "eyebrow": "Limited Time Only",
+        "end_date": "2025-12-31T23:59:59"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,62 @@
+<!-- sections/zh-featured-collection.liquid -->
+{%- liquid
+  assign se = section.settings
+  assign col = collections[se.collection]
+  assign product_limit = se.product_limit | default: 8
+-%}
+
+{%- if col != blank and col.products_count > 0 -%}
+<section class="zh-featured-collection" style="padding:80px 0;background:{{ se.bg_color | default: 'var(--zh-bg)' }};" data-gcc-reveal>
+  <div class="t4s-container">
+    <div class="zh-section-header" style="{% if se.align == 'left' %}text-align:start;{% endif %}">
+      {%- if se.eyebrow != blank -%}
+        <div class="zh-section-header__eyebrow">{{ se.eyebrow }}</div>
+      {%- endif -%}
+      <h2 class="zh-section-header__title">{{ se.title | default: col.title }}</h2>
+      <div class="zh-divider" style="{% if se.align == 'left' %}margin-left:0;{% endif %}"></div>
+      {%- if se.description != blank -%}
+        <p class="zh-section-header__sub" style="margin-top:16px;{% if se.align == 'left' %}margin-left:0;{% endif %}">{{ se.description }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="t4s-row" style="display:grid;grid-template-columns:repeat({{ se.columns | default: 4 }},1fr);gap:24px;">
+      {%- for product in col.products limit: product_limit -%}
+        <div data-gcc-reveal data-delay="{{ forloop.index | modulo: 6 | plus: 1 }}">
+          {%- render 't4s-product-card', product: product -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if se.show_view_all and col.products_count > product_limit -%}
+      <div style="text-align:center;margin-top:40px;">
+        <a href="{{ col.url }}" class="zh-btn-ghost">
+          {{ se.btn_label | default: 'View All' }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "tag": "section",
+  "class": "zh-section-featured-col",
+  "settings": [
+    { "type": "collection", "id": "collection",    "label": "Collection" },
+    { "type": "text",       "id": "eyebrow",       "label": "Eyebrow" },
+    { "type": "text",       "id": "title",         "label": "Title" },
+    { "type": "textarea",   "id": "description",   "label": "Description" },
+    { "type": "range",      "id": "product_limit", "label": "Products",     "min": 4, "max": 12, "step": 2, "default": 8 },
+    { "type": "range",      "id": "columns",       "label": "Columns",      "min": 2, "max": 5,  "step": 1, "default": 4 },
+    { "type": "select",     "id": "align",         "label": "Align Header", "options": [{"value":"center","label":"Center"},{"value":"left","label":"Left"}], "default": "center" },
+    { "type": "color",      "id": "bg_color",      "label": "Background" },
+    { "type": "checkbox",   "id": "show_view_all", "label": "Show View All", "default": true },
+    { "type": "text",       "id": "btn_label",     "label": "Button Label", "default": "View All" }
+  ],
+  "presets": [
+    { "name": "Featured Collection", "settings": { "eyebrow": "New Arrivals", "title": "Just Arrived", "product_limit": 8 } }
+  ]
+}
+{% endschema %}

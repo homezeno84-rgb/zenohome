@@ -1,0 +1,343 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign show_social = section.settings.show_social
+  assign text_color = section.settings.text_color | default: '#ffffff'
+  assign bg_color = section.settings.background_color | default: '#1A1A2E'
+-%}
+
+<footer
+  class="zh-footer"
+  id="zh-footer-{{ section.id }}"
+  style="background:{{ bg_color }};color:{{ text_color }};"
+  role="contentinfo"
+>
+  <div class="zh-footer__main">
+    <div class="zh-container">
+      <div class="zh-footer__grid">
+        <!-- Brand Column -->
+        <div class="zh-footer__brand">
+          {%- if section.settings.logo != blank -%}
+            <a href="/" class="zh-footer__logo-link">
+              {{ section.settings.logo | image_url: height: 60 | image_tag: class: 'zh-footer__logo', loading: 'lazy', alt: shop.name }}
+            </a>
+          {%- else -%}
+            <a href="/" class="zh-footer__logo-text">{{ shop.name }}</a>
+          {%- endif -%}
+          {%- if section.settings.tagline != blank -%}
+            <p class="zh-footer__tagline">{{ section.settings.tagline }}</p>
+          {%- endif -%}
+          {%- if show_social -%}
+            <div class="zh-footer__social">
+              {%- if section.settings.instagram != blank -%}
+                <a href="{{ section.settings.instagram }}" class="zh-footer__social-link" aria-label="Instagram" target="_blank" rel="noopener">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if section.settings.tiktok != blank -%}
+                <a href="{{ section.settings.tiktok }}" class="zh-footer__social-link" aria-label="TikTok" target="_blank" rel="noopener">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.95a8.28 8.28 0 004.84 1.55V7.05a4.85 4.85 0 01-1.07-.36z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if section.settings.facebook != blank -%}
+                <a href="{{ section.settings.facebook }}" class="zh-footer__social-link" aria-label="Facebook" target="_blank" rel="noopener">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if section.settings.twitter != blank -%}
+                <a href="{{ section.settings.twitter }}" class="zh-footer__social-link" aria-label="Twitter / X" target="_blank" rel="noopener">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if section.settings.youtube != blank -%}
+                <a href="{{ section.settings.youtube }}" class="zh-footer__social-link" aria-label="YouTube" target="_blank" rel="noopener">
+                  <svg width="20" height="14" fill="currentColor" viewBox="0 0 576 400"><path d="M549.655 60.611C543.076 36.053 524.213 16.677 500.189 9.897 456.432 0 288 0 288 0S119.568 0 75.811 9.897c-24.024 6.78-42.887 26.156-49.466 50.714C16 104.8 16 200 16 200s0 95.2 10.345 139.389c6.579 24.558 25.442 43.934 49.466 50.714C119.568 400 288 400 288 400s168.432 0 212.189-9.897c24.024-6.78 42.887-26.156 49.466-50.714C560 295.2 560 200 560 200s0-95.2-10.345-139.389zM232 286.3V113.7L376 200l-144 86.3z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if section.settings.snapchat != blank -%}
+                <a href="{{ section.settings.snapchat }}" class="zh-footer__social-link" aria-label="Snapchat" target="_blank" rel="noopener">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12.065.001c1.416 0 6.048.394 8.078 5.462.581 1.452.442 3.889.332 5.817l-.036.626c.099.054.248.11.443.11.342 0 .727-.144 1.136-.427.154-.107.314-.161.477-.161.325 0 .657.234.657.611 0 .569-.748 1.001-1.001 1.145a5.44 5.44 0 01-.297.144c-.437.19-.928.383-1.044.978-.025.127-.002.273.065.459.445 1.223 2.009 2.178 2.009 3.478 0 .854-.715 1.362-1.454 1.362-.286 0-.577-.078-.844-.237-.644-.383-1.149-.563-1.622-.563-.292 0-.559.069-.814.211-.567.318-1.124 1.305-2.535 2.02-.994.501-2.135.754-3.393.754-1.25 0-2.39-.255-3.385-.757-1.409-.716-1.965-1.703-2.533-2.021a2.16 2.16 0 00-.813-.211c-.474 0-.979.18-1.621.563a2.063 2.063 0 01-.844.237c-.739 0-1.454-.508-1.454-1.363 0-1.3 1.562-2.254 2.008-3.478.067-.185.091-.33.066-.456-.116-.596-.607-.789-1.044-.979a5.504 5.504 0 01-.298-.144c-.253-.144-1.001-.576-1.001-1.144 0-.378.332-.613.656-.613.163 0 .323.054.477.161.41.283.795.427 1.137.427.218 0 .378-.067.462-.112l-.035-.622c-.11-1.928-.25-4.365.332-5.817C5.929.395 10.648.001 12.065.001z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if section.settings.whatsapp != blank -%}
+                <a href="https://wa.me/{{ section.settings.whatsapp | remove: '+' | remove: ' ' }}" class="zh-footer__social-link" aria-label="WhatsApp" target="_blank" rel="noopener">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <!-- Dynamic blocks -->
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+          {%- when 'menu_column' -%}
+            <div class="zh-footer__col" {{ block.shopify_attributes }}>
+              <button class="zh-footer__col-title zh-footer__accordion-btn" aria-expanded="false">
+                {{ block.settings.title }}
+                <svg class="zh-footer__col-chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="zh-footer__col-body">
+                {%- if block.settings.menu != blank -%}
+                  <ul class="zh-footer__nav">
+                    {%- for link in linklists[block.settings.menu].links -%}
+                      <li><a href="{{ link.url }}" class="zh-footer__nav-link">{{ link.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- when 'contact_column' -%}
+            <div class="zh-footer__col" {{ block.shopify_attributes }}>
+              <button class="zh-footer__col-title zh-footer__accordion-btn" aria-expanded="false">
+                {{ block.settings.title | default: 'Contact Us' }}
+                <svg class="zh-footer__col-chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="zh-footer__col-body">
+                <ul class="zh-footer__contact">
+                  {%- if block.settings.address != blank -%}
+                    <li class="zh-footer__contact-item">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                      {{ block.settings.address }}
+                    </li>
+                  {%- endif -%}
+                  {%- if block.settings.phone != blank -%}
+                    <li class="zh-footer__contact-item">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                      <a href="tel:{{ block.settings.phone | remove: ' ' }}" class="zh-footer__nav-link">{{ block.settings.phone }}</a>
+                    </li>
+                  {%- endif -%}
+                  {%- if block.settings.email != blank -%}
+                    <li class="zh-footer__contact-item">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                      <a href="mailto:{{ block.settings.email }}" class="zh-footer__nav-link">{{ block.settings.email }}</a>
+                    </li>
+                  {%- endif -%}
+                  {%- if block.settings.hours != blank -%}
+                    <li class="zh-footer__contact-item">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      {{ block.settings.hours }}
+                    </li>
+                  {%- endif -%}
+                </ul>
+              </div>
+            </div>
+          {%- when 'payment_column' -%}
+            <div class="zh-footer__col zh-footer__col--payment" {{ block.shopify_attributes }}>
+              <h3 class="zh-footer__col-title zh-footer__col-title--static">{{ block.settings.title | default: 'Secure Payment' }}</h3>
+              <div class="zh-footer__payments">
+                {%- if block.settings.show_visa -%}<span class="zh-payment-badge">Visa</span>{%- endif -%}
+                {%- if block.settings.show_mastercard -%}<span class="zh-payment-badge">Mastercard</span>{%- endif -%}
+                {%- if block.settings.show_mada -%}<span class="zh-payment-badge zh-payment-badge--mada">mada</span>{%- endif -%}
+                {%- if block.settings.show_stcpay -%}<span class="zh-payment-badge zh-payment-badge--stc">STC Pay</span>{%- endif -%}
+                {%- if block.settings.show_applepay -%}<span class="zh-payment-badge zh-payment-badge--apple">Apple Pay</span>{%- endif -%}
+              </div>
+            </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="zh-footer__bottom">
+    <div class="zh-container">
+      <div class="zh-footer__bottom-inner">
+        <p class="zh-footer__copy">{{ section.settings.copyright_text | default: '© 2025 ZenoHome. All rights reserved.' }}</p>
+        <div class="zh-footer__bottom-links">
+          {%- if section.settings.privacy_url != blank -%}
+            <a href="{{ section.settings.privacy_url }}">{{ 'general.privacy_policy' | t | default: 'Privacy Policy' }}</a>
+          {%- endif -%}
+          {%- if section.settings.terms_url != blank -%}
+            <a href="{{ section.settings.terms_url }}">{{ 'general.terms_of_service' | t | default: 'Terms of Service' }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  #zh-footer-{{ section.id }} { font-family: var(--zh-font-body); }
+  [dir="rtl"] #zh-footer-{{ section.id }} { font-family: var(--zh-font-ar,'Cairo',sans-serif); }
+  #zh-footer-{{ section.id }} .zh-footer__main { padding: 64px 0 40px; }
+  #zh-footer-{{ section.id }} .zh-footer__grid {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(auto-fill,minmax(180px,1fr));
+    gap: 40px;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__logo { max-height: 60px; width: auto; }
+  #zh-footer-{{ section.id }} .zh-footer__logo-text {
+    font-family: var(--zh-font-display,'Cormorant Garant',serif);
+    font-size: 1.75rem; font-weight: 700;
+    color: #fff; text-decoration: none;
+    display: inline-block; margin-bottom: 16px;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__tagline {
+    font-size: .85rem; color: rgba(255,255,255,.6);
+    line-height: 1.6; margin: 16px 0 24px;
+    max-width: 260px;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__social { display: flex; gap: 12px; flex-wrap: wrap; }
+  #zh-footer-{{ section.id }} .zh-footer__social-link {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 50%; color: rgba(255,255,255,.75);
+    transition: background .25s, color .25s, border-color .25s;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__social-link:hover {
+    background: var(--zh-gold,#C9A84C); border-color: var(--zh-gold,#C9A84C); color: #fff;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__col-title {
+    font-size: .8rem; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: rgba(255,255,255,.9);
+    margin-bottom: 16px; display: flex; align-items: center;
+    justify-content: space-between; width: 100%;
+    background: none; border: none; cursor: default;
+    padding: 0; font-family: inherit;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__col-chevron { display: none; }
+  #zh-footer-{{ section.id }} .zh-footer__col-body { display: block !important; }
+  #zh-footer-{{ section.id }} .zh-footer__nav { list-style: none; margin: 0; padding: 0; }
+  #zh-footer-{{ section.id }} .zh-footer__nav li + li { margin-top: 10px; }
+  #zh-footer-{{ section.id }} .zh-footer__nav-link {
+    font-size: .875rem; color: rgba(255,255,255,.6);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__nav-link:hover { color: var(--zh-gold,#C9A84C); }
+  #zh-footer-{{ section.id }} .zh-footer__contact { list-style: none; margin: 0; padding: 0; }
+  #zh-footer-{{ section.id }} .zh-footer__contact-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: .85rem; color: rgba(255,255,255,.6);
+    line-height: 1.5; margin-bottom: 10px;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__contact-item svg { flex-shrink: 0; margin-top: 2px; color: var(--zh-gold,#C9A84C); }
+  #zh-footer-{{ section.id }} .zh-footer__payments { display: flex; gap: 8px; flex-wrap: wrap; }
+  #zh-footer-{{ section.id }} .zh-payment-badge {
+    padding: 4px 10px; border-radius: 4px;
+    font-size: .7rem; font-weight: 700; letter-spacing: .05em;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+    color: rgba(255,255,255,.8);
+  }
+  #zh-footer-{{ section.id }} .zh-payment-badge--mada { background: rgba(0,140,255,.15); border-color: rgba(0,140,255,.3); color: #60b0ff; }
+  #zh-footer-{{ section.id }} .zh-payment-badge--stc { background: rgba(122,50,155,.2); border-color: rgba(122,50,155,.4); color: #c080e0; }
+  #zh-footer-{{ section.id }} .zh-payment-badge--apple { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.3); }
+  #zh-footer-{{ section.id }} .zh-footer__bottom {
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding: 20px 0;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__bottom-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__copy { font-size: .78rem; color: rgba(255,255,255,.4); margin: 0; }
+  #zh-footer-{{ section.id }} .zh-footer__bottom-links { display: flex; gap: 20px; }
+  #zh-footer-{{ section.id }} .zh-footer__bottom-links a {
+    font-size: .78rem; color: rgba(255,255,255,.4); text-decoration: none;
+    transition: color .2s;
+  }
+  #zh-footer-{{ section.id }} .zh-footer__bottom-links a:hover { color: var(--zh-gold,#C9A84C); }
+  @media (max-width: 1024px) {
+    #zh-footer-{{ section.id }} .zh-footer__grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    #zh-footer-{{ section.id }} .zh-footer__grid { grid-template-columns: 1fr; gap: 0; }
+    #zh-footer-{{ section.id }} .zh-footer__brand { padding-bottom: 24px; }
+    #zh-footer-{{ section.id }} .zh-footer__col { border-top: 1px solid rgba(255,255,255,.08); }
+    #zh-footer-{{ section.id }} .zh-footer__col-title { cursor: pointer; padding: 16px 0; margin-bottom: 0; }
+    #zh-footer-{{ section.id }} .zh-footer__col-chevron { display: block; transition: transform .3s; }
+    #zh-footer-{{ section.id }} .zh-footer__accordion-btn[aria-expanded="true"] .zh-footer__col-chevron { transform: rotate(180deg); }
+    #zh-footer-{{ section.id }} .zh-footer__col-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height .35s cubic-bezier(.22,1,.36,1);
+    }
+    #zh-footer-{{ section.id }} .zh-footer__col-body.open { max-height: 400px; }
+    #zh-footer-{{ section.id }} .zh-footer__col-body > * { padding-bottom: 16px; }
+    #zh-footer-{{ section.id }} .zh-footer__bottom-inner { flex-direction: column; text-align: center; }
+  }
+</style>
+
+<script>
+(function(){
+  var footer = document.getElementById('zh-footer-{{ section.id }}');
+  if(!footer) return;
+  var btns = footer.querySelectorAll('.zh-footer__accordion-btn');
+  btns.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(window.innerWidth > 640) return;
+      var body = btn.nextElementSibling;
+      var isOpen = body && body.classList.contains('open');
+      if(body){ body.classList.toggle('open',!isOpen); }
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "ZH Footer Main",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Footer Logo" },
+    { "type": "textarea", "id": "tagline", "label": "Tagline", "default": "Luxury home decor curated for the GCC lifestyle." },
+    { "type": "text", "id": "copyright_text", "label": "Copyright Text", "default": "© 2025 ZenoHome. All rights reserved." },
+    { "type": "url", "id": "privacy_url", "label": "Privacy Policy URL" },
+    { "type": "url", "id": "terms_url", "label": "Terms of Service URL" },
+    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#1A1A2E" },
+    { "type": "color", "id": "text_color", "label": "Text Color", "default": "#ffffff" },
+    { "type": "header", "content": "Social Media" },
+    { "type": "checkbox", "id": "show_social", "label": "Show Social Links", "default": true },
+    { "type": "text", "id": "instagram", "label": "Instagram URL" },
+    { "type": "text", "id": "tiktok", "label": "TikTok URL" },
+    { "type": "text", "id": "facebook", "label": "Facebook URL" },
+    { "type": "text", "id": "twitter", "label": "Twitter / X URL" },
+    { "type": "text", "id": "youtube", "label": "YouTube URL" },
+    { "type": "text", "id": "snapchat", "label": "Snapchat URL" },
+    { "type": "text", "id": "whatsapp", "label": "WhatsApp Number (with country code)" }
+  ],
+  "blocks": [
+    {
+      "type": "menu_column", "name": "Menu Column",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Column Title", "default": "Quick Links" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    },
+    {
+      "type": "contact_column", "name": "Contact Info",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Column Title", "default": "Contact Us" },
+        { "type": "text", "id": "address", "label": "Address" },
+        { "type": "text", "id": "phone", "label": "Phone" },
+        { "type": "text", "id": "email", "label": "Email" },
+        { "type": "text", "id": "hours", "label": "Working Hours" }
+      ]
+    },
+    {
+      "type": "payment_column", "name": "Payment Methods",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Column Title", "default": "Secure Payment" },
+        { "type": "checkbox", "id": "show_visa", "label": "Visa", "default": true },
+        { "type": "checkbox", "id": "show_mastercard", "label": "Mastercard", "default": true },
+        { "type": "checkbox", "id": "show_mada", "label": "mada", "default": true },
+        { "type": "checkbox", "id": "show_stcpay", "label": "STC Pay", "default": true },
+        { "type": "checkbox", "id": "show_applepay", "label": "Apple Pay", "default": true }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "ZH Footer Main",
+    "blocks": [
+      { "type": "menu_column", "settings": { "title": "Shop" } },
+      { "type": "menu_column", "settings": { "title": "Help" } },
+      { "type": "contact_column" },
+      { "type": "payment_column" }
+    ]
+  }]
+}
+{% endschema %}

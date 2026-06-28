@@ -1,0 +1,330 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign pt = section.settings.padding_top | default: 64
+  assign pb = section.settings.padding_bottom | default: 64
+  assign cols = section.settings.columns | default: 4
+  assign limit = section.settings.products_to_show | default: 8
+  assign show_quick_add = section.settings.show_quick_add
+  assign show_wishlist = section.settings.show_wishlist
+  assign show_rating = section.settings.show_rating
+  assign show_swatches = section.settings.show_color_swatches
+  assign show_badges = section.settings.show_badges
+  assign collection_handle = section.settings.collection
+  assign coll = collections[collection_handle]
+-%}
+
+<section
+  class="zh-section zh-product-grid-section"
+  id="zh-product-grid-{{ section.id }}"
+  style="padding-top: {{ pt }}px; padding-bottom: {{ pb }}px; background: {{ section.settings.background_color | default: '#ffffff' }};"
+>
+  <div class="zh-container">
+    {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+      <header class="zh-section-header zh-anim">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+        <span class="zh-section-divider"></span>
+      </header>
+    {%- endif -%}
+
+    <div class="zh-product-grid" style="--grid-cols: {{ cols }};">
+      {%- if coll != blank -%}
+        {%- for product in coll.products limit: limit -%}
+          {%- liquid
+            assign on_sale = false
+            if product.compare_at_price > product.price
+              assign on_sale = true
+            endif
+            assign is_new = false
+            assign days_old = 'now' | date: '%s' | minus: product.published_at | date: '%s' | divided_by: 86400
+            if days_old < 30
+              assign is_new = true
+            endif
+            assign discount_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
+          -%}
+          <article class="zh-product-card zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}" aria-label="{{ product.title }}">
+            <div class="zh-product-card__media">
+              <a href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+                {%- if product.featured_image -%}
+                  {{ product.featured_image | image_url: width: 600 | image_tag:
+                    class: 'img-primary',
+                    alt: product.featured_image.alt | default: product.title,
+                    loading: 'lazy',
+                    widths: '300,400,600',
+                    sizes: '(max-width:480px) 50vw,(max-width:768px) 33vw,25vw'
+                  }}
+                  {%- if product.images[1] != blank -%}
+                    {{ product.images[1] | image_url: width: 600 | image_tag:
+                      class: 'img-secondary',
+                      alt: product.title,
+                      loading: 'lazy',
+                      widths: '300,400,600'
+                    }}
+                  {%- endif -%}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'img-primary' }}
+                {%- endif -%}
+              </a>
+
+              {%- if show_badges -%}
+                <div class="zh-product-card__badges">
+                  {%- if on_sale -%}<span class="zh-badge zh-badge--sale">-{{ discount_pct }}%</span>{%- endif -%}
+                  {%- if is_new -%}<span class="zh-badge zh-badge--new">{{ 'products.product.new' | t | default: 'New' }}</span>{%- endif -%}
+                  {%- unless product.available -%}<span class="zh-badge" style="background:#888;color:#fff;">{{ 'products.product.sold_out' | t | default: 'Sold Out' }}</span>{%- endunless -%}
+                  {%- if product.available and product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity <= 5 -%}
+                    <span class="zh-badge zh-badge--low-stock">{{ 'products.product.only_x_left' | t: count: product.selected_or_first_available_variant.inventory_quantity | default: 'Only few left' }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if show_wishlist -%}
+                <button class="zh-wishlist-btn zh-product-card__wishlist" aria-label="{{ 'products.wishlist.add' | t | default: 'Add to Wishlist' }}" data-product-handle="{{ product.handle }}">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+              {%- endif -%}
+
+              {%- if show_quick_add and product.available -%}
+                <div class="zh-product-card__actions">
+                  <button
+                    type="button"
+                    class="zh-product-card__action-btn zh-product-card__action-btn--primary"
+                    data-product-id="{{ product.variants.first.id }}"
+                    onclick="ZH.quickAdd && ZH.quickAdd(this)"
+                    aria-label="{{ 'products.product.add_to_cart' | t | default: 'Add to Cart' }}"
+                  >
+                    {{ 'products.product.add_to_cart' | t | default: 'Add to Cart' }}
+                  </button>
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="zh-product-card__info">
+              {%- if product.vendor != blank -%}
+                <div class="zh-product-card__vendor">{{ product.vendor }}</div>
+              {%- endif -%}
+              <h3 class="zh-product-card__title">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
+
+              {%- if show_rating -%}
+                <div class="zh-product-card__rating" aria-label="Rating">
+                  <div class="zh-stars" role="img" aria-label="4.5 out of 5 stars">
+                    {%- for i in (1..5) -%}
+                      <span class="zh-star{% if i <= 4 %} active{% endif %}"></span>
+                    {%- endfor -%}
+                  </div>
+                  <span class="zh-rating-count">(24)</span>
+                </div>
+              {%- endif -%}
+
+              <div class="zh-product-card__price">
+                {%- if on_sale -%}
+                  <span class="zh-price zh-price--sale">{{ product.price | money }}</span>
+                  <span class="zh-price zh-price--compare">{{ product.compare_at_price | money }}</span>
+                {%- else -%}
+                  <span class="zh-price">{{ product.price | money }}</span>
+                {%- endif -%}
+              </div>
+
+              {%- if show_swatches -%}
+                {%- assign color_option = product.options_by_name['Color'] | default: product.options_by_name['Colour'] | default: product.options_by_name['اللون'] -%}
+                {%- if color_option -%}
+                  <div class="zh-swatches" aria-label="Colors">
+                    {%- for value in color_option.values limit: 6 -%}
+                      <span
+                        class="zh-swatch"
+                        title="{{ value }}"
+                        style="background: {{ value | downcase | replace: ' ', '' }};"
+                      ></span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..limit) -%}
+          <article class="zh-product-card zh-product-card--placeholder zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}">
+            <div class="zh-product-card__media">
+              {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'img-primary' }}
+            </div>
+            <div class="zh-product-card__info">
+              <h3 class="zh-product-card__title">Sample Product {{ forloop.index }}</h3>
+              <div class="zh-product-card__price"><span class="zh-price">SAR 450</span></div>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all and coll != blank -%}
+      <div class="zh-product-grid__footer zh-anim">
+        <a href="{{ coll.url }}" class="zh-btn zh-btn--outline">
+          {{ section.settings.view_all_text | default: 'View All Products' }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #zh-product-grid-{{ section.id }} .zh-product-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols, 4), 1fr);
+    gap: 24px;
+  }
+  #zh-product-grid-{{ section.id }} .zh-product-card__wishlist {
+    position: absolute; top: 12px; right: 12px; z-index: 3;
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,.9);
+    border-radius: 50%;
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--zh-text-muted, #888);
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    transition: color .2s, transform .2s, background .2s;
+  }
+  [dir="rtl"] #zh-product-grid-{{ section.id }} .zh-product-card__wishlist { right: auto; left: 12px; }
+  #zh-product-grid-{{ section.id }} .zh-product-card__wishlist:hover { color: #e53e3e; background: #fff; transform: scale(1.1); }
+  #zh-product-grid-{{ section.id }} .zh-product-card__title a { text-decoration: none; color: inherit; }
+  #zh-product-grid-{{ section.id }} .zh-product-card__title a:hover { color: var(--zh-gold, #C9A84C); }
+  #zh-product-grid-{{ section.id }} .zh-product-grid__footer {
+    text-align: center; margin-top: 48px;
+  }
+  @media (max-width: 1200px) {
+    #zh-product-grid-{{ section.id }} .zh-product-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 900px) {
+    #zh-product-grid-{{ section.id }} .zh-product-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  }
+  @media (max-width: 480px) {
+    #zh-product-grid-{{ section.id }} .zh-product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "ZH Product Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Featured Products"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "select",
+      "id": "products_to_show",
+      "label": "Products to Show",
+      "options": [
+        { "value": "4", "label": "4" },
+        { "value": "8", "label": "8" },
+        { "value": "12", "label": "12" },
+        { "value": "16", "label": "16" }
+      ],
+      "default": "8"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show Quick Add Button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show Wishlist Button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show Rating Stars",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_swatches",
+      "label": "Show Color Swatches",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show Badges (Sale/New/Stock)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All Button Text",
+      "default": "View All Products"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top (px)",
+      "min": 0, "max": 120, "step": 8, "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom (px)",
+      "min": 0, "max": 120, "step": 8, "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "ZH Product Grid"
+    }
+  ]
+}
+{% endschema %}

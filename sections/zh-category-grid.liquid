@@ -1,0 +1,292 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign cols = section.settings.columns | default: 3
+  assign gap = section.settings.gap | default: 24
+  assign pt = section.settings.padding_top | default: 64
+  assign pb = section.settings.padding_bottom | default: 64
+-%}
+
+<section
+  class="zh-section zh-category-grid-section"
+  id="zh-category-grid-{{ section.id }}"
+  style="padding-top: {{ pt }}px; padding-bottom: {{ pb }}px;"
+>
+  <div class="zh-container">
+    {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+      <header class="zh-section-header zh-anim">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+        <span class="zh-section-divider"></span>
+      </header>
+    {%- endif -%}
+
+    <div
+      class="zh-category-grid"
+      style="
+        --cols: {{ cols }};
+        --gap: {{ gap }}px;
+        grid-template-columns: repeat(var(--cols), 1fr);
+        gap: var(--gap);
+      "
+    >
+      {%- for block in section.blocks -%}
+        {%- assign card_style = block.settings.card_style | default: 'default' -%}
+        <div
+          class="zh-category-card zh-category-card--{{ card_style }} zh-anim zh-anim-delay-{{ forloop.index | modulo: 5 | plus: 1 }}"
+          {{ block.shopify_attributes }}
+        >
+          <a href="{{ block.settings.button_url | default: '#' }}" class="zh-category-card__link" aria-label="{{ block.settings.title }}">
+            <div class="zh-category-card__media">
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 800 | image_tag:
+                  class: 'zh-category-card__img',
+                  loading: 'lazy',
+                  widths: '400,600,800',
+                  sizes: '(max-width:480px) 50vw,(max-width:1024px) 33vw,25vw'
+                }}
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'zh-category-card__placeholder' }}
+              {%- endif -%}
+              <div class="zh-category-card__overlay"></div>
+            </div>
+            <div class="zh-category-card__body">
+              {%- if block.settings.title != blank -%}
+                <h3 class="zh-category-card__title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <p class="zh-category-card__desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+              {%- if block.settings.button_text != blank -%}
+                <span class="zh-category-card__btn">
+                  {{ block.settings.button_text }}
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
+              {%- endif -%}
+            </div>
+          </a>
+        </div>
+      {%- else -%}
+        <p class="zh-no-blocks">Add category cards in the Theme Editor.</p>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #zh-category-grid-{{ section.id }} .zh-category-grid {
+    display: grid;
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card {
+    border-radius: var(--zh-radius-xl, 12px);
+    overflow: hidden;
+    box-shadow: var(--zh-shadow-md);
+    background: #fff;
+    transition: box-shadow .35s var(--zh-ease-out), transform .35s var(--zh-ease-out);
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card:hover {
+    box-shadow: var(--zh-shadow-xl);
+    transform: translateY(-6px);
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card--outlined {
+    border: 2px solid var(--zh-border, #e8e8e8);
+    box-shadow: none;
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card--filled {
+    background: var(--zh-bg-soft, #f5f5f5);
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card__link {
+    display: block; text-decoration: none; color: inherit;
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    background: var(--zh-bg-soft, #f5f5f5);
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card__img,
+  #zh-category-grid-{{ section.id }} .zh-category-card__placeholder {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform .5s var(--zh-ease-out);
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card:hover .zh-category-card__img,
+  #zh-category-grid-{{ section.id }} .zh-category-card:hover .zh-category-card__placeholder {
+    transform: scale(1.07);
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,26,46,.55) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity .35s;
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card:hover .zh-category-card__overlay { opacity: 1; }
+  #zh-category-grid-{{ section.id }} .zh-category-card__body {
+    padding: 20px 24px 24px;
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card__title {
+    font-family: var(--zh-font-display, 'Cormorant Garant', serif);
+    font-size: 1.25rem; font-weight: 600;
+    color: var(--zh-dark, #1A1A2E);
+    margin: 0 0 8px;
+    transition: color .25s;
+  }
+  [dir="rtl"] #zh-category-grid-{{ section.id }} .zh-category-card__title { font-family: var(--zh-font-ar, 'Cairo', sans-serif); }
+  #zh-category-grid-{{ section.id }} .zh-category-card:hover .zh-category-card__title { color: var(--zh-gold, #C9A84C); }
+  #zh-category-grid-{{ section.id }} .zh-category-card__desc {
+    font-size: .875rem; color: var(--zh-text-mid, #555);
+    line-height: 1.6; margin: 0 0 14px;
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card__btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: .78rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--zh-gold, #C9A84C);
+    opacity: 0; transform: translateY(4px);
+    transition: opacity .3s, transform .3s;
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card:hover .zh-category-card__btn {
+    opacity: 1; transform: none;
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card__btn svg {
+    transition: transform .25s;
+  }
+  #zh-category-grid-{{ section.id }} .zh-category-card:hover .zh-category-card__btn svg {
+    transform: translateX(4px);
+  }
+  [dir="rtl"] #zh-category-grid-{{ section.id }} .zh-category-card:hover .zh-category-card__btn svg {
+    transform: translateX(-4px) scaleX(-1);
+  }
+  @media (max-width: 1024px) {
+    #zh-category-grid-{{ section.id }} .zh-category-grid { --cols: 2 !important; grid-template-columns: repeat(2,1fr) !important; }
+  }
+  @media (max-width: 480px) {
+    #zh-category-grid-{{ section.id }} .zh-category-grid { --cols: 1 !important; grid-template-columns: 1fr !important; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "ZH Category Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Explore"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "options": [
+        { "value": "2", "label": "2 Columns" },
+        { "value": "3", "label": "3 Columns" },
+        { "value": "4", "label": "4 Columns" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between cards (px)",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top (px)",
+      "min": 0, "max": 120, "step": 8,
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom (px)",
+      "min": 0, "max": 120, "step": 8,
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Name",
+          "default": "Living Room"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        },
+        {
+          "type": "select",
+          "id": "card_style",
+          "label": "Card Style",
+          "options": [
+            { "value": "default", "label": "Default (shadow)" },
+            { "value": "outlined", "label": "Outlined" },
+            { "value": "filled", "label": "Filled" }
+          ],
+          "default": "default"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ZH Category Grid",
+      "blocks": [
+        { "type": "category", "settings": { "title": "Living Room", "button_text": "Shop Now" } },
+        { "type": "category", "settings": { "title": "Bedroom", "button_text": "Shop Now" } },
+        { "type": "category", "settings": { "title": "Kitchen & Dining", "button_text": "Shop Now" } },
+        { "type": "category", "settings": { "title": "Outdoor", "button_text": "Shop Now" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

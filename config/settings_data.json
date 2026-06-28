@@ -1,0 +1,2648 @@
+{
+  "current": {
+    "purchase_code": "258f383b-6299-4e25-a64d-418e3cde0ee3",
+    "body_bg": "#f7fafc",
+    "home_keywords": "Zeno Home, Smart Home Products, Home Organization, Storage Solutions, Kitchen Gadgets, Modern Lighting, Home Accessories, Home Decor, Innovative Home Tools, Smart Livin",
+    "use_rtl": "2",
+    "header_design": "bottom",
+    "logo_svg": "https://cdn.shopify.com/s/files/1/0647/3626/4303/files/Zeno_Home_Logo_with_Clean_Aesthetic_cf190223-8e79-4e5e-a9f3-84ea993912ae.png?v=1758473503",
+    "logo": "shopify://shop_images/Zeno_Home_Logo_with_Clean_Aesthetic_cf190223-8e79-4e5e-a9f3-84ea993912ae.png",
+    "logo_width": 60,
+    "logos": "shopify://shop_images/Zeno_Home_Logo_with_Clean_Aesthetic.png",
+    "logos_width": 50,
+    "logo_mb": "shopify://shop_images/Zeno_Home_Logo_with_Clean_Aesthetic_ef019009-f573-4890-8035-cad5940f90bf.png",
+    "logo_mb_width": 50,
+    "logo_tr_svg": "https://cdn.shopify.com/s/files/1/0647/3626/4303/files/Zeno_Home_Logo_with_Clean_Aesthetic_cf190223-8e79-4e5e-a9f3-84ea993912ae.png?v=1758473503",
+    "logo_tr": "shopify://shop_images/Zeno_Home_Logo_with_Clean_Aesthetic.png",
+    "logo_tr_width": 60,
+    "only_icon": true,
+    "heading_color": "#1A1A2E",
+    "text_color": "#555555",
+    "accent_color": "#C9A84C",
+    "secondary_color": "#1A1A2E",
+    "border_color": "#E8E8E8",
+    "border_primary_color": "#d1d5db",
+    "price_primary": "#111827",
+    "price_secondary": "#6b7280",
+    "price_sale": "#ef4444",
+    "link_color": "#C9A84C",
+    "link_color_hover": "#A07830",
+    "btn_bg": "#C9A84C",
+    "btn_color": "#FFFFFF",
+    "cl_lazyload": "#41b6ff",
+    "bg_lazyload": "#ffffff",
+    "use_cus_lz": true,
+    "btn_radius": 4,
+    "other_radius": 14,
+    "font_source": "2",
+    "fnt_fm_sp1": "poppins_n7",
+    "fnt_fm_sp2": "inter_n4",
+    "fnt_fm_sp3": "inter_n4",
+    "fnt_fm_gg1": "Lato",
+    "fnt_fm_gg2": "Inter",
+    "fnt_fm_gg3": "Libre Baskerville",
+    "bd_ffamily": "2",
+    "bd_fsize": 15,
+    "bd_fweight": 400,
+    "bd_lheight": 1.5,
+    "bd_lspacing": 0,
+    "hd_ffamily": "1",
+    "fs_h1": 40,
+    "fs_h2": 22,
+    "fs_h4": 18,
+    "fs_h6": 14,
+    "hd_fweight": 700,
+    "hd_lheight": 1.3,
+    "hd_lspacing": 0.4,
+    "wishlist_mode": "1",
+    "enable_compe": false,
+    "app_review": "4",
+    "badge_shape": "1",
+    "label_sale_style": "2",
+    "use_new_badge": false,
+    "sale_badge_color": "#C9A84C",
+    "new_badge_color": "#1A1A2E",
+    "preorder_badge_color": "#0ea5e9",
+    "soldout_badge_color": "#6b7280",
+    "custom_badge_color": "#6b7280",
+    "type_qv": "2",
+    "enable_rating": true,
+    "show_qty": true,
+    "pr_border_style": "1",
+    "enable_pr_color": true,
+    "swatch_color_style": "2",
+    "swatch_item_style": "1",
+    "show_color_type": "1",
+    "sw_num": 4,
+    "enable_pr_size": true,
+    "pr_size_pos": "2",
+    "show_size_type": "1",
+    "show_img": "2",
+    "pr_img_effect": "2",
+    "enable_eff_img1": false,
+    "enable_shadow_round_img": true,
+    "enable_pr_ellipsis": true,
+    "pr_curent": "3",
+    "use_group_media": true,
+    "show_first_media": true,
+    "use_change_variant_by_img": true,
+    "enable_his": true,
+    "use_incoming_mess": true,
+    "date_in": "%d/%m/%y",
+    "variant_remove": "1",
+    "share_source": "1",
+    "min_qty": "1",
+    "after_action_atc": "4",
+    "cart_type": "disable",
+    "free_ship_pr": "free-shipping-amount",
+    "des_shipbar": "4",
+    "des_shipbar_cl_2": "#f59e0b",
+    "gift_wrap_pr": "gift-wrapping",
+    "link_ship": "",
+    "link_conditions": "",
+    "use_privacy_policy": false,
+    "privacy_policy_link": "shopify://pages/about-us",
+    "login_side": true,
+    "return_login": "shopify://pages/offers-campaigns",
+    "growave_social_login": true,
+    "filter_type_search": false,
+    "search_types": "fullwidth",
+    "unavailable_prs": "last",
+    "show_search_suggest": true,
+    "search_prs_suggest": "best-selling-collection",
+    "show_search_hotkey": true,
+    "list_hotkey": "kitchen home bathroom",
+    "lang_pos": "0",
+    "currency_code_enabled": true,
+    "auto_currency": true,
+    "currency_type": "2",
+    "size_currency": "md",
+    "currency_pos": "0",
+    "round_currency": true,
+    "notify_currency": true,
+    "hover_currency": false,
+    "bootstrap_css": false,
+    "colors_css": false,
+    "t4s_custom_css": true,
+    "global_css": ".menu-class {\n       display: flex;\n       flex-direction: row; /* يجعل القائمة أفقية */\n       list-style: none; /* إزالة النقاط من القائمة */\n       padding: 0;\n       margin: 0;\n   }\n\n   .menu-class li {\n       margin-right: 15px; /* مسافة بين العناصر */\n   }",
+    "share_twitter": true,
+    "share_pinterest": true,
+    "share_tumblr": false,
+    "share_telegram": true,
+    "share_whatsapp": true,
+    "social_facebook_link": "https://www.facebook.com/profile.php?id=61581872348801",
+    "social_twitter_link": "",
+    "social_instagram_link": "https://www.instagram.com/zenohome.store/",
+    "social_dribbble_link": "",
+    "social_linkedin_link": "",
+    "social_pinterest_link": "",
+    "social_tumblr_link": "",
+    "social_snapchat_link": "",
+    "social_youtube_link": "",
+    "social_vimeo_link": "",
+    "social_behance_link": "",
+    "social_soundcloud_link": "",
+    "social_tiktok_link": "https://www.tiktok.com/@zenohome0?lang=ar",
+    "social_spotify_link": "",
+    "favicon": "shopify://shop_images/Zeno_Home_Logo_with_Clean_Aesthetic.png",
+    "favicon_apple": "shopify://shop_images/Zeno_Home_Logo_with_Clean_Aesthetic.png",
+    "loading_bar_color": "#C9A84C",
+    "pr_incoming_mess": true,
+    "use_vimg": true,
+    "sticky_atc": true,
+    "fnt_fm_button": "1",
+    "sections": {
+      "footer-bottom": {
+        "type": "footer-bottom",
+        "blocks": {
+          "2433b4f1-5bdc-49a9-ba42-a51f4eb6d8e3": {
+            "type": "bl_col",
+            "settings": {
+              "col_heading": "",
+              "menu": "",
+              "menu_style": "1",
+              "col_dk": "6",
+              "col_dk_w": "33.33333",
+              "col_tb": "12",
+              "col_dk_w_tb": "33.33333",
+              "col_mb": "12",
+              "content_align": "start",
+              "padding_inner": "",
+              "content_align_tb": "center",
+              "padding_inner_tb": "",
+              "col_heading_mobile": "",
+              "content_align_mb": "center",
+              "padding_inner_mb": ""
+            }
+          },
+          "b3c6ceca-2d54-4a14-b482-bb86cbf25f08": {
+            "type": "copyR",
+            "settings": {
+              "text": "© 2025 Zeno Home Store. Smart Living, Simplified.",
+              "mgb": 10,
+              "mgb_tb": 8,
+              "mgb_mb": 5
+            }
+          }
+        },
+        "block_order": [
+          "2433b4f1-5bdc-49a9-ba42-a51f4eb6d8e3",
+          "b3c6ceca-2d54-4a14-b482-bb86cbf25f08"
+        ],
+        "settings": {
+          "border_top": true,
+          "border_pos": "in",
+          "space_h_item": "0",
+          "space_v_item": "10",
+          "space_h_item_tb": "10",
+          "space_v_item_tb": "6",
+          "space_h_item_mb": "10",
+          "space_v_item_mb": "4",
+          "heading_fontf": "1",
+          "heading_fs": 18,
+          "heading_lh": 26,
+          "heading_fw": 600,
+          "heading_ls": 0,
+          "mgb": 10,
+          "mgb_tb": 8,
+          "mgb_mb": 6,
+          "text_fs": 14,
+          "text_fw": 400,
+          "heading_cl": "#ffffff",
+          "text_cl": "#cccccc",
+          "link_cl": "#ffffff",
+          "link_hover_cl": "#41b6ff",
+          "bg_overlay": "#000000",
+          "bg_overlay_op": 60,
+          "border_cl": "#333333",
+          "layout": "t4s-container-fluid",
+          "cl_bg": "#222222",
+          "cl_bg_gradient": "",
+          "mg": "0px",
+          "pd": "20px,,5px,",
+          "mg_tb": "0px",
+          "pd_tb": "",
+          "mg_mb": "0px",
+          "pd_mb": "15px,,15px,"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "bl_col_kciYGK": {
+            "type": "bl_col",
+            "settings": {
+              "col_heading": "Zeno Home Store",
+              "menu": "",
+              "menu_style": "1",
+              "col_dk": "3",
+              "col_dk_w": "0",
+              "col_tb": "6",
+              "col_dk_w_tb": "33.33333",
+              "col_mb": "12",
+              "content_align": "start",
+              "padding_inner": "",
+              "content_align_tb": "center",
+              "padding_inner_tb": "20px,20px",
+              "col_heading_mobile": "",
+              "content_align_mb": "center",
+              "padding_inner_mb": "5px,15px,10px,15px"
+            }
+          },
+          "image_TJWD8k": {
+            "type": "image",
+            "settings": {
+              "image_child": "shopify://shop_images/Zeno_Home_Logo_with_Clean_Aesthetic_cf190223-8e79-4e5e-a9f3-84ea993912ae.png",
+              "img_width": 140,
+              "img_width_tb": 120,
+              "img_width_mb": 100,
+              "img_link": "",
+              "hidden_mobile": true,
+              "mgb": 20,
+              "mgb_tb": 15,
+              "mgb_mb": 10
+            }
+          },
+          "custom_text_mVThTE": {
+            "type": "custom_text",
+            "settings": {
+              "text": "Join the Zeno Home Family 💡\n\nBe the first to know about our latest products, offers, and inspirations for your home.",
+              "remove_br_tag_tb": true,
+              "remove_br_tag_mb": true,
+              "tag": "h5",
+              "fontf": "1",
+              "text_cl": "#ffffff",
+              "text_fs": 16,
+              "text_lh": 24,
+              "text_fw": 500,
+              "text_ls": 0.5,
+              "font_italic": false,
+              "text_shadow": false,
+              "mgb": 15,
+              "text_fs_tb": 15,
+              "text_lh_tb": 22,
+              "text_ls_tb": 0,
+              "mgb_tb": 20,
+              "hidden_mobile": false,
+              "text_fs_mb": 11,
+              "text_lh_mb": 20,
+              "text_ls_mb": 0,
+              "mgb_mb": 10
+            }
+          },
+          "bl_col_Ki7qq6": {
+            "type": "bl_col",
+            "settings": {
+              "col_heading": "Customer care",
+              "menu": "customers-care",
+              "menu_style": "1",
+              "col_dk": "custom",
+              "col_dk_w": "25",
+              "col_tb": "12",
+              "col_dk_w_tb": "33.33333",
+              "col_mb": "12",
+              "content_align": "start",
+              "padding_inner": "",
+              "content_align_tb": "start",
+              "padding_inner_tb": "",
+              "col_heading_mobile": "",
+              "content_align_mb": "center",
+              "padding_inner_mb": ""
+            }
+          },
+          "bl_col_ThNPpq": {
+            "type": "bl_col",
+            "settings": {
+              "col_heading": "Our Collection",
+              "menu": "collec-fot",
+              "menu_style": "1",
+              "col_dk": "custom",
+              "col_dk_w": "25",
+              "col_tb": "6",
+              "col_dk_w_tb": "20",
+              "col_mb": "12",
+              "content_align": "start",
+              "padding_inner": "",
+              "content_align_tb": "start",
+              "padding_inner_tb": "",
+              "col_heading_mobile": "",
+              "content_align_mb": "center",
+              "padding_inner_mb": ""
+            }
+          },
+          "bl_col_e4KfmW": {
+            "type": "bl_col",
+            "settings": {
+              "col_heading": "Follow Us On",
+              "menu": "",
+              "menu_style": "2",
+              "col_dk": "3",
+              "col_dk_w": "33.33333",
+              "col_tb": "12",
+              "col_dk_w_tb": "33.33333",
+              "col_mb": "12",
+              "content_align": "start",
+              "padding_inner": "",
+              "content_align_tb": "start",
+              "padding_inner_tb": "",
+              "col_heading_mobile": "",
+              "content_align_mb": "center",
+              "padding_inner_mb": ""
+            }
+          },
+          "cus_socials_kLR4jt": {
+            "type": "cus_socials",
+            "settings": {
+              "title": "",
+              "social_mode": "1",
+              "social_style": "2",
+              "social_size": "small",
+              "bd_radius": 2,
+              "use_color_set": true,
+              "icon_cl": "#00faf0",
+              "bg_cl": "#222222",
+              "space_h_item": "2",
+              "space_v_item": "8",
+              "space_h_item_mb": "4",
+              "space_v_item_mb": "2",
+              "mgb_mb": 0
+            }
+          },
+          "follow_shop_TPKchR": {
+            "type": "follow_shop",
+            "settings": {
+              "mgb": 33,
+              "mgb_tb": 10,
+              "mgb_mb": 10
+            }
+          },
+          "custom_text_4mTmf6": {
+            "type": "custom_text",
+            "settings": {
+              "text": "Join the Zeno Home Family",
+              "remove_br_tag_tb": false,
+              "remove_br_tag_mb": false,
+              "tag": "h3",
+              "fontf": "2",
+              "text_cl": "#ffffff",
+              "text_fs": 14,
+              "text_lh": 71,
+              "text_fw": 400,
+              "text_ls": 0,
+              "font_italic": false,
+              "text_shadow": false,
+              "mgb": 15,
+              "text_fs_tb": 16,
+              "text_lh_tb": 0,
+              "text_ls_tb": 0,
+              "mgb_tb": 10,
+              "hidden_mobile": true,
+              "text_fs_mb": 10,
+              "text_lh_mb": 0,
+              "text_ls_mb": 0,
+              "mgb_mb": 50
+            }
+          },
+          "newsletter_FeLr98": {
+            "type": "newsletter",
+            "settings": {
+              "form_width": 0,
+              "form_width_tb": 0,
+              "form_width_mb": 0,
+              "newl_des": "1",
+              "newl_size": "small",
+              "btn_icon": false,
+              "input_cl": "#878787",
+              "input_bg_cl": "#ffffff",
+              "border_cl": "#000000",
+              "btn_cl": "#ffffff",
+              "btn_bg_cl": "#222222",
+              "btn_hover_cl": "#ffffff",
+              "btn_hover_bg_cl": "#b59677",
+              "hidden_mobile": true,
+              "mgb": 15,
+              "mgb_tb": 10,
+              "mgb_mb": 10
+            }
+          },
+          "follow_shop_MNG6a3": {
+            "type": "follow_shop",
+            "disabled": true,
+            "settings": {
+              "mgb": 100
+            }
+          },
+          "payments_ghhww6": {
+            "type": "payments",
+            "settings": {
+              "svg": "american_express,apple_pay,,master,,mada,visa",
+              "height": 30,
+              "hidden_mobile": false,
+              "mgb": 20,
+              "mgb_tb": 15,
+              "mgb_mb": 10
+            }
+          }
+        },
+        "block_order": [
+          "bl_col_kciYGK",
+          "image_TJWD8k",
+          "custom_text_mVThTE",
+          "bl_col_Ki7qq6",
+          "bl_col_ThNPpq",
+          "bl_col_e4KfmW",
+          "cus_socials_kLR4jt",
+          "follow_shop_TPKchR",
+          "custom_text_4mTmf6",
+          "newsletter_FeLr98",
+          "follow_shop_MNG6a3",
+          "payments_ghhww6"
+        ],
+        "custom_css": [
+          ".footer {background: #000 !important; color: #fff !important; padding: 40px 20px !important;}",
+          ".footer a {color: #fff !important; text-decoration: none;}",
+          ".footer a:hover,.footer .social-icons a:hover {color: #41b6ff !important;}",
+          ".footer .social-icons a {margin: 0 5px; font-size: 18px;}",
+          "@media (max-width: 767px) {.footer {text-align: center; padding: 20px 12px !important; } .footer .social-icons {margin-top: 15px; }}"
+        ],
+        "settings": {
+          "sticky": false,
+          "collapse": false,
+          "border_top": false,
+          "border_pos": "in",
+          "space_h_item": "40",
+          "space_v_item": "30",
+          "space_h_item_tb": "15",
+          "space_v_item_tb": "20",
+          "space_h_item_mb": "10",
+          "space_v_item_mb": "15",
+          "heading_fontf": "1",
+          "heading_fs": 16,
+          "heading_lh": 24,
+          "heading_fw": 600,
+          "heading_ls": 0,
+          "mgb": 20,
+          "mgb_tb": 15,
+          "mgb_mb": 10,
+          "text_fs": 13,
+          "text_fw": 400,
+          "heading_cl": "#00faf0",
+          "text_cl": "#ffffff",
+          "link_cl": "#ffffff",
+          "link_hover_cl": "#41b6ff",
+          "border_cl": "#e6e6e6",
+          "bg_overlay": "#000000",
+          "bg_overlay_op": 70,
+          "layout": "t4s-container-fluid",
+          "cl_bg": "#000000",
+          "cl_bg_gradient": "radial-gradient(rgba(180, 173, 180, 0.81) 8%, rgba(54, 212, 255, 1) 47%, rgba(43, 252, 135, 1) 83%)",
+          "image_bg": "shopify://shop_images/Decor_Accessories_a866ed67-3c91-456c-8586-cb4938efe00b.jpg",
+          "mg": "50px,0px,0px,0px",
+          "pd": "40px,20px,40px,20px",
+          "mg_tb": "20px,0px,40px,0px",
+          "pd_tb": "24px,16px,24px,16px",
+          "mg_mb": "12px,0px,24px,0px",
+          "pd_mb": "20px,12px,20px,12px"
+        }
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "blocks": {
+          "announcement-bar-0": {
+            "type": "announcement",
+            "settings": {
+              "link": "",
+              "content": "<p>🎁 A gift for you: <strong>10% OFF</strong> with code <strong>WELCOME10</strong>.<br/><br/></p>",
+              "adding_border": false,
+              "countdown": "2023/12/26",
+              "txt_day": "days",
+              "dayx": 0
+            }
+          },
+          "announcement-bar-1": {
+            "type": "announcement",
+            "settings": {
+              "link": "",
+              "content": "<p>🚚 Free Delivery for orders above <strong>50 USD</strong></p>",
+              "adding_border": false,
+              "countdown": "2023/12/26",
+              "txt_day": "days",
+              "dayx": 0
+            }
+          },
+          "announcement-bar-2": {
+            "type": "announcement",
+            "settings": {
+              "link": "",
+              "content": "<p>Today deal sale off <strong>50%</strong>. End in <strong>[countdown]</strong>. Hurry Up [icon_arrow]</p>",
+              "adding_border": false,
+              "countdown": "2023/12/26",
+              "txt_day": "days",
+              "dayx": 0
+            }
+          }
+        },
+        "block_order": [
+          "announcement-bar-0",
+          "announcement-bar-1",
+          "announcement-bar-2"
+        ],
+        "settings": {
+          "show_announcement": true,
+          "design": "slider",
+          "effect": "1",
+          "au_time": 4.5,
+          "speed": 20,
+          "pause_when_hover": true,
+          "direction": "rtl",
+          "height": 21,
+          "fontsize": 15,
+          "cl": "#ffffff",
+          "bg": "#23b2c7",
+          "bg_op": 90,
+          "close": "2",
+          "cl_btn": "#ffffff",
+          "version": "1",
+          "date": 30
+        }
+      },
+      "top-bar": {
+        "type": "top-bar",
+        "blocks": {
+          "b855f86d-0fa1-47d0-82aa-bb105a26eab9": {
+            "type": "social",
+            "settings": {
+              "social": "2",
+              "social_style": "2",
+              "bd_radius": 30,
+              "use_color_set": false,
+              "icon_cl": "#ffffff",
+              "bg_cl": "#b59677",
+              "hide": true,
+              "text_align": "start",
+              "col": "4"
+            }
+          },
+          "b7e96bb9-e8b3-4ccf-862d-a5f5896a3a60": {
+            "type": "text",
+            "settings": {
+              "text": "<p>Summer sale discount off <a href=\"#cr\" title=\"#cr\"><strong>50%</strong></a>! <a href=\"/collections/clothing\" title=\"Clothing\">Shop Now</a>;;; MADE WITH LOVE</p>",
+              "adding_border": false,
+              "countdown": "2023/12/26",
+              "txt_day": "days",
+              "dayx": 0,
+              "effect": "fade t4s-slide-eff-translate",
+              "au_time": 2.5,
+              "fw_bold": 400,
+              "cl_a": "#ffffff",
+              "cl_bold": "#b59677",
+              "cl_a_tr": "#ffffff",
+              "cl_bold_tr": "#b59677",
+              "hide": false,
+              "text_align": "center",
+              "col": "4"
+            }
+          },
+          "top-bar-2": {
+            "type": "cur",
+            "settings": {
+              "show_currency": true,
+              "show_language": true,
+              "use_location": false,
+              "txt_location": "Location",
+              "url_location": "shopify://blogs/lingeries/5-best-swimsuits-for-big-busts",
+              "open_link": "_self",
+              "hide": true,
+              "text_align": "center",
+              "col": "4"
+            }
+          }
+        },
+        "block_order": [
+          "b855f86d-0fa1-47d0-82aa-bb105a26eab9",
+          "b7e96bb9-e8b3-4ccf-862d-a5f5896a3a60",
+          "top-bar-2"
+        ],
+        "settings": {
+          "show_topbar": true,
+          "topbar_transparent": false,
+          "height": 20,
+          "fontsize": 12,
+          "cl": "#ffffff",
+          "cl_a_hover": "#222222",
+          "bg": "#24a7a7",
+          "bg_op": 100,
+          "show_border": false,
+          "bd_cl": "#000000",
+          "cl_tr": "#ffffff",
+          "cl_a_hover_tr": "#b59677",
+          "bg_tr": "#000000",
+          "bg_op_tr": 10,
+          "show_border_tr": false,
+          "bd_cl_tr": "#b3b3b3"
+        }
+      },
+      "header-inline": {
+        "type": "header-inline",
+        "blocks": {
+          "drop_LdGEcf": {
+            "type": "drop",
+            "settings": {
+              "title": "Home organization",
+              "url": "",
+              "open_link": "_self",
+              "menu": "",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_yEL89j": {
+            "type": "drop",
+            "settings": {
+              "title": "Lighting & Home Ambience",
+              "url": "",
+              "open_link": "_self",
+              "menu": "lighting-home-ambience",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_rnTaKX": {
+            "type": "drop",
+            "settings": {
+              "title": "Décor & Accessories",
+              "url": "",
+              "open_link": "_self",
+              "menu": "",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_x8VXqb": {
+            "type": "drop",
+            "settings": {
+              "title": "Kitchen Essentials",
+              "url": "",
+              "open_link": "_self",
+              "menu": "kitchen-essentials",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "#141010",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_7thcx7": {
+            "type": "drop",
+            "settings": {
+              "title": "Laundry & Cleaning",
+              "url": "",
+              "open_link": "_self",
+              "menu": "laundry-cleaning",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_6RpLF7": {
+            "type": "drop",
+            "settings": {
+              "title": "Personal Care",
+              "url": "",
+              "open_link": "_self",
+              "menu": "",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "#222222",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_FjLh9R": {
+            "type": "drop",
+            "settings": {
+              "title": "Bathroom Essentials",
+              "url": "",
+              "open_link": "_self",
+              "menu": "bathroom-essentials",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "#fa0000",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_HTLUrY": {
+            "type": "drop",
+            "settings": {
+              "title": "Garden & Outdoor Lifestyle",
+              "url": "",
+              "open_link": "_self",
+              "menu": "garden-outdoor-lifestyle",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          }
+        },
+        "block_order": [
+          "drop_LdGEcf",
+          "drop_yEL89j",
+          "drop_rnTaKX",
+          "drop_x8VXqb",
+          "drop_7thcx7",
+          "drop_6RpLF7",
+          "drop_FjLh9R",
+          "drop_HTLUrY"
+        ],
+        "custom_css": [
+          ".menu-class {display: flex; flex-direction: row; /* يجعل القائمة أفقية */ list-style: none; /* إزالة النقاط من القائمة */ padding: 0; margin: 0;}",
+          ".menu-class li {margin-right: 15px; /* مسافة بين العناصر */}"
+        ],
+        "settings": {
+          "layout": "logo_search",
+          "full_header": true,
+          "height": 60,
+          "arrow": true,
+          "align": "center",
+          "hover": "hover_fadein",
+          "enable_active": true,
+          "h_navmb": 66,
+          "bgnav": "#ffffff",
+          "opnav": 44,
+          "clnav": "#4d5959",
+          "clnav_hover": "#222222",
+          "h_icon": "drawn",
+          "hover_icon": "1",
+          "show_search": true,
+          "show_acc": true,
+          "show_wis": true,
+          "cart_des": "1",
+          "bg_hc": "#25d5d5",
+          "cl_hc": "#222222",
+          "sticky_header": true,
+          "scroll_header": false,
+          "bgnavst": "#ffffff",
+          "opnavst": 100,
+          "clnavst": "#222222",
+          "clnavst_hover": "#222222",
+          "transparent_header": false,
+          "space_transparent_header": true,
+          "bgnavtr": "#ffffff",
+          "opnavtr": 100,
+          "clnavtr": "#222222",
+          "clnavtr_hover": "#4d5959",
+          "source": "3",
+          "txt": "<p>Welcome to our store!</p>",
+          "primary_form_color": "#60ecdd",
+          "secondary_form_color": "#4d5959",
+          "fm_nav": "1",
+          "fs_nav": 15,
+          "fw_nav": 500,
+          "ls_nav": 0
+        }
+      },
+      "title_config": {
+        "type": "title_config",
+        "blocks": {
+          "title_config-0": {
+            "type": "title",
+            "settings": {
+              "color": "#4d5959",
+              "family": "2",
+              "size": 20,
+              "weight": 400,
+              "lh": 28,
+              "ls": 2,
+              "space": 0,
+              "size_tb": 20,
+              "lh_tb": 28,
+              "ls_tb": 2,
+              "space_tb": 0,
+              "size_mb": 12,
+              "lh_mb": 10,
+              "ls_mb": 2,
+              "space_mb": 0
+            }
+          },
+          "title_config-1": {
+            "type": "subtitle",
+            "settings": {
+              "italic": true,
+              "color": "#878787",
+              "family": "3",
+              "size": 14,
+              "weight": 400,
+              "lh": 0,
+              "ls": 0,
+              "space": 0,
+              "size_tb": 14,
+              "lh_tb": 0,
+              "ls_tb": 0,
+              "space_tb": 0,
+              "size_mb": 14,
+              "lh_mb": 0,
+              "ls_mb": 0,
+              "space_mb": 0
+            }
+          }
+        },
+        "block_order": [
+          "title_config-0",
+          "title_config-1"
+        ],
+        "settings": {
+          "design_heading": "1",
+          "heading_center": true,
+          "top_heading": "Accordion",
+          "icon_heading": "las la-gem",
+          "top_subheading": "",
+          "tophead_mb": 30,
+          "tophead_mb_tb": 30,
+          "tophead_mb_mb": 25
+        }
+      },
+      "pr_item_config": {
+        "type": "pr_item_config",
+        "blocks": {
+          "pr_item_config-0": {
+            "type": "1",
+            "settings": {
+              "heading": "Product desgin 01",
+              "addtocart_color": "#ffffff",
+              "addtocart_color_hover": "#b59677",
+              "quickview_color": "#ffffff",
+              "quickview_color_hover": "#b59677",
+              "wishlist_color": "#ffffff",
+              "wishlist_color_hover": "#b59677",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#ffffff",
+              "compare_color_hover": "#b59677",
+              "size_list_color": "#ffffff"
+            }
+          },
+          "pr_item_config-1": {
+            "type": "2",
+            "settings": {
+              "heading": "Product desgin 02",
+              "addtocart_color": "#ffffff",
+              "addtocart_color_hover": "#b59677",
+              "quickview_color": "#ffffff",
+              "quickview_color_hover": "#b59677",
+              "wishlist_color": "#ffffff",
+              "wishlist_color_hover": "#b59677",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#ffffff",
+              "compare_color_hover": "#b59677",
+              "size_list_color": "#ffffff"
+            }
+          },
+          "977f60cb-440c-4e8e-beaa-b55b503aaa7c": {
+            "type": "3",
+            "settings": {
+              "heading": "Product design 03",
+              "addtocart_color": "#ffffff",
+              "addtocart_color_hover": "#b59677",
+              "quickview_color": "#ffffff",
+              "quickview_color_hover": "#b59677",
+              "wishlist_color": "#ffffff",
+              "wishlist_color_hover": "#b59677",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#ffffff",
+              "compare_color_hover": "#b59677",
+              "size_list_color": "#ffffff"
+            }
+          },
+          "fca180ab-ad71-42a7-a8a9-ed91fbebd0ac": {
+            "type": "4",
+            "settings": {
+              "heading": "Product design 04",
+              "addtocart_color": "#ffffff",
+              "addtocart_color_hover": "#b59677",
+              "quickview_color": "#ffffff",
+              "quickview_color_hover": "#b59677",
+              "wishlist_color": "#ffffff",
+              "wishlist_color_hover": "#b59677",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#ffffff",
+              "compare_color_hover": "#b59677",
+              "pr_btn_round": 0,
+              "size_list_color": "#ffffff"
+            }
+          },
+          "6fdc3407-75d0-4c09-92f9-138646c4699e": {
+            "type": "5",
+            "settings": {
+              "heading": "Product design 05",
+              "use_bg_trans_btn": false,
+              "addtocart_color": "#b59677",
+              "addtocart_color_hover": "#b59677",
+              "quickview_color": "#ffffff",
+              "quickview_color_hover": "#b59677",
+              "wishlist_color": "#ffffff",
+              "wishlist_color_hover": "#b59677",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#ffffff",
+              "compare_color_hover": "#b59677",
+              "size_list_color": "#ffffff"
+            }
+          },
+          "16ce1932-676d-4dcd-bdbf-356d813613c5": {
+            "type": "6",
+            "settings": {
+              "heading": "Product design 06",
+              "atc_style": "default",
+              "addtocart_color": "#b59677",
+              "addtocart_color_hover": "#b59677",
+              "quickview_color": "#ffffff",
+              "quickview_color_hover": "#b59677",
+              "wishlist_color": "#ffffff",
+              "wishlist_color_hover": "#b59677",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#ffffff",
+              "compare_color_hover": "#b59677",
+              "size_list_color": "#ffffff"
+            }
+          },
+          "83670c68-17f0-43a9-8caa-b96cca9a3b05": {
+            "type": "list",
+            "settings": {
+              "heading": "Product list",
+              "content_color": "#878787",
+              "addtocart_color": "#b59677",
+              "addtocart_color_hover": "#222222",
+              "quickview_color": "#b59677",
+              "quickview_color_hover": "#222222",
+              "wishlist_color": "#ffffff",
+              "wishlist_color_hover": "#222222",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#ffffff",
+              "compare_color_hover": "#222222",
+              "size_list_color": "#ffffff"
+            }
+          },
+          "a8021fa1-2248-47ff-a3a7-9433011a17bc": {
+            "type": "packery",
+            "settings": {
+              "heading": "Product packery",
+              "pr_title_color": "#ffffff",
+              "pr_title_color_hover": "#b59677",
+              "primary_price_color": "#ffffff",
+              "secondary_price_color": "#ffffff",
+              "price_sale_color": "#ec0101",
+              "addtocart_color": "#b59677",
+              "addtocart_color_hover": "#b59677",
+              "quickview_color": "#ffffff",
+              "quickview_color_hover": "#b59677",
+              "wishlist_color": "#ffffff",
+              "wishlist_color_hover": "#b59677",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#ffffff",
+              "compare_color_hover": "#b59677",
+              "size_list_color": "#ffffff"
+            }
+          }
+        },
+        "block_order": [
+          "pr_item_config-0",
+          "pr_item_config-1",
+          "977f60cb-440c-4e8e-beaa-b55b503aaa7c",
+          "fca180ab-ad71-42a7-a8a9-ed91fbebd0ac",
+          "6fdc3407-75d0-4c09-92f9-138646c4699e",
+          "16ce1932-676d-4dcd-bdbf-356d813613c5",
+          "83670c68-17f0-43a9-8caa-b96cca9a3b05",
+          "a8021fa1-2248-47ff-a3a7-9433011a17bc"
+        ],
+        "settings": {
+          "txt_tr_pr": "uppercase",
+          "fnt_df_pr": "2",
+          "size_pr": 13,
+          "fw_pr": 700,
+          "lh_pr": 16.5,
+          "ls_pr": 2,
+          "size_price_pr": 14,
+          "fw_price_pr": 400,
+          "space_img_content": 15,
+          "space_elements": 0,
+          "swatch_color_size": 16,
+          "swatch_color_size_mb": 16,
+          "pr_btn_round": 0,
+          "pr_title_color": "#4d5959",
+          "pr_title_color_hover": "#b59677",
+          "primary_price_color": "#696969",
+          "secondary_price_color": "#696969",
+          "price_sale_color": "#ec0101",
+          "vendors_color": "#696969",
+          "vendors_color_hover": "#b59677",
+          "countdown_color": "#b59677",
+          "countdown_overlay": 100,
+          "pr_bg_overlay": "#000000",
+          "pr_overlay": 10
+        }
+      },
+      "btn_config": {
+        "type": "btn_config",
+        "blocks": {
+          "btn_config-0": {
+            "type": "custom1",
+            "settings": {
+              "color_primary": "#ffb100",
+              "color_second": "#ffffff",
+              "color_primary_hover": "#ff4e00",
+              "color_second_hover": "#ffffff"
+            }
+          },
+          "btn_config-1": {
+            "type": "custom2",
+            "settings": {
+              "color_primary": "#f7f7f7",
+              "color_second": "#222222",
+              "color_primary_hover": "#ffffff",
+              "color_second_hover": "#222222"
+            }
+          },
+          "824c754c-d42d-4e6f-beec-dd09247aad97": {
+            "type": "1",
+            "settings": {
+              "fontf": "--font-family-1",
+              "fsbutton": 14,
+              "fwbutton": 600,
+              "button_ls": 0,
+              "button_mh": 52,
+              "button_pd_lr": 45,
+              "button_icon_w": 18,
+              "fsbutton_tb": 14,
+              "button_ls_tb": 0,
+              "button_mh_tb": 52,
+              "button_pd_lr_tb": 45,
+              "button_icon_w_tb": 18,
+              "fsbutton_mb": 14,
+              "button_ls_mb": 0,
+              "button_mh_mb": 42,
+              "button_pd_lr_mb": 30,
+              "button_icon_w_mb": 16
+            }
+          },
+          "369654b3-931c-43fa-9360-7aee6203ec30": {
+            "type": "2",
+            "settings": {
+              "fontf": "--font-family-1",
+              "fsbutton": 14,
+              "fwbutton": 600,
+              "button_ls": 0,
+              "button_mh": 48,
+              "button_pd_lr": 46,
+              "button_icon_w": 14,
+              "fsbutton_tb": 14,
+              "button_ls_tb": 0,
+              "button_mh_tb": 48,
+              "button_pd_lr_tb": 46,
+              "button_icon_w_tb": 14,
+              "fsbutton_mb": 14,
+              "button_ls_mb": 0,
+              "button_mh_mb": 48,
+              "button_pd_lr_mb": 46,
+              "button_icon_w_mb": 14
+            }
+          },
+          "d302da5f-4eda-4f4e-bcbc-3327a566136f": {
+            "type": "3",
+            "settings": {
+              "fontf": "--font-family-1",
+              "fsbutton": 14,
+              "fwbutton": 600,
+              "button_ls": 0,
+              "button_mh": 36,
+              "button_pd_lr": 0,
+              "button_icon_w": 0,
+              "fsbutton_tb": 14,
+              "button_ls_tb": 0,
+              "button_mh_tb": 36,
+              "button_pd_lr_tb": 25,
+              "button_icon_w_tb": 0,
+              "fsbutton_mb": 14,
+              "button_ls_mb": 0,
+              "button_mh_mb": 36,
+              "button_pd_lr_mb": 20,
+              "button_icon_w_mb": 0
+            }
+          }
+        },
+        "block_order": [
+          "btn_config-0",
+          "btn_config-1",
+          "824c754c-d42d-4e6f-beec-dd09247aad97",
+          "369654b3-931c-43fa-9360-7aee6203ec30",
+          "d302da5f-4eda-4f4e-bcbc-3327a566136f"
+        ],
+        "settings": {
+          "fnt_fm_button": "--font-family-1",
+          "btn_fw": 600,
+          "button_effect": "default"
+        }
+      },
+      "toolbar_mobile": {
+        "type": "toolbar_mobile",
+        "blocks": {
+          "toolbar_mobile-0": {
+            "type": "shop",
+            "settings": {
+              "title": "Shop",
+              "link": ""
+            }
+          },
+          "toolbar_mobile-1": {
+            "type": "wish",
+            "settings": {
+              "title": "Wishlist"
+            }
+          },
+          "toolbar_mobile-2": {
+            "type": "cart",
+            "settings": {
+              "title": "Cart"
+            }
+          },
+          "toolbar_mobile-3": {
+            "type": "account",
+            "settings": {
+              "title": "Account"
+            }
+          },
+          "toolbar_mobile-4": {
+            "type": "search",
+            "settings": {
+              "title": "Search"
+            }
+          }
+        },
+        "block_order": [
+          "toolbar_mobile-0",
+          "toolbar_mobile-1",
+          "toolbar_mobile-2",
+          "toolbar_mobile-3",
+          "toolbar_mobile-4"
+        ],
+        "settings": {
+          "enable_toolbar": true,
+          "show_txt": true,
+          "bg_color": "#ffffff",
+          "icon_color": "#222222",
+          "label_color": "#222222",
+          "count_bg_color": "#000000",
+          "count_text_color": "#ffffff"
+        }
+      },
+      "back_top": {
+        "type": "back_top",
+        "settings": {
+          "enable_backtop": true,
+          "enable_hidden_mobile": false,
+          "btn_radius": 10,
+          "enable_progress_bar": false,
+          "border_cl": "#878787",
+          "border_cl_active": "#000000"
+        }
+      },
+      "mega-menu": {
+        "type": "mega-menu",
+        "settings": {}
+      },
+      "mb_nav": {
+        "type": "mb_nav",
+        "blocks": {
+          "mb_nav-0": {
+            "type": "menu",
+            "disabled": true,
+            "settings": {
+              "title": "Demo",
+              "url": "/",
+              "open_link": "_self",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "",
+              "icons_op": "0",
+              "icon": "las la-user"
+            }
+          },
+          "mb_nav-1": {
+            "type": "menu",
+            "settings": {
+              "title": "Shop",
+              "url": "shopify://collections",
+              "open_link": "_self",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "",
+              "icons_op": "2",
+              "icon": ""
+            }
+          },
+          "mb_nav-2": {
+            "type": "menu",
+            "settings": {
+              "title": "Product",
+              "url": "shopify://collections/all",
+              "open_link": "_self",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "",
+              "icons_op": "2",
+              "icon": ""
+            }
+          },
+          "25fa7ecf-2db0-4747-b093-a1299099917e": {
+            "type": "menu",
+            "settings": {
+              "title": "New Arrivals",
+              "url": "shopify://collections/new-arrivals",
+              "open_link": "_self",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "",
+              "icons_op": "2",
+              "icon": ""
+            }
+          },
+          "58800ed8-befe-449a-b8f8-ea86620bef6f": {
+            "type": "menu",
+            "settings": {
+              "title": "About Us",
+              "url": "shopify://pages/about-us",
+              "open_link": "_self",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "",
+              "icons_op": "2",
+              "icon": ""
+            }
+          },
+          "mb_nav-3": {
+            "type": "menu",
+            "settings": {
+              "title": "Contact Us",
+              "url": "shopify://pages/contact-us",
+              "open_link": "_self",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "",
+              "icons_op": "2",
+              "icon": ""
+            }
+          },
+          "mb_nav-4": {
+            "type": "wis",
+            "settings": {}
+          },
+          "mb_nav-5": {
+            "type": "sea",
+            "settings": {}
+          },
+          "mb_nav-6": {
+            "type": "acc",
+            "settings": {}
+          },
+          "mb_nav-7": {
+            "type": "help",
+            "settings": {
+              "title": "Need help?",
+              "text": ""
+            }
+          },
+          "mb_nav-8": {
+            "type": "lang",
+            "settings": {}
+          },
+          "mb_nav-9": {
+            "type": "cur",
+            "settings": {}
+          }
+        },
+        "block_order": [
+          "mb_nav-0",
+          "mb_nav-1",
+          "mb_nav-2",
+          "25fa7ecf-2db0-4747-b093-a1299099917e",
+          "58800ed8-befe-449a-b8f8-ea86620bef6f",
+          "mb_nav-3",
+          "mb_nav-4",
+          "mb_nav-5",
+          "mb_nav-6",
+          "mb_nav-7",
+          "mb_nav-8",
+          "mb_nav-9"
+        ],
+        "settings": {}
+      },
+      "mb_cat": {
+        "type": "mb_cat",
+        "blocks": {
+          "37d41873-33b9-495f-b9e9-261690a26f44": {
+            "type": "cat",
+            "settings": {
+              "cat": "home-organization",
+              "title": "Smart Home Organization",
+              "url": "shopify://collections/home-organization",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "#e91e63",
+              "icons_op": "0",
+              "icon": "las la-female"
+            }
+          },
+          "9bc80180-7db8-4a0c-a987-5452a9f93167": {
+            "type": "cat",
+            "settings": {
+              "cat": "lighting-home-ambience",
+              "title": "Lighting & Home Ambience",
+              "url": "shopify://collections/lighting-home-ambience",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "#e91e63",
+              "icons_op": "0",
+              "icon": "las la-male"
+            }
+          },
+          "02afbc74-7e86-47eb-a54c-4b782b9be1ec": {
+            "type": "cat",
+            "settings": {
+              "cat": "decor-accessories",
+              "title": "Décor & Accessories",
+              "url": "shopify://collections/decor-accessories",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "#e91e63",
+              "icons_op": "0",
+              "icon": "las la-shoe-prints"
+            }
+          },
+          "a8e444e6-eaae-4fff-a0dd-f13d43abd5f0": {
+            "type": "cat",
+            "settings": {
+              "cat": "kitchen-essentials",
+              "title": "Kitchen Essentials",
+              "url": "shopify://collections/kitchen-essentials",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "#e91e63",
+              "icons_op": "0",
+              "icon": "las la-glasses"
+            }
+          },
+          "cd037d53-15f5-4756-9039-1b2b00959d4e": {
+            "type": "cat",
+            "settings": {
+              "cat": "laundry-cleaning",
+              "title": "Laundry & Cleaning",
+              "url": "shopify://collections/laundry-cleaning",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "#e91e63",
+              "icons_op": "0",
+              "icon": "las la-shopping-bag"
+            }
+          },
+          "251a9643-5d61-4fca-a85f-9b110891798b": {
+            "type": "cat",
+            "settings": {
+              "cat": "personal-care-accessories",
+              "title": "Personal Care & Accessories",
+              "url": "shopify://collections/personal-care-accessories",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "#e91e63",
+              "icons_op": "0",
+              "icon": "las la-tshirt"
+            }
+          },
+          "5cb7c19c-21e4-4bd3-8ae3-a439bbfcdaee": {
+            "type": "cat",
+            "settings": {
+              "cat": "bathroom-essentials",
+              "title": "Bathroom Essentials",
+              "url": "shopify://collections/bathroom-essentials",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "#e91e63",
+              "icons_op": "0",
+              "icon": "las la-hand-holding-heart"
+            }
+          },
+          "cat_6TA4TG": {
+            "type": "cat",
+            "settings": {
+              "cat": "garden-outdoor-lifestyle",
+              "title": "Garden & Outdoor Lifestyle",
+              "url": "shopify://collections/garden-outdoor-lifestyle",
+              "menu": "",
+              "lb": "",
+              "lb_cl": "#e91e63",
+              "icons_op": "0",
+              "icon": "las la-home"
+            }
+          }
+        },
+        "block_order": [
+          "37d41873-33b9-495f-b9e9-261690a26f44",
+          "9bc80180-7db8-4a0c-a987-5452a9f93167",
+          "02afbc74-7e86-47eb-a54c-4b782b9be1ec",
+          "a8e444e6-eaae-4fff-a0dd-f13d43abd5f0",
+          "cd037d53-15f5-4756-9039-1b2b00959d4e",
+          "251a9643-5d61-4fca-a85f-9b110891798b",
+          "5cb7c19c-21e4-4bd3-8ae3-a439bbfcdaee",
+          "cat_6TA4TG"
+        ],
+        "settings": {}
+      },
+      "mini_cart": {
+        "type": "mini_cart",
+        "blocks": {
+          "mini_cart-0": {
+            "type": "price",
+            "settings": {}
+          },
+          "mini_cart-1": {
+            "type": "tax",
+            "settings": {}
+          },
+          "mini_cart-2": {
+            "type": "agree",
+            "settings": {}
+          },
+          "mini_cart-3": {
+            "type": "btnc",
+            "settings": {
+              "btn_icon": false,
+              "button_style": "default",
+              "btn_cl": "custom2",
+              "button_effect": "default"
+            }
+          },
+          "mini_cart-4": {
+            "type": "btnck",
+            "settings": {
+              "btn_icon": false,
+              "button_style": "default",
+              "btn_cl": "primary",
+              "button_effect": "default"
+            }
+          },
+          "mini_cart-5": {
+            "type": "img",
+            "settings": {}
+          },
+          "mini_cart-6": {
+            "type": "btn",
+            "settings": {
+              "title": "Return To Shop",
+              "url": "",
+              "btn_icon": false,
+              "button_style": "default",
+              "btn_cl": "primary",
+              "button_effect": "fade"
+            }
+          }
+        },
+        "block_order": [
+          "mini_cart-0",
+          "mini_cart-1",
+          "mini_cart-2",
+          "mini_cart-3",
+          "mini_cart-4",
+          "mini_cart-5",
+          "mini_cart-6"
+        ],
+        "settings": {
+          "style": "1",
+          "pos": "2",
+          "enable_pr": true,
+          "enable_calc_ship": true,
+          "enable_note": true,
+          "enable_rates": true,
+          "enable_discount": true,
+          "enable_gift_wrap": true,
+          "ship_df_country": "United States"
+        }
+      },
+      "main-qv": {
+        "type": "main-qv",
+        "blocks": {
+          "main-qv-0": {
+            "type": "title",
+            "settings": {
+              "txt_tr_pr": "none",
+              "fnt_df_pr": "2",
+              "size_pr": 16,
+              "fw_pr": 600,
+              "lh_pr": 23,
+              "ls_pr": 2,
+              "pr_title_color": "#4d5959",
+              "pr_title_color_hover": "#b59677"
+            }
+          },
+          "main-qv-1": {
+            "type": "price_review",
+            "settings": {
+              "use_border": true,
+              "border_color": "#e5e5e5",
+              "price": "0",
+              "type_sale": "0",
+              "tax_ship": true,
+              "size_price_pr": 22,
+              "fw_price_pr": 400,
+              "primary_price_color": "#696969",
+              "secondary_price_color": "#696969",
+              "price_sale": "#ec0101",
+              "show_available": true,
+              "show_inline": true,
+              "primary_stock_color": "#4eb0be",
+              "secondary_stock_color": "#696969",
+              "rating": true,
+              "review_liquid": ""
+            }
+          },
+          "main-qv-2": {
+            "type": "description",
+            "settings": {
+              "des": "2",
+              "text": "<p>Go gecko this summer with this vintage navy and white striped v-neck t-shirt from the Nike. Perfect for pairing with denim and white kicks for a stylish gecko vibe.</p>",
+              "length": 31
+            }
+          },
+          "main-qv-3": {
+            "type": "form",
+            "settings": {
+              "selector_mode": "circle",
+              "color_mode": "color is-sw-cl__round",
+              "enable_fit_ratio_img": false,
+              "color_size": "medium",
+              "show_qty": true,
+              "enable_wishlist": true,
+              "enable_compare": true,
+              "btn_atc_full": false,
+              "pr_btn_round": 40,
+              "wishlist_color": "#222222",
+              "wishlist_color_hover": "#b59677",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#222222",
+              "compare_color_hover": "#b59677",
+              "compare_color_active": "#000000",
+              "ani": "t4s-ani-tada",
+              "time": 6,
+              "btn_txt": "3",
+              "btn_icon": false,
+              "button_style": "default",
+              "button_color": "primary",
+              "button_effect": "sweep-to-bottom",
+              "show_dynamic_checkout": false,
+              "btn_txt2": "3",
+              "button_color_payment": "dark",
+              "product_list": [],
+              "show_product_current": true,
+              "qty_val": "0",
+              "advance_label": "Choose style",
+              "advance_pr_list": []
+            }
+          },
+          "1b23c084-beb7-462b-9746-ac7a831c2954": {
+            "type": "complimentary_products",
+            "settings": {
+              "text": "Pairs well with"
+            }
+          },
+          "5c5e960c-7f6f-43e2-b2cc-249f582b9f85": {
+            "type": "img",
+            "settings": {
+              "mess": "",
+              "size": 16,
+              "source": "1",
+              "image": "shopify://shop_images/trust_img2.png",
+              "al": "start",
+              "wimg": 85,
+              "svg": "amazon_payments,apple_pay,google_pay,master,paypal,shopify_pay,visa",
+              "height": 33
+            }
+          },
+          "main-qv-5": {
+            "type": "meta",
+            "settings": {
+              "show_options": false,
+              "show_vendor": false,
+              "use_cdt": false,
+              "show_type": false,
+              "show_sku": true,
+              "show_barcode": false,
+              "show_available": false,
+              "show_category": true,
+              "show_tags": true
+            }
+          },
+          "main-qv-6": {
+            "type": "social",
+            "settings": {
+              "socials_align": "start",
+              "social_mode": "2",
+              "social_style": "1",
+              "social_size": "extra_small",
+              "bd_radius": 0,
+              "use_color_set": true,
+              "icon_cl": "#222222",
+              "bg_cl": "#b59677",
+              "space_h_item": "20",
+              "space_v_item": "5",
+              "space_h_item_mb": "10",
+              "space_v_item_mb": "4"
+            }
+          },
+          "5d7ae1eb-043c-4ac3-b276-69b27a8d65f9": {
+            "type": "btn_detail",
+            "settings": {
+              "button_label": "View full details",
+              "button_link": "",
+              "open_link": "_self",
+              "btn_icon": true,
+              "button_style": "link",
+              "btn_size": "default",
+              "btn_cl": "dark",
+              "button_effect": "fade"
+            }
+          }
+        },
+        "block_order": [
+          "main-qv-0",
+          "main-qv-1",
+          "main-qv-2",
+          "main-qv-3",
+          "1b23c084-beb7-462b-9746-ac7a831c2954",
+          "5c5e960c-7f6f-43e2-b2cc-249f582b9f85",
+          "main-qv-5",
+          "main-qv-6",
+          "5d7ae1eb-043c-4ac3-b276-69b27a8d65f9"
+        ],
+        "settings": {
+          "demo_pr": "classic-cotton-leggings",
+          "image_ratio": "ratioadapt",
+          "image_size": "cover",
+          "image_position": "8",
+          "enable_video_looping": false,
+          "enable_video_muting": true,
+          "enable_video_autoplaying": true,
+          "eff": "fade",
+          "nav_btn": true,
+          "btn_vi": "hover",
+          "btn_owl": "outline",
+          "btn_shape": "round",
+          "btn_cl": "dark",
+          "btn_size": "small",
+          "btn_hidden_mobile": false,
+          "nav_dot": true,
+          "dot_owl": "outline",
+          "dots_cl": "dark",
+          "dots_round": true,
+          "dots_space": 10,
+          "dots_hidden_mobile": false
+        }
+      },
+      "slider_config": {
+        "type": "slider_config",
+        "blocks": {
+          "ef55a72d-2a3a-4be2-b303-7904b5feef29": {
+            "type": "custom1",
+            "settings": {
+              "btn_color_primary": "#abb1b4",
+              "btn_color_second": "#ffffff",
+              "btn_color_primary_hover": "#b59677",
+              "btn_color_second_hover": "#ffffff"
+            }
+          }
+        },
+        "block_order": [
+          "ef55a72d-2a3a-4be2-b303-7904b5feef29"
+        ],
+        "settings": {
+          "btn_vi": "hover",
+          "btn_owl": "default",
+          "btn_shape": "none",
+          "btn_size": "small",
+          "dot_owl": "default",
+          "dots_round": true,
+          "dots_space": 10
+        }
+      },
+      "search-hidden": {
+        "type": "search-hidden",
+        "settings": {}
+      },
+      "login-sidebar": {
+        "type": "login-sidebar",
+        "settings": {
+          "content_align": "start",
+          "btn_width": "full",
+          "button_style": "outline",
+          "btn_size": "1",
+          "btns_cl": "custom1",
+          "button_effect": "fade"
+        }
+      },
+      "facets": {
+        "type": "facets",
+        "settings": {
+          "style_color_filter": "Color, color, Colour , colour",
+          "style_tag_filter": ""
+        }
+      },
+      "main-wishlist": {
+        "type": "main-wishlist",
+        "blocks": {
+          "main-wishlist-0": {
+            "type": "layout",
+            "settings": {}
+          }
+        },
+        "block_order": [
+          "main-wishlist-0"
+        ],
+        "settings": {
+          "product_list": [],
+          "product_des": "5",
+          "show_vendor": false,
+          "use_cdt": false,
+          "image_ratio": "ratioadapt",
+          "image_size": "cover",
+          "image_position": "8",
+          "content_align": "default",
+          "limit": 12,
+          "enable_listing": true,
+          "enable_listing_default": false,
+          "col_dk": "4",
+          "col_tb": "3",
+          "col_mb": "2",
+          "space_h_item": "30",
+          "space_v_item": "30",
+          "space_h_item_tb": "15",
+          "space_v_item_tb": "20",
+          "space_h_item_mb": "10",
+          "space_v_item_mb": "20",
+          "layout_des": "1",
+          "use_pagination": "default",
+          "enable_bar_lm": true,
+          "btn_icon": false,
+          "button_style": "default",
+          "btns_size": "large",
+          "btns_cl": "dark",
+          "button_effect": "default",
+          "btn_pos": "t4s-text-center",
+          "layout": "t4s-container-wrap",
+          "cl_bg": "",
+          "cl_bg_gradient": "",
+          "mg": ",,50px,",
+          "pd": "",
+          "mg_tb": ",,50px,",
+          "pd_tb": "",
+          "mg_mb": ",,30px,",
+          "pd_mb": ""
+        }
+      },
+      "main-compare": {
+        "type": "main-compare",
+        "blocks": {
+          "main-compare-0": {
+            "type": "basic",
+            "settings": {}
+          },
+          "main-compare-1": {
+            "type": "availability",
+            "settings": {
+              "title": "Availability"
+            }
+          },
+          "main-compare-2": {
+            "type": "vendor",
+            "settings": {
+              "title": "Vendor"
+            }
+          },
+          "main-compare-3": {
+            "type": "variants",
+            "settings": {
+              "title": "Color"
+            }
+          },
+          "main-compare-4": {
+            "type": "btn",
+            "settings": {
+              "title": "RETURN TO SHOP",
+              "url": "",
+              "open_link": "_self",
+              "btn_icon": false,
+              "button_style": "default",
+              "btns_size": "medium",
+              "btns_cl": "primary",
+              "button_effect": "default"
+            }
+          }
+        },
+        "block_order": [
+          "main-compare-0",
+          "main-compare-1",
+          "main-compare-2",
+          "main-compare-3",
+          "main-compare-4"
+        ],
+        "settings": {
+          "cl_price": "#95bf46",
+          "cl_price_sale": "#ec0101",
+          "cl_in": "#95bf46",
+          "cl_out": "#e1b878",
+          "image_ratio": "rationt",
+          "image_size": "cover",
+          "image_position": "8",
+          "content_align": "center",
+          "layout": "t4s-container-wrap",
+          "cl_bg": "",
+          "cl_bg_gradient": "",
+          "mg": ",,50px,",
+          "pd": "",
+          "mg_mb": ",,30px,",
+          "pd_mb": ""
+        }
+      },
+      "header-vertical": {
+        "type": "header-vertical",
+        "blocks": {
+          "header-vertical-0": {
+            "type": "mega",
+            "settings": {
+              "title": "Home",
+              "url": "",
+              "open_link": "_self",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "#00badb",
+              "pos_sub": "right-start",
+              "wid": "cus",
+              "cus_wid": 1200,
+              "id": 1,
+              "r_s_h_item": "30",
+              "r_s_v_item": "30"
+            }
+          },
+          "header-vertical-1": {
+            "type": "mega",
+            "settings": {
+              "title": "mega",
+              "url": "",
+              "open_link": "_self",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "#00badb",
+              "pos_sub": "right-start",
+              "wid": "cus",
+              "cus_wid": 1200,
+              "id": 1,
+              "r_s_h_item": "30",
+              "r_s_v_item": "30"
+            }
+          },
+          "header-vertical-2": {
+            "type": "base",
+            "settings": {
+              "title": "base",
+              "url": "/",
+              "open_link": "_self",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": ""
+            }
+          },
+          "0dec03c0-f79c-4d2b-946e-0a9c5d0a0d9a": {
+            "type": "drop",
+            "settings": {
+              "title": "Dropdown",
+              "url": "",
+              "open_link": "_self",
+              "menu": "main-menu",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "pos_sub": "right-start"
+            }
+          }
+        },
+        "block_order": [
+          "header-vertical-0",
+          "header-vertical-1",
+          "header-vertical-2",
+          "0dec03c0-f79c-4d2b-946e-0a9c5d0a0d9a"
+        ],
+        "settings": {
+          "show_currency": true,
+          "arrow": false,
+          "bgnav": "#ffffff",
+          "opnav": 100,
+          "clnav": "#222222",
+          "clnav_hover": "#b59677",
+          "h_icon": "kalles",
+          "hover_icon": "2",
+          "show_search": true,
+          "show_acc": true,
+          "show_wis": true,
+          "cart_des": "1",
+          "bg_hc": "#000000",
+          "cl_hc": "#ffffff",
+          "source": "2",
+          "txt": "<p>Welcome to our store!</p>",
+          "enable_active": false,
+          "h_navmb": 62,
+          "fm_nav": "1",
+          "fs_nav": 14,
+          "fw_nav": 500,
+          "ls_nav": 0.2
+        }
+      },
+      "popups": {
+        "type": "popups",
+        "blocks": {
+          "a318abee-f06d-417d-abb3-3b43dedf8df9": {
+            "type": "exit",
+            "settings": {
+              "design_heading": "1",
+              "heading_center": true,
+              "top_heading": "Wait! Can't find what you're looking for ?",
+              "icon_heading": "las la-gem",
+              "top_subheading": "<p>Maybe this will help...</p>",
+              "tophead_mb": 30,
+              "tophead_mb_tb": 30,
+              "tophead_mb_mb": 25,
+              "product_list": [
+                "black-cotton-leggings",
+                "blue-cotton-leggings",
+                "blue-slub-knit-top",
+                "classic-cotton-leggings"
+              ],
+              "product_des": "5",
+              "show_vendor": true,
+              "image_ratio": "ratioadapt",
+              "image_size": "cover",
+              "content_align": "default",
+              "col_dk": "4",
+              "space_h_item": "30",
+              "day_next": 7,
+              "loop": true,
+              "au_time": 0,
+              "au_hover": true,
+              "nav_btn": false,
+              "btn_vi": "hover",
+              "btn_owl": "default",
+              "btn_shape": "none",
+              "btn_cl": "dark",
+              "btn_size": "small",
+              "btn_hidden_mobile": true,
+              "nav_dot": false,
+              "dot_owl": "default",
+              "dots_cl": "dark",
+              "dots_round": true,
+              "dots_space": 10,
+              "dots_hidden_mobile": false,
+              "index": true,
+              "product": false,
+              "collection": false,
+              "article": false,
+              "blog": false,
+              "cart": false,
+              "page": false
+            }
+          },
+          "a97628dd-9da2-405b-a3e1-e2e41b9902f6": {
+            "type": "sales",
+            "settings": {
+              "product_list": [
+                "blue-modern-backpack",
+                "givenchy-stars-t-shirt",
+                "black-in-faux-jx-suede",
+                "business-casual-on-a-budget",
+                "dictumst-of-habitasse"
+              ],
+              "mb": false,
+              "index": true,
+              "product": false,
+              "collection": false,
+              "article": false,
+              "blog": false,
+              "cart": false,
+              "page": false,
+              "pp_type": "2",
+              "start_time": 4,
+              "start_time_unit": "1000",
+              "stay_time": 5,
+              "stay_time_unit": "1000",
+              "enable_cl": true,
+              "close": "Close",
+              "enable_qv": true,
+              "enable_progressbar": true,
+              "list_user": "Nathan (California) | Alex (Texas) | Henry (New York) | Kiti (Ohio) | Daniel (Washington) | Hau (California) | Van (Ohio) | Sara (Montana)  | Kate (Georgia)",
+              "enable_time": true,
+              "list_time": "4 hours ago | 2 hours ago | 45 minutes ago | 1 day ago | 8 hours ago | 10 hours ago | 25 minutes ago | 2 day ago | 5 hours ago | 40 minutes ago",
+              "enable_verify": true,
+              "des": "1",
+              "pp_ani": "anislideInUp",
+              "txt1": "purchased",
+              "txt2": "Verified"
+            }
+          }
+        },
+        "block_order": [
+          "a318abee-f06d-417d-abb3-3b43dedf8df9",
+          "a97628dd-9da2-405b-a3e1-e2e41b9902f6"
+        ],
+        "settings": {}
+      },
+      "t4s_custom_color": {
+        "type": "t4s_custom_color",
+        "settings": {}
+      },
+      "facets_tags": {
+        "type": "facets_tags",
+        "blocks": {
+          "1e0e1b8c-7e03-46a9-94aa-801b857b6514": {
+            "type": "color",
+            "settings": {
+              "hidden_block": false,
+              "title": "By Color",
+              "arra_enter": "Red,White,Brown,Blue, Black, Green, Grey, Sliver,Pink",
+              "use_auto_filter_tag": false,
+              "key": "Color"
+            }
+          },
+          "f0bf9f19-fc52-461d-80a9-6d0f3403d681": {
+            "type": "other",
+            "settings": {
+              "hidden_block": false,
+              "title": "By Other",
+              "arra_enter": "Red,White,Brown,Blue, Black, Green, Grey, Sliver,Pink",
+              "use_auto_filter_tag": false,
+              "key": "Other",
+              "style": "default"
+            }
+          }
+        },
+        "block_order": [
+          "1e0e1b8c-7e03-46a9-94aa-801b857b6514",
+          "f0bf9f19-fc52-461d-80a9-6d0f3403d681"
+        ],
+        "settings": {}
+      },
+      "main-qs": {
+        "type": "main-qs",
+        "blocks": {
+          "main-qs-0": {
+            "type": "infos",
+            "settings": {
+              "txt_tr_pr": "none",
+              "fnt_df_pr": "2",
+              "size_pr": 14,
+              "fw_pr": 500,
+              "lh_pr": 18,
+              "ls_pr": 2,
+              "pr_title_color": "#4d5959",
+              "pr_title_color_hover": "#b59677",
+              "price": "0",
+              "type_sale": "0",
+              "size_price_pr": 16,
+              "fw_price_pr": 400,
+              "primary_price_color": "#696969",
+              "secondary_price_color": "#868686",
+              "price_sale": "#ec0101"
+            }
+          },
+          "main-qs-1": {
+            "type": "form",
+            "settings": {
+              "selector_mode": "circle",
+              "color_mode": "color is-sw-cl__round",
+              "enable_fit_ratio_img": false,
+              "color_size": "medium",
+              "show_qty": true,
+              "enable_wishlist": false,
+              "enable_compare": false,
+              "pr_btn_round": 0,
+              "wishlist_color": "#222222",
+              "wishlist_color_hover": "#b59677",
+              "wishlist_color_active": "#e81e63",
+              "compare_color": "#222222",
+              "compare_color_hover": "#b59677",
+              "compare_color_active": "#000000",
+              "ani": "none",
+              "time": 6,
+              "btn_txt": "3",
+              "btn_icon": false,
+              "button_style": "default",
+              "button_color": "primary",
+              "button_effect": "fade",
+              "show_dynamic_checkout": false,
+              "btn_txt2": "3",
+              "button_color_payment": "dark"
+            }
+          },
+          "7cad397c-987b-4e5f-a80a-c2b174fc9e08": {
+            "type": "btn_detail",
+            "settings": {
+              "button_label": "View full details",
+              "button_link": "",
+              "open_link": "_self",
+              "btn_icon": true,
+              "button_style": "link",
+              "btn_size": "default",
+              "btn_cl": "dark",
+              "button_effect": "fade"
+            }
+          }
+        },
+        "block_order": [
+          "main-qs-0",
+          "main-qs-1",
+          "7cad397c-987b-4e5f-a80a-c2b174fc9e08"
+        ],
+        "settings": {
+          "demo_pr": "red-cotton-leggings"
+        }
+      },
+      "extras": {
+        "type": "extras",
+        "settings": {}
+      },
+      "heading-static": {
+        "type": "heading-static",
+        "blocks": {
+          "3a74624d-9fb3-41b5-a50a-fbf8dbe0b0e4": {
+            "type": "2",
+            "settings": {
+              "content": "<p>View your wishlist products</p>",
+              "fontf": "inherit",
+              "text_cl": "#ffffff",
+              "text_fs": 14,
+              "text_lh": 20,
+              "text_fw": 400,
+              "text_ls": 0,
+              "mgb": 0,
+              "font_italic": false,
+              "font_uppercase": false,
+              "text_shadow": false,
+              "text_fs_tb": 14,
+              "text_lh_tb": 20,
+              "text_ls_tb": 0,
+              "mgb_tb": 0,
+              "hidden_mobile": false,
+              "text_fs_mb": 14,
+              "text_lh_mb": 21,
+              "text_ls_mb": 0,
+              "mgb_mb": 0
+            }
+          }
+        },
+        "block_order": [
+          "3a74624d-9fb3-41b5-a50a-fbf8dbe0b0e4"
+        ],
+        "settings": {
+          "parallax": false,
+          "bg_overlay": "#000000",
+          "bg_opacity": 54,
+          "padding_top": 50,
+          "padding_bottom": 50,
+          "padding_top_tb": 50,
+          "padding_bottom_tb": 50,
+          "padding_top_mb": 50,
+          "padding_bottom_mb": 50,
+          "bg_pos": "center center",
+          "bg_repeat": "no-repeat",
+          "bg_size": "cover",
+          "mgb": 50,
+          "mgb_tb": 50,
+          "mgb_mb": 50
+        }
+      },
+      "header-sidebar": {
+        "type": "header-sidebar",
+        "settings": {
+          "layout": "menu_left",
+          "full_header": true,
+          "height": 62,
+          "frm_sea_mw": 600,
+          "bgnav": "#ffffff",
+          "opnav": 100,
+          "clnav": "#222222",
+          "clnav_hover": "#b59677",
+          "clsea": "#b59677",
+          "h_icon": "kalles",
+          "hover_icon": "2",
+          "show_search": true,
+          "show_acc": true,
+          "show_wis": true,
+          "cart_des": "1",
+          "bg_hc": "#000000",
+          "cl_hc": "#ffffff",
+          "sticky_header": true,
+          "scroll_header": true,
+          "bgnavst": "#ffffff",
+          "opnavst": 100,
+          "clnavst": "#222222",
+          "clnavst_hover": "#b59677",
+          "clseast": "#b59677",
+          "transparent_header": false,
+          "space_transparent_header": false,
+          "bgnavtr": "#000000",
+          "opnavtr": 40,
+          "clnavtr": "#ffffff",
+          "clnavtr_hover": "#ffffff",
+          "clseatr": "#b59677",
+          "source": "2",
+          "txt": "<p>Welcome to our store!</p>"
+        }
+      },
+      "header-categories-menu": {
+        "type": "header-categories-menu",
+        "blocks": {
+          "drop_afQfaK": {
+            "type": "drop",
+            "settings": {
+              "title": "Dropdown",
+              "url": "",
+              "open_link": "_self",
+              "menu": "lighting-home-ambience",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_93BMHP": {
+            "type": "drop",
+            "settings": {
+              "title": "Dropdown",
+              "url": "",
+              "open_link": "_self",
+              "menu": "",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          }
+        },
+        "block_order": [
+          "drop_afQfaK",
+          "drop_93BMHP"
+        ],
+        "settings": {
+          "full_header": true,
+          "height": 90,
+          "frm_sea_mw": 500,
+          "height2": 50,
+          "arrow": true,
+          "border": true,
+          "border_cate": true,
+          "header_design": "2",
+          "align": "start",
+          "hover": "hover_sideup",
+          "enable_active": true,
+          "h_navmb": 62,
+          "bgnav": "#ffffff",
+          "opnav": 100,
+          "clnav": "#222222",
+          "clnav_hover": "#222222",
+          "bgsea": "#fafafa",
+          "clsea": "#33c1a8",
+          "bgnav2": "#ffffff",
+          "clnav2": "#4d5959",
+          "h_icon": "line",
+          "hover_icon": "2",
+          "show_search": true,
+          "show_acc": true,
+          "show_wis": true,
+          "cart_des": "4",
+          "bg_hc": "#4ee4d0",
+          "cl_hc": "#ffffff",
+          "sticky_header": true,
+          "scroll_header": true,
+          "bgnavst": "#ffffff",
+          "opnavst": 100,
+          "clnavst": "#222222",
+          "clnavst_hover": "#b59677",
+          "bgseavst": "#fafafa",
+          "clseast": "#b59677",
+          "transparent_header": false,
+          "space_transparent_header": false,
+          "bgnavtr": "#000000",
+          "opnavtr": 40,
+          "clnavtr": "#ffffff",
+          "clnavtr_hover": "#ffffff",
+          "bgseatr": "#fafafa",
+          "clseatr": "#b59677",
+          "fm_nav": "1",
+          "fs_nav": 14,
+          "fw_nav": 400,
+          "ls_nav": 0,
+          "text": "",
+          "shop_cat": true,
+          "txt_cat": "Main Menu",
+          "bgcategory": "#ffffff",
+          "clcategory": "#222222"
+        }
+      },
+      "header-categories": {
+        "type": "header-categories",
+        "settings": {
+          "arrow": true
+        }
+      },
+      "header-bottom": {
+        "type": "header-bottom",
+        "blocks": {
+          "drop_7AzCWY": {
+            "type": "drop",
+            "settings": {
+              "title": "Smart Home Organization",
+              "url": "",
+              "open_link": "_self",
+              "menu": "smart-home-collections-main",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_6czDcN": {
+            "type": "drop",
+            "settings": {
+              "title": "Lighting & Home Ambience",
+              "url": "",
+              "open_link": "_self",
+              "menu": "lighting-home-ambience-main",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_RyNHzc": {
+            "type": "drop",
+            "settings": {
+              "title": "Décor & Accessories",
+              "url": "",
+              "open_link": "_self",
+              "menu": "menu-up-copy-1",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_QfKMC9": {
+            "type": "drop",
+            "settings": {
+              "title": "Kitchen Essentials",
+              "url": "",
+              "open_link": "_self",
+              "menu": "kitchen-essentials-main",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_CzzEk9": {
+            "type": "drop",
+            "settings": {
+              "title": "General Cleaning & Laundry",
+              "url": "",
+              "open_link": "_self",
+              "menu": "laundry-cleaning-main",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_4HQUUh": {
+            "type": "drop",
+            "settings": {
+              "title": "Personal Care & Accessories",
+              "url": "",
+              "open_link": "_self",
+              "menu": "personal-care-accessories-main",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_qbcacP": {
+            "type": "drop",
+            "settings": {
+              "title": "Bathroom Essentials",
+              "url": "",
+              "open_link": "_self",
+              "menu": "bathroom-essentials-main",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          },
+          "drop_UHDiRe": {
+            "type": "drop",
+            "settings": {
+              "title": "Garden & Outdoor Lifestyle",
+              "url": "",
+              "open_link": "_self",
+              "menu": "garden-outdoor-lifestyle-main",
+              "icon": "",
+              "cus_cl": false,
+              "cl": "#ec0101",
+              "lb": "",
+              "lb_cl": "",
+              "lazy_mn": true,
+              "pos_sub": "bottom",
+              "pos": "left"
+            }
+          }
+        },
+        "block_order": [
+          "drop_7AzCWY",
+          "drop_6czDcN",
+          "drop_RyNHzc",
+          "drop_QfKMC9",
+          "drop_CzzEk9",
+          "drop_4HQUUh",
+          "drop_qbcacP",
+          "drop_UHDiRe"
+        ],
+        "custom_css": [
+          ".header-wrapper {margin-top: 0px !important; padding-top: 0px !important;}"
+        ],
+        "settings": {
+          "full_header": true,
+          "height": 60,
+          "height2": 60,
+          "arrow": true,
+          "border": true,
+          "align": "center",
+          "hover": "hover_sideup",
+          "enable_active": true,
+          "h_navmb": 60,
+          "bgnav": "#010713",
+          "opnav": 80,
+          "clnav": "#f7fafc",
+          "clnav_hover": "#41b6ff",
+          "h_icon": "line",
+          "hover_icon": "2",
+          "show_search": true,
+          "show_acc": true,
+          "show_wis": true,
+          "cart_des": "2",
+          "bg_hc": "#41b6ff",
+          "cl_hc": "#ffffff",
+          "sticky_header": false,
+          "scroll_header": false,
+          "bgnavst": "#1b1515",
+          "opnavst": 62,
+          "clnavst": "#000000",
+          "clnavst_hover": "#41b6ff",
+          "transparent_header": true,
+          "space_transparent_header": false,
+          "bgnavtr": "#000000",
+          "opnavtr": 71,
+          "clnavtr": "#ffffff",
+          "clnavtr_hover": "#41b6ff",
+          "source": "4",
+          "txt": "<p><em>\"Welcome to Zeno Home ✨ Discover smart & innovative products for your home!\"</em><br/></p>",
+          "fm_nav": "2",
+          "fs_nav": 12,
+          "fw_nav": 400,
+          "ls_nav": 0
+        }
+      }
+    },
+    "content_for_index": [],
+    "blocks": {
+      "21474836472147483647": {
+        "type": "shopify://apps/ecomposer-landing-page-builder/blocks/app-embed/a0fc26e1-7741-4773-8b27-39389b4fb4a0",
+        "disabled": false,
+        "settings": {}
+      },
+      "11532412952436166569": {
+        "type": "shopify://apps/loox-reviews/blocks/loox-inject/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e",
+        "disabled": false,
+        "settings": {}
+      },
+      "18423266570658624584": {
+        "type": "shopify://apps/beast-currency-converter/blocks/doubly/267afa86-a419-4d5b-a61b-556038e7294d",
+        "disabled": true,
+        "settings": {}
+      },
+      "15683396631634586217": {
+        "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
+        "disabled": false,
+        "settings": {
+          "button_color": "#000000",
+          "secondary_color": "#FFFFFF",
+          "ternary_color": "#6A6A6A",
+          "button_icon": "chat_bubble",
+          "button_text": "chat_with_us",
+          "button_horizontal_position": "bottom_right",
+          "button_vertical_position": "lowest",
+          "greeting_message": ""
+        }
+      }
+    },
+    "sticky_header": true,
+    "enable_shipbar": true
+  },
+  "platform_customizations": {
+    "custom_css": [
+      "/* ===== Side dropdown for all Collection menus ===== */ /* إظهار القوائم المنسدلة بشكل جانبي بدل عمودي */.site-nav__dropdown,.nt_menu .sub-menu,.header__menu .list-menu .sub-menu {position: absolute !important; top: 0 !important; left: 100% !important; /* يمين */ min-width: 220px; z-index: 9999; display: none; white-space: nowrap;}",
+      " /* إظهار القائمة عند التحويم */.site-nav li:hover > .site-nav__dropdown,.nt_menu li:hover > .sub-menu,.header__menu .list-menu li:hover > .sub-menu {display: block !important;}",
+      " /* القوائم المتداخلة (المستوى الثاني/الثالث) تفتح للجانب */.site-nav__dropdown li .site-nav__dropdown,.sub-menu li .sub-menu {top: 0 !important; left: 100% !important;}",
+      " /* دعم RTL (عربي) لو قلبت الموقع من اليمين لليسار */html[dir=\"rtl\"] .site-nav__dropdown,html[dir=\"rtl\"] .nt_menu .sub-menu,html[dir=\"rtl\"] .header__menu .list-menu .sub-menu {right: 100% !important; left: auto !important;}"
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+<!-- sections/zh-bottom-nav.liquid -->
+{%- liquid
+  assign se = section.settings
+  assign cart_count = cart.item_count
+-%}
+
+<nav class="zh-bottom-nav" aria-label="{{ 'accessibility.nav.mobile_menu' | t | default: 'Mobile navigation' }}">
+  <ul class="zh-bottom-nav__list">
+    <li class="zh-bottom-nav__item">
+      <a class="zh-bottom-nav__link {% if request.page_type == 'index' %}is-active{% endif %}" href="{{ routes.root_url }}">
+        <svg class="zh-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>{{ 'general.navigation.home' | t | default: 'Home' }}</span>
+      </a>
+    </li>
+    <li class="zh-bottom-nav__item">
+      <a class="zh-bottom-nav__link {% if request.page_type == 'list-collections' or request.page_type == 'collection' %}is-active{% endif %}"
+         href="{{ se.categories_url | default: routes.collections_url }}">
+        <svg class="zh-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span>{{ 'collections.general.title' | t | default: 'Shop' }}</span>
+      </a>
+    </li>
+    <li class="zh-bottom-nav__item">
+      <a class="zh-bottom-nav__link {% if request.page_type == 'search' %}is-active{% endif %}" href="{{ routes.search_url }}">
+        <svg class="zh-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span>{{ 'general.search.search' | t | default: 'Search' }}</span>
+      </a>
+    </li>
+    <li class="zh-bottom-nav__item">
+      <a class="zh-bottom-nav__link" href="{{ routes.cart_url }}" aria-label="{{ 'sections.cart.title' | t }} ({{ cart_count }})">
+        <div style="position:relative;display:inline-flex;">
+          <svg class="zh-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          {%- if cart_count > 0 -%}
+            <span style="position:absolute;top:-6px;right:-8px;background:var(--zh-teal);color:#fff;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 3px;">{{ cart_count }}</span>
+          {%- endif -%}
+        </div>
+        <span>{{ 'sections.cart.title' | t | default: 'Cart' }}</span>
+      </a>
+    </li>
+    <li class="zh-bottom-nav__item">
+      <a class="zh-bottom-nav__link {% if request.page_type == 'customers/account' %}is-active{% endif %}"
+         href="{{ routes.account_url }}">
+        <svg class="zh-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>{{ 'customer.account.title' | t | default: 'Account' }}</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+{% schema %}
+{
+  "name": "Mobile Bottom Nav",
+  "tag": "section",
+  "class": "zh-section-bottom-nav",
+  "settings": [
+    { "type": "url", "id": "categories_url", "label": "Shop / Categories URL" }
+  ],
+  "presets": [
+    { "name": "Mobile Bottom Nav" }
+  ]
+}
+{% endschema %}

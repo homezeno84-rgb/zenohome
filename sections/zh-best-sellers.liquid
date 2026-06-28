@@ -1,0 +1,179 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign default_coll = collections[section.settings.collection]
+  assign limit = section.settings.products_count | default: 8
+  assign cols = section.settings.columns | default: 4
+  assign pt = section.settings.padding_top | default: 64
+  assign pb = section.settings.padding_bottom | default: 64
+  assign has_tabs = false
+  for block in section.blocks
+    if block.type == 'tab'
+      assign has_tabs = true
+      break
+    endif
+  endfor
+-%}
+
+<section
+  class="zh-section zh-best-sellers-section"
+  id="zh-best-sellers-{{ section.id }}"
+  style="padding-top:{{ pt }}px;padding-bottom:{{ pb }}px;background:{{ section.settings.background_color | default: '#ffffff' }};"
+>
+  <div class="zh-container">
+    {%- if section.settings.title != blank -%}
+      <header class="zh-section-header zh-anim">
+        {%- if section.settings.eyebrow != blank -%}<span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+        {%- if section.settings.subtitle != blank -%}<p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+        <span class="zh-section-divider"></span>
+      </header>
+    {%- endif -%}
+
+    {%- if has_tabs -%}
+      <div class="zh-tabs" data-zh-tabs>
+        <div class="zh-tabs__nav" role="tablist">
+          <button class="zh-tab-btn active" data-tab-trigger="all" role="tab" aria-selected="true">{{ section.settings.all_label | default: 'All' }}</button>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'tab' -%}
+              <button class="zh-tab-btn" data-tab-trigger="{{ block.id }}" role="tab" aria-selected="false" {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <div data-tab-panel="all" class="zh-tab-panel active">
+          <div class="zh-product-grid" style="grid-template-columns:repeat({{ cols }},1fr);">
+            {%- if default_coll != blank -%}
+              {%- for product in default_coll.products limit: limit -%}
+                {%- render 'zh-product-card-item', product: product -%}
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        </div>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'tab' -%}
+            {%- assign tab_coll = collections[block.settings.collection] -%}
+            <div data-tab-panel="{{ block.id }}" class="zh-tab-panel">
+              <div class="zh-product-grid" style="grid-template-columns:repeat({{ cols }},1fr);">
+                {%- if tab_coll != blank -%}
+                  {%- for product in tab_coll.products limit: limit -%}
+                    {%- render 'zh-product-card-item', product: product -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  <p>No products in this collection.</p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="zh-product-grid" style="grid-template-columns:repeat({{ cols }},1fr);">
+        {%- if default_coll != blank -%}
+          {%- for product in default_coll.products limit: limit -%}
+            {%- assign on_sale = false -%}
+            {%- if product.compare_at_price > product.price -%}{%- assign on_sale = true -%}{%- endif -%}
+            {%- assign discount_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+            <article class="zh-product-card zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}">
+              <div class="zh-product-card__media">
+                <a href="{{ product.url }}">
+                  {%- if product.featured_image -%}
+                    {{ product.featured_image | image_url: width: 600 | image_tag: class: 'img-primary', loading: 'lazy', alt: product.title }}
+                    {%- if product.images[1] -%}{{ product.images[1] | image_url: width: 600 | image_tag: class: 'img-secondary', loading: 'lazy' }}{%- endif -%}
+                  {%- else -%}{{ 'product-1' | placeholder_svg_tag: 'img-primary' }}{%- endif -%}
+                </a>
+                <div class="zh-product-card__badges">
+                  {%- if on_sale -%}<span class="zh-badge zh-badge--sale">-{{ discount_pct }}%</span>{%- endif -%}
+                </div>
+              </div>
+              <div class="zh-product-card__info">
+                <h3 class="zh-product-card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+                <div class="zh-product-card__price">
+                  {%- if on_sale -%}
+                    <span class="zh-price zh-price--sale">{{ product.price | money }}</span>
+                    <span class="zh-price zh-price--compare">{{ product.compare_at_price | money }}</span>
+                  {%- else -%}
+                    <span class="zh-price">{{ product.price | money }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </article>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..8) -%}
+            <article class="zh-product-card">
+              <div class="zh-product-card__media">{{ 'product-1' | placeholder_svg_tag: 'img-primary' }}</div>
+              <div class="zh-product-card__info">
+                <h3 class="zh-product-card__title">Best Seller {{ i }}</h3>
+                <div class="zh-product-card__price"><span class="zh-price">SAR 599</span></div>
+              </div>
+            </article>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_view_all and default_coll != blank -%}
+      <div style="text-align:center;margin-top:40px;" class="zh-anim">
+        <a href="{{ default_coll.url }}" class="zh-btn zh-btn--outline">{{ section.settings.view_all_text | default: 'View All Best Sellers' }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #zh-best-sellers-{{ section.id }} .zh-product-grid { display:grid;gap:24px; }
+  #zh-best-sellers-{{ section.id }} .zh-product-card__title a { text-decoration:none;color:inherit; }
+  #zh-best-sellers-{{ section.id }} .zh-product-card__title a:hover { color:var(--zh-gold,#C9A84C); }
+  #zh-best-sellers-{{ section.id }} .zh-tabs__nav {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 32px; justify-content: center;
+    border-bottom: 1px solid var(--zh-border,#e8e8e8);
+    padding-bottom: 0;
+  }
+  #zh-best-sellers-{{ section.id }} .zh-tab-btn {
+    padding: 10px 24px; border: none; background: none; cursor: pointer;
+    font-size: .8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--zh-text-muted,#888);
+    border-bottom: 2px solid transparent;
+    transition: color .25s, border-color .25s;
+    margin-bottom: -1px;
+  }
+  #zh-best-sellers-{{ section.id }} .zh-tab-btn.active,
+  #zh-best-sellers-{{ section.id }} .zh-tab-btn:hover { color: var(--zh-gold,#C9A84C); border-bottom-color: var(--zh-gold,#C9A84C); }
+  #zh-best-sellers-{{ section.id }} .zh-tab-panel { display: none; }
+  #zh-best-sellers-{{ section.id }} .zh-tab-panel.active { display: block; }
+  @media(max-width:1200px){ #zh-best-sellers-{{ section.id }} .zh-product-grid { grid-template-columns:repeat(3,1fr); } }
+  @media(max-width:768px){ #zh-best-sellers-{{ section.id }} .zh-product-grid { grid-template-columns:repeat(2,1fr);gap:16px; } }
+</style>
+
+{% schema %}
+{
+  "name": "ZH Best Sellers",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Top Picks" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Best Sellers" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle" },
+    { "type": "collection", "id": "collection", "label": "Default Collection" },
+    { "type": "text", "id": "all_label", "label": "All Tab Label", "default": "All" },
+    { "type": "range", "id": "products_count", "label": "Products to Show", "min": 4, "max": 16, "step": 4, "default": 8 },
+    { "type": "select", "id": "columns", "label": "Columns", "options": [{ "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }], "default": "4" },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show View All Button", "default": true },
+    { "type": "text", "id": "view_all_text", "label": "View All Button Text", "default": "View All Best Sellers" },
+    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "label": "Padding Top (px)", "min": 0, "max": 120, "step": 8, "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding Bottom (px)", "min": 0, "max": 120, "step": 8, "default": 64 }
+  ],
+  "blocks": [
+    {
+      "type": "tab", "name": "Category Tab",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Tab Label", "default": "Living Room" },
+        { "type": "collection", "id": "collection", "label": "Collection" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "ZH Best Sellers" }]
+}
+{% endschema %}

@@ -1,0 +1,87 @@
+/*=============================================================================
+  ZENOHOME — GCC Premium Custom CSS
+  Overrides & Store-Specific Customizations
+=============================================================================*/
+
+/* ── Global ── */
+body {
+  font-family: var(--gcc-font-en, 'Inter', sans-serif);
+}
+
+html[dir="rtl"] body,
+.rtl_true body {
+  font-family: var(--gcc-font-ar, 'IBM Plex Arabic', 'Tajawal', sans-serif);
+}
+
+/* ── Menu horizontal fix ── */
+.menu-class {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-class li {
+  margin-inline-end: 15px;
+}
+
+/* ── Remove blue outline on iOS tap ── */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* ── Cart shipping bar premium override ── */
+.t4s-cart__ship-bar {
+  border-radius: 999px !important;
+  height: 6px !important;
+  background: var(--gcc-light-gray, #F2F0EB) !important;
+}
+
+.t4s-cart__ship-bar-inner {
+  background: linear-gradient(90deg, #A07830, #C9A84C) !important;
+  border-radius: 999px !important;
+  transition: width .6s cubic-bezier(0,0,.2,1) !important;
+}
+
+/* ── Product rating stars — gold ── */
+.t4s-rating-star,
+.t4s-product-rating svg,
+.t4s-star-active { color: #C9A84C !important; fill: #C9A84C !important; }
+
+/* ── Announcement bar RTL spacing ── */
+[dir="rtl"] .t4s-announcement-bar__item p { text-align: center; }
+
+/* ── Header bottom design padding fix ── */
+.t4s-header__bottom .t4s-container { padding-top: 6px; padding-bottom: 6px; }
+
+/* ── Category section cards ── */
+.t4s-cat-item {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s !important;
+}
+.t4s-cat-item:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 32px rgba(15,27,45,.12) !important;
+}
+
+/* ── Collection group cards ── */
+.t4s-collection-group__item {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+/* ── Desktop ── */
+@media (min-width: 1025px) {
+  .t4s-container { max-width: 1320px; }
+}
+
+/* ── Tablet + Mobile ── */
+@media (max-width: 1024px) {
+  .t4s-section-inner { padding-top: 48px !important; padding-bottom: 48px !important; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+  .t4s-product-item { border-radius: 10px !important; }
+  .t4s-pr-content { padding: 12px !important; }
+}

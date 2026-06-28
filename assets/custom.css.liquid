@@ -1,0 +1,44 @@
+/*=============================================================================
+  ZENO HOME — Custom Theme CSS (Liquid)
+  Dynamic token overrides from theme settings
+=============================================================================*/
+
+/*── Dynamic color tokens from Theme Settings ──*/
+:root {
+  --t4s-primary-color:       {{ settings.accent_color | default: '#C9A84C' }};
+  --t4s-btn-bg:              {{ settings.btn_bg | default: '#C9A84C' }};
+  --t4s-btn-color:           {{ settings.btn_color | default: '#FFFFFF' }};
+  --t4s-heading-color:       {{ settings.heading_color | default: '#1A1A2E' }};
+  --t4s-text-color:          {{ settings.text_color | default: '#555555' }};
+  --t4s-link-color:          {{ settings.link_color | default: '#C9A84C' }};
+  --t4s-link-hover-color:    {{ settings.link_color_hover | default: '#A07830' }};
+  --t4s-border-color:        {{ settings.border_color | default: '#E8E8E8' }};
+  --t4s-border-radius:       {{ settings.btn_radius | default: 4 }}px;
+  --zh-gold-primary:         {{ settings.accent_color | default: '#C9A84C' }};
+  --zh-gold:                 {{ settings.accent_color | default: '#C9A84C' }};
+  --gcc-gold:                {{ settings.accent_color | default: '#C9A84C' }};
+  --gcc-dark:                {{ settings.secondary_color | default: '#1A1A2E' }};
+}
+
+/*── Global Custom CSS (from admin) ──*/
+{{- settings.global_css -}}
+
+/*── Desktop ──*/
+@media (min-width: 1025px) {
+  {{- settings.desktop_css -}}
+}
+
+/*── Tablet + Mobile ──*/
+@media (max-width: 1024px) {
+  {{- settings.tablet_mobile_css -}}
+}
+
+/*── Tablet only ──*/
+@media (min-width: 768px) and (max-width: 1024px) {
+  {{- settings.tablet_css -}}
+}
+
+/*── Mobile only ──*/
+@media (max-width: 767px) {
+  {{- settings.mobile_css -}}
+}

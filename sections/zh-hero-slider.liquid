@@ -1,0 +1,463 @@
+{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
+{{ 'zh-sections.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign section_height = section.settings.height
+  assign height_value = '550px'
+  if section_height == 'small'
+    assign height_value = '400px'
+  elsif section_height == 'large'
+    assign height_value = '700px'
+  elsif section_height == 'full'
+    assign height_value = '100vh'
+  endif
+-%}
+
+<section
+  class="zh-section zh-hero-slider-section"
+  id="zh-hero-slider-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div
+    class="zh-hero-slider"
+    data-zh-hero-slider
+    data-autoplay="{{ section.settings.autoplay }}"
+    data-speed="{{ section.settings.autoplay_speed | times: 1000 }}"
+    data-animation="{{ section.settings.animation }}"
+    role="region"
+    aria-label="Hero Slider"
+    aria-roledescription="carousel"
+    style="--slider-height: {{ height_value }};"
+  >
+    {%- for block in section.blocks -%}
+      {%- assign text_align = block.settings.text_align | default: 'center' -%}
+      {%- assign overlay_color = block.settings.overlay_color | default: '#000000' -%}
+      {%- assign overlay_opacity = block.settings.overlay_opacity | default: 40 | divided_by: 100.0 -%}
+      <div
+        class="zh-slide zh-slide--{{ text_align }}"
+        role="group"
+        aria-roledescription="slide"
+        aria-label="{{ forloop.index }} of {{ section.blocks.size }}"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.image_desktop != blank -%}
+          <div class="zh-slide__bg">
+            {{ block.settings.image_desktop | image_url: width: 2000 | image_tag:
+              class: 'zh-slide__img zh-slide__img--desktop',
+              loading: 'eager',
+              fetchpriority: forloop.first | ternary: 'high', 'auto',
+              widths: '768,1200,1600,2000',
+              sizes: '100vw'
+            }}
+            {%- if block.settings.image_mobile != blank -%}
+              {{ block.settings.image_mobile | image_url: width: 800 | image_tag:
+                class: 'zh-slide__img zh-slide__img--mobile',
+                loading: 'eager',
+                widths: '375,480,768',
+                sizes: '100vw'
+              }}
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          <div class="zh-slide__bg zh-slide__bg--placeholder"></div>
+        {%- endif -%}
+
+        <div class="zh-slide__overlay" style="background: {{ overlay_color }}; opacity: {{ overlay_opacity }};"></div>
+
+        <div class="zh-slide__content zh-container">
+          <div class="zh-slide__inner">
+            {%- if block.settings.subheading != blank -%}
+              <p class="zh-slide__eyebrow zh-anim zh-anim-delay-1">{{ block.settings.subheading }}</p>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="zh-slide__heading zh-anim zh-anim-delay-2">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="zh-slide__text zh-anim zh-anim-delay-3">{{ block.settings.text }}</p>
+            {%- endif -%}
+            {%- if block.settings.cta1_text != blank or block.settings.cta2_text != blank -%}
+              <div class="zh-slide__ctas zh-anim zh-anim-delay-4">
+                {%- if block.settings.cta1_text != blank -%}
+                  <a href="{{ block.settings.cta1_url | default: '#' }}" class="zh-btn zh-btn--{{ block.settings.cta1_style | default: 'gold' }}">
+                    {{ block.settings.cta1_text }}
+                  </a>
+                {%- endif -%}
+                {%- if block.settings.cta2_text != blank -%}
+                  <a href="{{ block.settings.cta2_url | default: '#' }}" class="zh-btn zh-btn--{{ block.settings.cta2_style | default: 'outline-white' }}">
+                    {{ block.settings.cta2_text }}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+
+    {%- if section.blocks.size > 1 -%}
+      {%- if section.settings.show_arrows -%}
+        <button class="zh-slider-arrow zh-slider-prev" aria-label="{{ 'general.slider.previous_slide' | t | default: 'Previous slide' }}">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="zh-slider-arrow zh-slider-next" aria-label="{{ 'general.slider.next_slide' | t | default: 'Next slide' }}">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      {%- endif -%}
+      {%- if section.settings.show_dots -%}
+        <div class="zh-slider-dots" role="tablist" aria-label="Slides">
+          {%- for block in section.blocks -%}
+            <button class="zh-slider-dot" role="tab" aria-label="Go to slide {{ forloop.index }}" aria-selected="false"></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider {
+    position: relative;
+    height: var(--slider-height, 550px);
+    overflow: hidden;
+    background: var(--zh-dark, #1A1A2E);
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.7s cubic-bezier(.22,1,.36,1);
+    pointer-events: none;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  {%- if section.settings.animation == 'slide' -%}
+  #zh-hero-slider-{{ section.id }} .zh-slide {
+    transform: translateX(100%);
+    transition: transform 0.7s cubic-bezier(.22,1,.36,1), opacity 0.7s;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide.active {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  {%- endif -%}
+  #zh-hero-slider-{{ section.id }} .zh-slide__bg {
+    position: absolute; inset: 0;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide__img--mobile { display: none; }
+  @media (max-width: 767px) {
+    #zh-hero-slider-{{ section.id }} .zh-slide__img--desktop { display: none; }
+    #zh-hero-slider-{{ section.id }} .zh-slide__img--mobile { display: block; }
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide__bg--placeholder {
+    background: linear-gradient(135deg, var(--zh-dark, #1A1A2E) 0%, var(--zh-dark-light, #2A2A40) 100%);
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide__overlay {
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide__content {
+    position: relative; z-index: 2;
+    width: 100%;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide--center .zh-slide__inner {
+    text-align: center;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide--left .zh-slide__inner {
+    text-align: left;
+    max-width: 600px;
+  }
+  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slide--left .zh-slide__inner { text-align: right; }
+  #zh-hero-slider-{{ section.id }} .zh-slide--right .zh-slide__inner {
+    text-align: right;
+    max-width: 600px;
+    margin-inline-start: auto;
+  }
+  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slide--right .zh-slide__inner { text-align: left; }
+  #zh-hero-slider-{{ section.id }} .zh-slide__eyebrow {
+    display: inline-block;
+    font-size: .75rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--zh-gold, #C9A84C);
+    margin-bottom: 16px;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide__heading {
+    font-family: var(--zh-font-display, 'Cormorant Garant', serif);
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 600; line-height: 1.1;
+    color: #fff;
+    margin: 0 0 20px;
+    text-shadow: 0 2px 20px rgba(0,0,0,.25);
+  }
+  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slide__heading { font-family: var(--zh-font-ar, 'Cairo', sans-serif); }
+  #zh-hero-slider-{{ section.id }} .zh-slide__text {
+    font-size: clamp(.95rem, 1.8vw, 1.2rem);
+    color: rgba(255,255,255,.85);
+    line-height: 1.7;
+    margin: 0 0 32px;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide__ctas {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    align-items: center;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide--center .zh-slide__ctas { justify-content: center; }
+  #zh-hero-slider-{{ section.id }} .zh-slide--right .zh-slide__ctas { justify-content: flex-end; }
+  /* Active slide content animation */
+  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim {
+    animation: zhSlideIn .7s cubic-bezier(.22,1,.36,1) both;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim-delay-1 { animation-delay: .15s; }
+  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim-delay-2 { animation-delay: .3s; }
+  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim-delay-3 { animation-delay: .45s; }
+  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim-delay-4 { animation-delay: .6s; }
+  @keyframes zhSlideIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: none; }
+  }
+  /* Arrows */
+  #zh-hero-slider-{{ section.id }} .zh-slider-arrow {
+    position: absolute; top: 50%; z-index: 10;
+    transform: translateY(-50%);
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    color: #fff; cursor: pointer;
+    transition: background .25s, transform .25s;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slider-arrow:hover {
+    background: var(--zh-gold, #C9A84C);
+    border-color: var(--zh-gold, #C9A84C);
+    transform: translateY(-50%) scale(1.05);
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slider-prev { left: 24px; }
+  #zh-hero-slider-{{ section.id }} .zh-slider-next { right: 24px; }
+  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slider-prev { left: auto; right: 24px; }
+  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slider-next { right: auto; left: 24px; }
+  /* Dots */
+  #zh-hero-slider-{{ section.id }} .zh-slider-dots {
+    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; z-index: 10;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slider-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,.4);
+    border: none; cursor: pointer; padding: 0;
+    transition: background .25s, transform .25s;
+  }
+  #zh-hero-slider-{{ section.id }} .zh-slider-dot.active {
+    background: var(--zh-gold, #C9A84C);
+    transform: scale(1.4);
+  }
+  @media (max-width: 767px) {
+    #zh-hero-slider-{{ section.id }} .zh-slider-arrow { width: 40px; height: 40px; }
+    #zh-hero-slider-{{ section.id }} .zh-slider-prev { left: 12px; }
+    #zh-hero-slider-{{ section.id }} .zh-slider-next { right: 12px; }
+    #zh-hero-slider-{{ section.id }} .zh-slide__ctas { flex-direction: column; align-items: stretch; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "ZH Hero Slider",
+  "class": "zh-hero-slider-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Slider Height",
+      "options": [
+        { "value": "small", "label": "Small (400px)" },
+        { "value": "medium", "label": "Medium (550px)" },
+        { "value": "large", "label": "Large (700px)" },
+        { "value": "full", "label": "Full Screen (100vh)" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "animation",
+      "label": "Transition Animation",
+      "options": [
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide", "label": "Slide" }
+      ],
+      "default": "fade"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay Speed (seconds)",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Navigation Dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show Navigation Arrows",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_desktop",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile Image (optional)"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Eyebrow / Subheading",
+          "default": "New Collection"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Luxury Home Decor for the Modern GCC Home"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "cta1_text",
+          "label": "Button 1 Text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "cta1_url",
+          "label": "Button 1 URL"
+        },
+        {
+          "type": "select",
+          "id": "cta1_style",
+          "label": "Button 1 Style",
+          "options": [
+            { "value": "gold", "label": "Gold (filled)" },
+            { "value": "primary", "label": "Dark (filled)" },
+            { "value": "white", "label": "White (filled)" },
+            { "value": "outline-gold", "label": "Gold (outline)" },
+            { "value": "outline-white", "label": "White (outline)" }
+          ],
+          "default": "gold"
+        },
+        {
+          "type": "text",
+          "id": "cta2_text",
+          "label": "Button 2 Text"
+        },
+        {
+          "type": "url",
+          "id": "cta2_url",
+          "label": "Button 2 URL"
+        },
+        {
+          "type": "select",
+          "id": "cta2_style",
+          "label": "Button 2 Style",
+          "options": [
+            { "value": "gold", "label": "Gold (filled)" },
+            { "value": "primary", "label": "Dark (filled)" },
+            { "value": "white", "label": "White (filled)" },
+            { "value": "outline-gold", "label": "Gold (outline)" },
+            { "value": "outline-white", "label": "White (outline)" }
+          ],
+          "default": "outline-white"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "label": "Overlay Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay Opacity (%)",
+          "min": 0,
+          "max": 80,
+          "step": 5,
+          "default": 35
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ZH Hero Slider",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "subheading": "New Arrivals 2025",
+            "heading": "Elevate Your Living Space",
+            "text": "Discover our curated collection of luxury home decor for the modern GCC home.",
+            "cta1_text": "Shop Collection",
+            "cta2_text": "View Lookbook",
+            "overlay_opacity": 40
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "subheading": "Exclusive Deals",
+            "heading": "Up to 40% Off Selected Items",
+            "cta1_text": "Shop Sale",
+            "overlay_opacity": 35
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

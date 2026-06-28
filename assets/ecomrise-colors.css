@@ -1,0 +1,30 @@
+/*=============================================================================
+  ZENO HOME COLOR SYSTEM
+  Luxury Home Decor | Saudi Arabia, UAE & GCC
+=============================================================================*/
+
+:root {
+  --primary:          #C9A84C;
+  --primary-dark:     #A07830;
+  --primary-light:    #D4B86A;
+  --primary-rgb:      201, 168, 76;
+  --secondary:        #F5F5F5;
+  --secondary-dark:   #E8E8E8;
+  --secondary-light:  #FAFAFA;
+  --accent:           #1A1A2E;
+  --accent-dark:      #111122;
+  --accent-light:     #2A2A40;
+  --accent-rgb:       26, 26, 46;
+  --text-primary:     #1A1A2E;
+  --text-secondary:   #555555;
+  --text-muted:       #888888;
+  --bg-primary:       #FFFFFF;
+  --bg-secondary:     #F5F5F5;
+  --bg-tertiary:      #FAFAF8;
+  --border-light:     #F0F0F0;
+  --border-default:   #E8E8E8;
+  --success:          #16A34A;
+  --error:            #DC2626;
+  --warning:          #D97706;
+  --info:             #0284C7;
+}
