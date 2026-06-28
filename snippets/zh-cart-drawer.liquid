@@ -1,0 +1,331 @@
+{%- comment -%}
+  zh-cart-drawer.liquid
+  Global cart drawer snippet. Include once in theme.liquid via:
+    {%- render 'zh-cart-drawer' -%}
+
+  JavaScript (zh-cart.js) is expected to:
+  - Toggle aria-hidden on #zh-cart-drawer and #zh-cart-overlay
+  - Handle qty stepper [data-zh-cart-qty-down] / [data-zh-cart-qty-up]
+  - Handle remove [data-zh-cart-remove]
+  - Re-render #zh-cart-items and update counts via Shopify Cart API
+{%- endcomment -%}
+
+{%- comment -%} ── OVERLAY ── {%- endcomment -%}
+<div
+  id="zh-cart-overlay"
+  class="zh-cart-overlay"
+  data-zh-cart-overlay
+  aria-hidden="true"
+  tabindex="-1"
+></div>
+
+{%- comment -%} ── DRAWER ── {%- endcomment -%}
+<div
+  id="zh-cart-drawer"
+  class="zh-cart-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ 'sections.cart.title' | t | default: 'Shopping cart' }}"
+  aria-hidden="true"
+  tabindex="-1"
+>
+
+  {%- comment -%} ── HEADER ── {%- endcomment -%}
+  <div class="zh-cart-drawer__header">
+    <h2 class="zh-cart-drawer__title" id="zh-cart-drawer-title">
+      {{ 'sections.cart.title' | t | default: 'Your Cart' }}
+      (<span id="zh-cart-count-drawer" aria-live="polite" aria-atomic="true">{{ cart.item_count }}</span>)
+    </h2>
+    <button
+      class="zh-cart-drawer__close"
+      data-zh-cart-close
+      aria-label="{{ 'accessibility.close_cart' | t | default: 'Close cart' }}"
+      type="button"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="22" height="22">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  {%- comment -%} ── BODY ── {%- endcomment -%}
+  <div class="zh-cart-drawer__body">
+
+    {%- comment -%} Cart items list {%- endcomment -%}
+    <div
+      id="zh-cart-items"
+      class="zh-cart-drawer__items"
+      aria-live="polite"
+      aria-atomic="false"
+      aria-label="{{ 'sections.cart.items' | t | default: 'Cart items' }}"
+    >
+      {%- if cart.item_count > 0 -%}
+        {%- for item in cart.items -%}
+          <div
+            class="zh-cart-item"
+            data-cart-item
+            data-line-index="{{ forloop.index }}"
+          >
+
+            {%- comment -%} Item image {%- endcomment -%}
+            <a href="{{ item.url }}" class="zh-cart-item__img-link" tabindex="-1" aria-hidden="true">
+              {%- if item.image != blank -%}
+                {{
+                  item.image
+                  | image_url: width: 200
+                  | image_tag:
+                    class: 'zh-cart-item__img',
+                    loading: 'lazy',
+                    widths: '100, 150, 200',
+                    sizes: '80px',
+                    alt: item.image.alt | default: item.title | escape
+                }}
+              {%- else -%}
+                <div class="zh-cart-item__img-placeholder" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true" width="32" height="32">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                </div>
+              {%- endif -%}
+            </a>
+
+            {%- comment -%} Item details {%- endcomment -%}
+            <div class="zh-cart-item__details">
+
+              <div class="zh-cart-item__top">
+                <div class="zh-cart-item__info">
+                  {%- if item.product.vendor != blank -%}
+                    <p class="zh-cart-item__vendor">{{ item.product.vendor }}</p>
+                  {%- endif -%}
+
+                  <a href="{{ item.url }}" class="zh-cart-item__title">{{ item.product.title }}</a>
+
+                  {%- unless item.product.has_only_default_variant -%}
+                    <p class="zh-cart-item__variant">
+                      {%- for option in item.options_with_values -%}
+                        <span class="zh-cart-item__option">{{ option.name }}: <strong>{{ option.value }}</strong></span>
+                        {%- unless forloop.last -%}<span class="zh-cart-item__option-sep" aria-hidden="true"> / </span>{%- endunless -%}
+                      {%- endfor -%}
+                    </p>
+                  {%- endunless -%}
+
+                  {%- if item.selling_plan_allocation != blank -%}
+                    <p class="zh-cart-item__selling-plan">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                  {%- endif -%}
+                </div>
+
+                {%- comment -%} Remove button {%- endcomment -%}
+                <button
+                  class="zh-cart-item__remove"
+                  data-zh-cart-remove
+                  data-line-key="{{ item.key }}"
+                  aria-label="{{ 'sections.cart.remove_item' | t: title: item.product.title | default: 'Remove ' | append: item.product.title | escape }}"
+                  type="button"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="16" height="16">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                    <path d="M10 11v6"/>
+                    <path d="M14 11v6"/>
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="zh-cart-item__bottom">
+
+                {%- comment -%} Quantity stepper {%- endcomment -%}
+                <div
+                  class="zh-cart-item__qty"
+                  role="group"
+                  aria-label="{{ 'sections.cart.quantity_label' | t: product: item.product.title | default: 'Quantity for ' | append: item.product.title | escape }}"
+                >
+                  <button
+                    class="zh-cart-item__qty-btn zh-cart-item__qty-btn--down"
+                    data-zh-cart-qty-down
+                    data-line-key="{{ item.key }}"
+                    aria-label="{{ 'sections.cart.decrease_quantity' | t | default: 'Decrease quantity' }}"
+                    type="button"
+                    {%- if item.quantity <= 1 %}aria-disabled="true"{% endif -%}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" width="14" height="14">
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                  </button>
+
+                  <input
+                    class="zh-cart-item__qty-input"
+                    type="number"
+                    name="updates[]"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    max="{{ item.variant.inventory_quantity | default: 999 }}"
+                    data-zh-cart-qty-input
+                    data-line-key="{{ item.key }}"
+                    aria-label="{{ 'sections.cart.item_quantity' | t | default: 'Item quantity' }}"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                  >
+
+                  <button
+                    class="zh-cart-item__qty-btn zh-cart-item__qty-btn--up"
+                    data-zh-cart-qty-up
+                    data-line-key="{{ item.key }}"
+                    aria-label="{{ 'sections.cart.increase_quantity' | t | default: 'Increase quantity' }}"
+                    type="button"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" width="14" height="14">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                  </button>
+                </div>
+
+                {%- comment -%} Line price {%- endcomment -%}
+                <div class="zh-cart-item__price">
+                  {%- if item.original_line_price != item.final_line_price -%}
+                    <s class="zh-cart-item__price-original">{{ item.original_line_price | money }}</s>
+                    <span class="zh-cart-item__price-final">{{ item.final_line_price | money }}</span>
+                  {%- else -%}
+                    <span class="zh-cart-item__price-final">{{ item.final_line_price | money }}</span>
+                  {%- endif -%}
+                </div>
+
+              </div>
+
+              {%- comment -%} Discount allocations {%- endcomment -%}
+              {%- if item.line_level_discount_allocations.size > 0 -%}
+                <ul class="zh-cart-item__discounts" role="list" aria-label="{{ 'customer.order.discount' | t | default: 'Discounts' }}">
+                  {%- for discount in item.line_level_discount_allocations -%}
+                    <li class="zh-cart-item__discount">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                        <line x1="7" y1="7" x2="7.01" y2="7"/>
+                      </svg>
+                      {{ discount.discount_application.title }}
+                      (-{{ discount.amount | money }})
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
+            </div>
+            {%- comment -%} end .zh-cart-item__details {%- endcomment -%}
+
+          </div>
+          {%- comment -%} end .zh-cart-item {%- endcomment -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+    {%- comment -%} end #zh-cart-items {%- endcomment -%}
+
+    {%- comment -%} ── EMPTY STATE ── {%- endcomment -%}
+    <div
+      class="zh-cart-drawer__empty{% if cart.item_count > 0 %} zh-cart-drawer__empty--hidden{% endif %}"
+      id="zh-cart-empty"
+      aria-hidden="{{ cart.item_count > 0 }}"
+    >
+      <div class="zh-cart-drawer__empty-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" width="64" height="64" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+      </div>
+      <p class="zh-cart-drawer__empty-msg">
+        {{ 'sections.cart.empty' | t | default: 'Your cart is empty' }}
+      </p>
+      <a
+        href="{{ routes.collections_url }}/all"
+        class="zh-btn zh-btn--gold"
+        aria-label="{{ 'sections.cart.start_shopping' | t | default: 'Start shopping' }}"
+      >
+        {{ 'sections.cart.start_shopping' | t | default: 'Start Shopping' }}
+      </a>
+    </div>
+
+  </div>
+  {%- comment -%} end .zh-cart-drawer__body {%- endcomment -%}
+
+  {%- comment -%} ── FOOTER ── {%- endcomment -%}
+  <div
+    class="zh-cart-drawer__footer{% if cart.item_count == 0 %} zh-cart-drawer__footer--hidden{% endif %}"
+    id="zh-cart-footer"
+    aria-hidden="{{ cart.item_count == 0 }}"
+  >
+
+    {%- comment -%} Cart-level discounts {%- endcomment -%}
+    {%- if cart.cart_level_discount_applications.size > 0 -%}
+      <ul class="zh-cart-drawer__discounts" role="list" aria-label="{{ 'customer.order.discount' | t | default: 'Discounts' }}">
+        {%- for discount in cart.cart_level_discount_applications -%}
+          <li class="zh-cart-drawer__discount">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+              <line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+            <span>{{ discount.title }}</span>
+            <span class="zh-cart-drawer__discount-amount">-{{ discount.total_allocated_amount | money }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- comment -%} Subtotal {%- endcomment -%}
+    <div class="zh-cart-drawer__subtotal">
+      <span class="zh-cart-drawer__subtotal-label">
+        {{ 'sections.cart.subtotal' | t | default: 'Subtotal' }}
+      </span>
+      <span
+        class="zh-cart-drawer__subtotal-price"
+        id="zh-cart-subtotal"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {{ cart.total_price | money }}
+      </span>
+    </div>
+
+    {%- comment -%} Shipping note {%- endcomment -%}
+    <p class="zh-cart-drawer__note">
+      {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t | default: 'Taxes and shipping calculated at checkout.' }}
+    </p>
+
+    {%- comment -%} Checkout CTA {%- endcomment -%}
+    <a
+      href="{{ routes.checkout_url }}"
+      class="zh-btn zh-btn--gold zh-btn--full zh-cart-drawer__checkout"
+      role="button"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="18" height="18">
+        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+        <line x1="1" y1="10" x2="23" y2="10"/>
+      </svg>
+      <span>{{ 'sections.cart.checkout' | t | default: 'Proceed to Checkout' }}</span>
+    </a>
+
+    {%- comment -%} View full cart link {%- endcomment -%}
+    <a href="{{ routes.cart_url }}" class="zh-cart-drawer__view-cart">
+      {{ 'sections.cart.view_cart' | t | default: 'View Full Cart' }}
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </a>
+
+    {%- comment -%} PayPal / accelerated checkout (if available) {%- endcomment -%}
+    {%- if additional_checkout_buttons -%}
+      <div class="zh-cart-drawer__accelerated-checkout">
+        <p class="zh-cart-drawer__or-divider">
+          <span>{{ 'sections.cart.or' | t | default: 'or' }}</span>
+        </p>
+        {{ content_for_additional_checkout_buttons }}
+      </div>
+    {%- endif -%}
+
+  </div>
+  {%- comment -%} end .zh-cart-drawer__footer {%- endcomment -%}
+
+</div>
+{%- comment -%} end #zh-cart-drawer {%- endcomment -%}
