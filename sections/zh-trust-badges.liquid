@@ -1,0 +1,412 @@
+{% comment %} ZenoHome – Trust Badges section {% endcomment %}
+
+<link rel="stylesheet" href="{{ 'zh-premium.css' | asset_url }}">
+
+{%- liquid
+  assign dir = 'ltr'
+  if request.locale.iso_code == 'ar'
+    assign dir = 'rtl'
+  endif
+-%}
+
+<section
+  class="zh-trust-badges zh-trust-badges--{{ section.settings.style }}"
+  data-zh-trust-badges
+  dir="{{ dir }}"
+  style="
+    background-color: {{ section.settings.background }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    {% if section.settings.border_top %}border-top: 1px solid rgba(0,0,0,0.08);{% endif %}
+    {% if section.settings.border_bottom %}border-bottom: 1px solid rgba(0,0,0,0.08);{% endif %}
+  "
+>
+  <div class="zh-container">
+
+    {%- if section.blocks.size > 0 -%}
+
+      {%- if section.settings.style == 'bar' -%}
+        <div class="zh-badges-bar">
+          {%- for block in section.blocks -%}
+            <div class="zh-badge zh-badge--bar" {{ block.shopify_attributes }}>
+              <div class="zh-badge-icon" style="color: {{ section.settings.icon_color }};">
+                {%- if block.settings.custom_icon != blank -%}
+                  {{ block.settings.custom_icon | image_url: width: 48 | image_tag: class: 'zh-badge-icon-img', alt: block.settings.title }}
+                {%- else -%}
+                  {%- assign badge_icon = block.settings.icon -%}
+                  {%- if badge_icon == 'truck' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  {%- elsif badge_icon == 'shield' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                  {%- elsif badge_icon == 'refresh' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.49"/></svg>
+                  {%- elsif badge_icon == 'lock' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  {%- elsif badge_icon == 'award' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+                  {%- elsif badge_icon == 'clock' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {%- elsif badge_icon == 'phone' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.09 6.09l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+                  {%- elsif badge_icon == 'star' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  {%- else -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {%- endif -%}
+                {%- endif -%}
+              </div>
+              <div class="zh-badge-text" style="color: {{ section.settings.text_color }};">
+                {%- if block.settings.title != blank -%}
+                  <span class="zh-badge-title">{{ block.settings.title }}</span>
+                {%- endif -%}
+                {%- if block.settings.subtitle != blank -%}
+                  <span class="zh-badge-subtitle">{{ block.settings.subtitle }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+      {%- elsif section.settings.style == 'cards' -%}
+        <div class="zh-badges-cards">
+          {%- for block in section.blocks -%}
+            <div class="zh-badge zh-badge--card" {{ block.shopify_attributes }}>
+              <div class="zh-badge-icon" style="color: {{ section.settings.icon_color }};">
+                {%- if block.settings.custom_icon != blank -%}
+                  {{ block.settings.custom_icon | image_url: width: 56 | image_tag: class: 'zh-badge-icon-img', alt: block.settings.title }}
+                {%- else -%}
+                  {%- assign badge_icon = block.settings.icon -%}
+                  {%- if badge_icon == 'truck' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  {%- elsif badge_icon == 'shield' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                  {%- elsif badge_icon == 'refresh' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.49"/></svg>
+                  {%- elsif badge_icon == 'lock' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  {%- elsif badge_icon == 'award' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+                  {%- elsif badge_icon == 'clock' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {%- elsif badge_icon == 'phone' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.09 6.09l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+                  {%- elsif badge_icon == 'star' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  {%- else -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
+                  {%- endif -%}
+                {%- endif -%}
+              </div>
+              <div class="zh-badge-text" style="color: {{ section.settings.text_color }};">
+                {%- if block.settings.title != blank -%}
+                  <span class="zh-badge-title">{{ block.settings.title }}</span>
+                {%- endif -%}
+                {%- if block.settings.subtitle != blank -%}
+                  <span class="zh-badge-subtitle">{{ block.settings.subtitle }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+      {%- elsif section.settings.style == 'icons-only' -%}
+        <div class="zh-badges-icons-only">
+          {%- for block in section.blocks -%}
+            <div class="zh-badge zh-badge--icon-only" {{ block.shopify_attributes }}>
+              <div class="zh-badge-icon" style="color: {{ section.settings.icon_color }};" aria-label="{{ block.settings.title }}">
+                {%- if block.settings.custom_icon != blank -%}
+                  {{ block.settings.custom_icon | image_url: width: 64 | image_tag: class: 'zh-badge-icon-img', alt: block.settings.title }}
+                {%- else -%}
+                  {%- assign badge_icon = block.settings.icon -%}
+                  {%- if badge_icon == 'truck' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  {%- elsif badge_icon == 'shield' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                  {%- elsif badge_icon == 'refresh' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.49"/></svg>
+                  {%- elsif badge_icon == 'lock' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  {%- elsif badge_icon == 'award' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+                  {%- elsif badge_icon == 'clock' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {%- elsif badge_icon == 'phone' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.09 6.09l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+                  {%- elsif badge_icon == 'star' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  {%- else -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
+                  {%- endif -%}
+                {%- endif -%}
+              </div>
+              <span class="zh-badge-hover-title" style="color: {{ section.settings.text_color }};">{{ block.settings.title }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section.id }} .zh-trust-badges {
+    width: 100%;
+  }
+
+  /* Bar style */
+  #shopify-section-{{ section.id }} .zh-badges-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge--bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 0 0 auto;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge--bar .zh-badge-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* Cards style */
+  #shopify-section-{{ section.id }} .zh-badges-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge--card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 28px 20px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    gap: 14px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: default;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge--card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge--card .zh-badge-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* Icons-only style */
+  #shopify-section-{{ section.id }} .zh-badges-icons-only {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge--icon-only {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: default;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge--icon-only .zh-badge-hover-title {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    text-align: center;
+    max-width: 100px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge--icon-only:hover .zh-badge-hover-title {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Shared */
+  #shopify-section-{{ section.id }} .zh-badge-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge-icon svg {
+    display: block;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge-icon-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge-title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    display: block;
+  }
+
+  #shopify-section-{{ section.id }} .zh-badge-subtitle {
+    font-size: 13px;
+    opacity: 0.7;
+    display: block;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 639px) {
+    #shopify-section-{{ section.id }} .zh-badges-bar {
+      justify-content: flex-start;
+    }
+    #shopify-section-{{ section.id }} .zh-badge--bar {
+      flex: 0 0 calc(50% - 12px);
+    }
+  }
+</style>
+
+<script src="{{ 'zh-premium.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Trust Badges",
+  "tag": "section",
+  "class": "zh-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Display Style",
+      "options": [
+        { "value": "bar", "label": "Bar" },
+        { "value": "cards", "label": "Cards" },
+        { "value": "icons-only", "label": "Icons Only" }
+      ],
+      "default": "bar"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "border_top",
+      "label": "Show Top Border",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "border_bottom",
+      "label": "Show Bottom Border",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon Color",
+      "default": "#C9A84C"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 28,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 28,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Truck / Delivery" },
+            { "value": "shield", "label": "Shield / Secure" },
+            { "value": "refresh", "label": "Refresh / Returns" },
+            { "value": "lock", "label": "Lock / Payment" },
+            { "value": "award", "label": "Award / Quality" },
+            { "value": "clock", "label": "Clock / Fast" },
+            { "value": "phone", "label": "Phone / Support" },
+            { "value": "star", "label": "Star / Rating" }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom Icon Image (overrides icon select)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Free Shipping"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "On orders over SAR 200"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Badges",
+      "blocks": [
+        { "type": "badge", "settings": { "icon": "truck", "title": "Free Shipping", "subtitle": "On orders over SAR 200" } },
+        { "type": "badge", "settings": { "icon": "refresh", "title": "30-Day Returns", "subtitle": "Hassle-free returns" } },
+        { "type": "badge", "settings": { "icon": "shield", "title": "Authentic Products", "subtitle": "Guaranteed quality" } },
+        { "type": "badge", "settings": { "icon": "lock", "title": "Secure Payment", "subtitle": "Encrypted & safe" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
