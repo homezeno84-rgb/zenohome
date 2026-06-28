@@ -1,0 +1,390 @@
+{% comment %}
+  ZenoHome – Under SAR 100
+  Section: zh-under-sar100.liquid
+  Supports RTL (Arabic) and LTR (English)
+{% endcomment %}
+
+{{ 'zh-premium.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_dir = 'ltr'
+  if request.locale.iso_code == 'ar'
+    assign section_dir = 'rtl'
+  endif
+
+  assign price_limit_cents = section.settings.price_threshold | times: 100
+  assign filtered_products = section.settings.collection.products | where: 'price', 'less_than_or_equal_to', price_limit_cents
+  assign products_count = 0
+  assign display_products = ''
+-%}
+
+<section
+  id="zh-under-sar100-{{ section.id }}"
+  class="zh-under-sar100 zh-section"
+  dir="{{ section_dir }}"
+  style="
+    --zh-u100-bg: {{ section.settings.background_color }};
+    --zh-u100-accent: {{ section.settings.accent_color }};
+    --zh-u100-pt: {{ section.settings.padding_top }}px;
+    --zh-u100-pb: {{ section.settings.padding_bottom }}px;
+    --zh-u100-columns: {{ section.settings.columns }};
+  "
+>
+  <div class="zh-container">
+
+    <div class="zh-u100-header">
+      <div class="zh-u100-header__text">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="zh-eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        <div class="zh-u100-title-row">
+          <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+          <span class="zh-u100-price-badge">
+            {{ section.settings.currency_symbol }} {{ section.settings.price_threshold }}
+          </span>
+        </div>
+        {%- if section.settings.subtitle != blank -%}
+          <p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.settings.collection != blank -%}
+      {%- liquid
+        assign shown = 0
+        assign products_to_show = section.settings.products_to_show
+      -%}
+
+      <div class="zh-u100-count-bar">
+        {%- assign total_filtered = 0 -%}
+        {%- for product in section.settings.collection.products -%}
+          {%- if product.price <= price_limit_cents -%}
+            {%- assign total_filtered = total_filtered | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        <p class="zh-u100-count">
+          <span class="zh-u100-count__number">{{ total_filtered }}</span>
+          items under {{ section.settings.currency_symbol }}{{ section.settings.price_threshold }}
+        </p>
+      </div>
+
+      <div class="zh-u100-grid">
+        {%- for product in section.settings.collection.products -%}
+          {%- if product.price <= price_limit_cents and shown < products_to_show -%}
+            {%- assign shown = shown | plus: 1 -%}
+            <div class="zh-u100-product-card">
+              {%- render 'zh-product-card', product: product, currency_symbol: section.settings.currency_symbol -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if shown == 0 -%}
+          <div class="zh-u100-empty">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="23" stroke="#C9A84C" stroke-width="1.5"/>
+              <path d="M16 24H32M24 16V32" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <p>No products found under {{ section.settings.currency_symbol }}{{ section.settings.price_threshold }}.</p>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_view_all and shown > 0 -%}
+        <div class="zh-u100-footer">
+          <a
+            href="{{ section.settings.view_all_url | default: section.settings.collection.url }}"
+            class="zh-btn zh-btn--outline"
+          >
+            View All Under {{ section.settings.currency_symbol }}{{ section.settings.price_threshold }}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              {%- if section_dir == 'rtl' -%}
+                <path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              {%- else -%}
+                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              {%- endif -%}
+            </svg>
+          </a>
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="zh-u100-empty">
+        <p>Select a collection in the theme editor to display products.</p>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  #zh-under-sar100-{{ section.id }} {
+    background-color: var(--zh-u100-bg, #F5F0E8);
+    padding-top: var(--zh-u100-pt, 60px);
+    padding-bottom: var(--zh-u100-pb, 60px);
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: clamp(16px, 4vw, 64px);
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-u100-header {
+    margin-bottom: 32px;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--zh-u100-accent, #C9A84C);
+    margin: 0 0 10px;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-u100-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: #1A1A1A;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-u100-price-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--zh-u100-accent, #C9A84C);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 6px 14px;
+    border-radius: 4px;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-section-subtitle {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.6;
+    max-width: 600px;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-u100-count-bar {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-u100-count {
+    font-size: 0.9rem;
+    color: #888;
+    margin: 0;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-u100-count__number {
+    font-weight: 700;
+    color: var(--zh-u100-accent, #C9A84C);
+    font-size: 1.1rem;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-u100-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--zh-u100-columns, 4), 1fr);
+    gap: 24px;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-u100-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-u100-footer {
+    margin-top: 48px;
+    text-align: center;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-btn--outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border: 1.5px solid #1A1A1A;
+    color: #1A1A1A;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  #zh-under-sar100-{{ section.id }} .zh-btn--outline:hover {
+    background: #1A1A1A;
+    color: #fff;
+  }
+
+  @media (max-width: 1024px) {
+    #zh-under-sar100-{{ section.id }} .zh-u100-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    #zh-under-sar100-{{ section.id }} .zh-u100-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    #zh-under-sar100-{{ section.id }} .zh-u100-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  }
+</style>
+
+<script src="{{ 'zh-premium.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Under SAR 100",
+  "tag": "section",
+  "class": "zh-section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Smart Savings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Under SAR 100"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "number",
+      "id": "price_threshold",
+      "label": "Price Limit",
+      "default": 100
+    },
+    {
+      "type": "text",
+      "id": "currency_symbol",
+      "label": "Currency Symbol",
+      "default": "SAR"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to Show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "View All"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' Button",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "View All URL (overrides collection URL)"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#F5F0E8"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#C9A84C"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Under SAR 100"
+    }
+  ]
+}
+{% endschema %}

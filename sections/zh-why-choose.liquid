@@ -1,0 +1,589 @@
+{% comment %} ZenoHome – Why Choose Us section {% endcomment %}
+
+<link rel="stylesheet" href="{{ 'zh-premium.css' | asset_url }}">
+
+{%- liquid
+  assign dir = 'ltr'
+  assign text_align = 'left'
+  if request.locale.iso_code == 'ar'
+    assign dir = 'rtl'
+    assign text_align = 'right'
+  endif
+-%}
+
+<section
+  class="zh-why-choose zh-why-choose--{{ section.settings.layout }}"
+  data-zh-why-choose
+  dir="{{ dir }}"
+  style="
+    background-color: {{ section.settings.background }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="zh-container">
+
+    {%- if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.subtitle != blank -%}
+      <div class="zh-section-header" style="text-align: {{ text_align }};">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="zh-eyebrow" style="color: {{ section.settings.icon_color }};">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+
+      {%- if section.settings.layout == 'grid' -%}
+        <div
+          class="zh-why-grid"
+          style="--zh-columns: {{ section.settings.columns }};"
+        >
+          {%- for block in section.blocks -%}
+            <div
+              class="zh-why-card zh-why-card--icon-{{ section.settings.icon_style }}"
+              data-aos-delay="{{ forloop.index0 | times: 100 }}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="zh-why-icon" style="color: {{ section.settings.icon_color }}; --icon-color: {{ section.settings.icon_color }};">
+                {%- if block.settings.custom_icon != blank -%}
+                  {{ block.settings.custom_icon | image_url: width: 80 | image_tag: class: 'zh-why-icon-img', alt: block.settings.title }}
+                {%- else -%}
+                  {%- render 'zh-icon', icon: block.settings.icon, size: 40 -%}
+                {%- endif -%}
+              </div>
+              <div class="zh-why-content">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="zh-why-title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <p class="zh-why-desc">{{ block.settings.description }}</p>
+                {%- endif -%}
+                {%- if block.settings.link != blank and block.settings.link_text != blank -%}
+                  <a class="zh-why-link" href="{{ block.settings.link }}" style="color: {{ section.settings.icon_color }};">
+                    {{ block.settings.link_text }}
+                    <span class="zh-arrow" aria-hidden="true">{% if dir == 'rtl' %}←{% else %}→{% endif %}</span>
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+      {%- elsif section.settings.layout == 'alternating' -%}
+        <div class="zh-why-alternating">
+          {%- for block in section.blocks -%}
+            {%- assign is_even = forloop.index | modulo: 2 -%}
+            <div
+              class="zh-why-row{% if is_even == 0 %} zh-why-row--reversed{% endif %}"
+              data-aos-delay="{{ forloop.index0 | times: 80 }}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="zh-why-row-icon" style="color: {{ section.settings.icon_color }}; --icon-color: {{ section.settings.icon_color }};">
+                <div class="zh-why-icon zh-why-icon--large zh-why-icon--{{ section.settings.icon_style }}">
+                  {%- if block.settings.custom_icon != blank -%}
+                    {{ block.settings.custom_icon | image_url: width: 120 | image_tag: class: 'zh-why-icon-img', alt: block.settings.title }}
+                  {%- else -%}
+                    {%- render 'zh-icon', icon: block.settings.icon, size: 60 -%}
+                  {%- endif -%}
+                </div>
+              </div>
+              <div class="zh-why-row-content">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="zh-why-title zh-why-title--large">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <p class="zh-why-desc">{{ block.settings.description }}</p>
+                {%- endif -%}
+                {%- if block.settings.link != blank and block.settings.link_text != blank -%}
+                  <a class="zh-why-link zh-btn-outline" href="{{ block.settings.link }}" style="border-color: {{ section.settings.icon_color }}; color: {{ section.settings.icon_color }};">
+                    {{ block.settings.link_text }}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+      {%- elsif section.settings.layout == 'centered-large' -%}
+        <div class="zh-why-centered" style="--zh-columns: {{ section.settings.columns }};">
+          {%- for block in section.blocks -%}
+            <div
+              class="zh-why-centered-item"
+              data-aos-delay="{{ forloop.index0 | times: 100 }}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="zh-why-icon zh-why-icon--xl zh-why-icon--{{ section.settings.icon_style }}" style="--icon-color: {{ section.settings.icon_color }}; color: {{ section.settings.icon_color }};">
+                {%- if block.settings.custom_icon != blank -%}
+                  {{ block.settings.custom_icon | image_url: width: 100 | image_tag: class: 'zh-why-icon-img', alt: block.settings.title }}
+                {%- else -%}
+                  {%- render 'zh-icon', icon: block.settings.icon, size: 56 -%}
+                {%- endif -%}
+              </div>
+              <h3 class="zh-why-title">{{ block.settings.title }}</h3>
+              {%- if block.settings.description != blank -%}
+                <p class="zh-why-desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+              {%- if block.settings.link != blank and block.settings.link_text != blank -%}
+                <a class="zh-why-link" href="{{ block.settings.link }}" style="color: {{ section.settings.icon_color }};">{{ block.settings.link_text }}</a>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section.id }} .zh-why-choose {
+    --icon-color: {{ section.settings.icon_color }};
+  }
+
+  #shopify-section-{{ section.id }} .zh-section-header {
+    max-width: 680px;
+    margin-bottom: 56px;
+  }
+  #shopify-section-{{ section.id }} .zh-section-header[style*="right"] {
+    margin-right: 0;
+    margin-left: auto;
+  }
+
+  #shopify-section-{{ section.id }} .zh-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-section-title {
+    font-size: clamp(26px, 3vw, 40px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+  }
+
+  #shopify-section-{{ section.id }} .zh-section-subtitle {
+    font-size: 17px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  /* Grid layout */
+  #shopify-section-{{ section.id }} .zh-why-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--zh-columns, 3), 1fr);
+    gap: 32px;
+  }
+
+  @media (max-width: 1023px) {
+    #shopify-section-{{ section.id }} .zh-why-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 639px) {
+    #shopify-section-{{ section.id }} .zh-why-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 28px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: zhFadeUp 0.5s forwards;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+  }
+
+  /* Stagger delays */
+  {%- for block in section.blocks -%}
+  #shopify-section-{{ section.id }} .zh-why-card:nth-child({{ forloop.index }}) {
+    animation-delay: {{ forloop.index0 | times: 100 }}ms;
+  }
+  #shopify-section-{{ section.id }} .zh-why-centered-item:nth-child({{ forloop.index }}) {
+    animation-delay: {{ forloop.index0 | times: 100 }}ms;
+  }
+  {%- endfor -%}
+
+  @keyframes zhFadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Icon styles */
+  #shopify-section-{{ section.id }} .zh-why-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-icon--circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: color-mix(in srgb, {{ section.settings.icon_color }} 12%, transparent);
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-icon--square {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    background: color-mix(in srgb, {{ section.settings.icon_color }} 12%, transparent);
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-icon--large.zh-why-icon--circle,
+  #shopify-section-{{ section.id }} .zh-why-icon--large.zh-why-icon--square {
+    width: 100px;
+    height: 100px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-icon--xl.zh-why-icon--circle,
+  #shopify-section-{{ section.id }} .zh-why-icon--xl.zh-why-icon--square {
+    width: 120px;
+    height: 120px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-icon svg {
+    fill: none;
+    stroke: {{ section.settings.icon_color }};
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-icon-img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-title--large {
+    font-size: 26px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-desc {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-link {
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: gap 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-link:hover {
+    gap: 8px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 24px;
+    border: 2px solid;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  /* Alternating layout */
+  #shopify-section-{{ section.id }} .zh-why-alternating {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: zhFadeUp 0.5s forwards;
+  }
+
+  {%- for block in section.blocks -%}
+  #shopify-section-{{ section.id }} .zh-why-row:nth-child({{ forloop.index }}) {
+    animation-delay: {{ forloop.index0 | times: 80 }}ms;
+  }
+  {%- endfor -%}
+
+  #shopify-section-{{ section.id }} .zh-why-row--reversed {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-row--reversed .zh-why-row-icon {
+    order: 2;
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-row--reversed .zh-why-row-content {
+    order: 1;
+  }
+
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} .zh-why-row,
+    #shopify-section-{{ section.id }} .zh-why-row--reversed {
+      grid-template-columns: 1fr;
+    }
+    #shopify-section-{{ section.id }} .zh-why-row--reversed .zh-why-row-icon,
+    #shopify-section-{{ section.id }} .zh-why-row--reversed .zh-why-row-content {
+      order: unset;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-row-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Centered-large layout */
+  #shopify-section-{{ section.id }} .zh-why-centered {
+    display: grid;
+    grid-template-columns: repeat(var(--zh-columns, 3), 1fr);
+    gap: 40px;
+    text-align: center;
+  }
+
+  @media (max-width: 1023px) {
+    #shopify-section-{{ section.id }} .zh-why-centered {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 639px) {
+    #shopify-section-{{ section.id }} .zh-why-centered {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .zh-why-centered-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: zhFadeUp 0.5s forwards;
+  }
+
+  /* RTL adjustments */
+  [dir="rtl"] #shopify-section-{{ section.id }} .zh-why-card,
+  [dir="rtl"] #shopify-section-{{ section.id }} .zh-why-centered-item {
+    text-align: right;
+  }
+
+  [dir="rtl"] #shopify-section-{{ section.id }} .zh-why-centered-item {
+    align-items: flex-end;
+  }
+</style>
+
+<script src="{{ 'zh-premium.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Why Choose Us",
+  "tag": "section",
+  "class": "zh-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Why Shop With Us"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Why Choose Zeno Home"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "alternating", "label": "Alternating" },
+        { "value": "centered-large", "label": "Centered Large" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "icon_style",
+      "label": "Icon Style",
+      "options": [
+        { "value": "circle", "label": "Circle" },
+        { "value": "square", "label": "Square" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "circle"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon Color",
+      "default": "#C9A84C"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background Color",
+      "default": "#FAFAF8"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "limit": 9,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "star", "label": "Star" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "refresh", "label": "Refresh / Returns" },
+            { "value": "award", "label": "Award" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "leaf", "label": "Leaf / Eco" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "support", "label": "Support" }
+          ],
+          "default": "star"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom Icon Image (overrides icon select)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Premium Quality"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "We source only the finest materials from around the world to bring you luxury furniture and decor that lasts a lifetime."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link Text",
+          "default": "Learn more"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why Choose Us",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "star",
+            "title": "Premium Quality",
+            "description": "We source only the finest materials from around the world."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "truck",
+            "title": "Fast Delivery",
+            "description": "White-glove delivery across the GCC within days."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "title": "Authenticity Guaranteed",
+            "description": "Every piece is verified for quality and authenticity."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

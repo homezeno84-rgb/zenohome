@@ -1,0 +1,23 @@
+:root {
+  --zh-font-display: 'Cormorant Garant', 'Georgia', serif;
+  --zh-font-body: 'Jost', 'Helvetica Neue', sans-serif;
+  --zh-font-ar: 'Cairo', 'Arial', sans-serif;
+  --zh-font-mono: 'SF Mono', 'Consolas', monospace;
+}
+
+/* Apply Arabic font in RTL mode */
+[dir="rtl"] body {
+  font-family: var(--zh-font-ar);
+}
+[dir="rtl"] .zh-section-title,
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4 {
+  font-family: var(--zh-font-ar);
+  font-weight: 600;
+}
+[dir="ltr"] body {
+  font-family: var(--zh-font-body);
+}
+[dir="ltr"] .zh-section-title,
+[dir="ltr"] h1, [dir="ltr"] h2, [dir="ltr"] h3 {
+  font-family: var(--zh-font-display);
+}

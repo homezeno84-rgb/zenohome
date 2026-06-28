@@ -1,0 +1,228 @@
+{%- liquid
+  assign card_loading = lazy | default: true
+  if card_loading
+    assign loading_attr = 'lazy'
+  else
+    assign loading_attr = 'eager'
+  endif
+  assign first_image = product.featured_media
+  assign hover_image = product.media[1]
+  assign is_sale = false
+  assign is_new = false
+  assign savings_pct = 0
+
+  if product.compare_at_price > product.price
+    assign is_sale = true
+    assign savings = product.compare_at_price | minus: product.price
+    assign savings_pct = savings | times: 100 | divided_by: product.compare_at_price | round
+  endif
+
+  for tag in product.tags
+    if tag == 'new' or tag == 'New'
+      assign is_new = true
+    endif
+  endfor
+
+  assign delay_mod = card_index | modulo: 5
+  assign delay_num = delay_mod | plus: 1
+  assign delay_class = 'zh-anim-delay-' | append: delay_num
+
+  assign rating_value = product.metafields.reviews.rating.value | default: 4.5
+  assign rating_count = product.metafields.reviews.rating_count.value | default: ''
+  assign rating_floor = rating_value | floor
+-%}
+
+<div class="zh-pc zh-anim {{ delay_class }}" data-product-id="{{ product.id }}">
+
+  {%- comment -%} ── MEDIA BLOCK ── {%- endcomment -%}
+  <div class="zh-pc__media">
+
+    <a href="{{ product.url }}" class="zh-pc__img-link" aria-label="{{ product.title | escape }}" tabindex="0">
+      {%- if first_image != blank -%}
+        {{
+          first_image
+          | image_url: width: 800
+          | image_tag:
+            class: 'zh-pc__img zh-pc__img--primary',
+            loading: loading_attr,
+            widths: '300, 400, 500, 600, 800',
+            sizes: '(max-width: 480px) calc(50vw - 16px), (max-width: 768px) calc(33vw - 16px), 280px',
+            alt: first_image.alt | default: product.title | escape
+        }}
+      {%- else -%}
+        <div class="zh-pc__img-placeholder" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="zh-pc__placeholder-svg" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+      {%- endif -%}
+
+      {%- if hover_image != blank and hover_image.id != first_image.id -%}
+        {{
+          hover_image
+          | image_url: width: 800
+          | image_tag:
+            class: 'zh-pc__img zh-pc__img--hover',
+            loading: 'lazy',
+            widths: '300, 400, 500, 600, 800',
+            sizes: '(max-width: 480px) calc(50vw - 16px), (max-width: 768px) calc(33vw - 16px), 280px',
+            alt: hover_image.alt | default: product.title | escape
+        }}
+      {%- endif -%}
+    </a>
+
+    {%- comment -%} ── BADGES ── {%- endcomment -%}
+    <div class="zh-pc__badges" aria-label="{{ 'accessibility.product_badges' | t | default: 'Product badges' }}">
+      {%- if custom_badge != blank -%}
+        <span class="zh-pc__badge zh-pc__badge--custom">{{ custom_badge }}</span>
+      {%- elsif show_sale_badge != false and is_sale -%}
+        <span class="zh-pc__badge zh-pc__badge--sale" aria-label="{{ 'products.product.sale' | t | default: 'Sale' }}">
+          &minus;{{ savings_pct }}%
+        </span>
+      {%- elsif show_new_badge != false and is_new -%}
+        <span class="zh-pc__badge zh-pc__badge--new" aria-label="{{ 'products.product.new' | t | default: 'New' }}">
+          {{ 'products.product.new' | t | default: 'New' }}
+        </span>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── WISHLIST ── {%- endcomment -%}
+    {%- if show_wishlist -%}
+      <button
+        class="zh-pc__wishlist"
+        data-zh-wishlist
+        data-product-id="{{ product.id }}"
+        aria-label="{{ 'products.product.add_to_wishlist' | t | default: 'Add to wishlist' }}"
+        aria-pressed="false"
+        type="button"
+      >
+        <svg class="zh-pc__wishlist-icon zh-pc__wishlist-icon--outline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <svg class="zh-pc__wishlist-icon zh-pc__wishlist-icon--filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
+    {%- endif -%}
+
+    {%- comment -%} ── QUICK ADD ── {%- endcomment -%}
+    {%- if show_quick_add and product.available -%}
+      <div class="zh-pc__quick-add-wrap">
+        {%- if product.has_only_default_variant -%}
+          <button
+            class="zh-pc__quick-add"
+            data-zh-quick-add
+            data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+            data-product-title="{{ product.title | escape }}"
+            aria-label="{{ 'products.product.quick_add' | t | default: 'Quick add' }} {{ product.title | escape }}"
+            type="button"
+          >
+            <svg class="zh-pc__quick-add-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="16" height="16">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <span>{{ 'products.product.quick_add' | t | default: 'Quick Add' }}</span>
+          </button>
+        {%- else -%}
+          <a href="{{ product.url }}" class="zh-pc__quick-add zh-pc__quick-add--select">
+            <svg class="zh-pc__quick-add-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="16" height="16">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="16"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+            <span>{{ 'products.product.select_options' | t | default: 'Select Options' }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- elsif show_quick_add and product.available == false -%}
+      <div class="zh-pc__quick-add-wrap">
+        <span class="zh-pc__sold-out">{{ 'products.product.sold_out' | t | default: 'Sold Out' }}</span>
+      </div>
+    {%- endif -%}
+
+  </div>
+  {%- comment -%} end .zh-pc__media {%- endcomment -%}
+
+  {%- comment -%} ── INFO BLOCK ── {%- endcomment -%}
+  <div class="zh-pc__info">
+
+    {%- if settings.show_vendor and product.vendor != blank -%}
+      <p class="zh-pc__vendor">
+        <a href="{{ product.vendor | url_for_vendor }}" class="zh-pc__vendor-link">{{ product.vendor }}</a>
+      </p>
+    {%- endif -%}
+
+    <h3 class="zh-pc__title">
+      <a href="{{ product.url }}" class="zh-pc__title-link">{{ product.title }}</a>
+    </h3>
+
+    {%- if show_rating -%}
+      {%- assign rating_float = rating_value | plus: 0.0 -%}
+      <div class="zh-pc__rating" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, reviews_count: rating_count | default: rating_value | append: ' stars' }}">
+        <div class="zh-pc__stars" aria-hidden="true">
+          {%- for i in (1..5) -%}
+            {%- assign i_float = i | plus: 0.0 -%}
+            {%- if i_float <= rating_floor -%}
+              {%- comment -%} full star {%- endcomment -%}
+              <svg class="zh-pc__star zh-pc__star--full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            {%- elsif i_float == rating_floor | plus: 1.0 and rating_float != rating_floor -%}
+              {%- comment -%} half star {%- endcomment -%}
+              <svg class="zh-pc__star zh-pc__star--half" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                <defs>
+                  <linearGradient id="zh-half-{{ product.id }}-{{ i }}">
+                    <stop offset="50%" stop-color="currentColor"/>
+                    <stop offset="50%" stop-color="transparent"/>
+                  </linearGradient>
+                </defs>
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="url(#zh-half-{{ product.id }}-{{ i }})" stroke="currentColor" stroke-width="1"/>
+              </svg>
+            {%- else -%}
+              {%- comment -%} empty star {%- endcomment -%}
+              <svg class="zh-pc__star zh-pc__star--empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14" aria-hidden="true">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- if rating_count != blank -%}
+          <span class="zh-pc__rating-count">({{ rating_count }})</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="zh-pc__price">
+      {%- if is_sale -%}
+        <span class="zh-pc__price-sale" aria-label="{{ 'products.product.sale_price' | t | default: 'Sale price' }}">
+          {{ product.price | money }}
+        </span>
+        <s class="zh-pc__price-compare" aria-label="{{ 'products.product.regular_price' | t | default: 'Regular price' }}">
+          {{ product.compare_at_price | money }}
+        </s>
+        <span class="zh-pc__savings" aria-label="{{ 'products.product.save' | t | default: 'Save' }} {{ savings_pct }}%">
+          &minus;{{ savings_pct }}%
+        </span>
+      {%- else -%}
+        <span class="zh-pc__price-regular" aria-label="{{ 'products.product.price' | t | default: 'Price' }}">
+          {%- if product.price_varies -%}
+            {{ 'products.product.from_price_html' | t: price: product.price_min | money | default: 'From ' | append: product.price_min | money }}
+          {%- else -%}
+            {{ product.price | money }}
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+
+      {%- if product.available == false -%}
+        <span class="zh-pc__price-sold-out">{{ 'products.product.sold_out' | t | default: 'Sold Out' }}</span>
+      {%- endif -%}
+    </div>
+
+  </div>
+  {%- comment -%} end .zh-pc__info {%- endcomment -%}
+
+</div>
+{%- comment -%} end .zh-pc {%- endcomment -%}

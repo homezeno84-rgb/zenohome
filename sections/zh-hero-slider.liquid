@@ -1,327 +1,620 @@
-{{ 'zh-sections.css' | asset_url | stylesheet_tag }}
-{{ 'zh-sections.js' | asset_url | script_tag }}
-
-{%- liquid
-  assign section_height = section.settings.height
-  assign height_value = '550px'
-  if section_height == 'small'
-    assign height_value = '400px'
-  elsif section_height == 'large'
-    assign height_value = '700px'
-  elsif section_height == 'full'
-    assign height_value = '100vh'
-  endif
--%}
+{{ 'zh-premium.css' | asset_url | stylesheet_tag }}
 
 <section
-  class="zh-section zh-hero-slider-section"
   id="zh-hero-slider-{{ section.id }}"
-  data-section-id="{{ section.id }}"
+  class="zh-hero-slider zh-hero-slider--{{ section.settings.animation }}"
+  data-zh-hero-slider
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ section.settings.autoplay_speed }}"
+  data-animation="{{ section.settings.animation }}"
+  style="
+    --slider-height: {{ section.settings.height }};
+    --slider-height-mobile: {{ section.settings.mobile_height }};
+    --pt: {{ section.settings.padding_top }}px;
+    --pb: {{ section.settings.padding_bottom }}px;
+  "
 >
-  <div
-    class="zh-hero-slider"
-    data-zh-hero-slider
-    data-autoplay="{{ section.settings.autoplay }}"
-    data-speed="{{ section.settings.autoplay_speed | times: 1000 }}"
-    data-animation="{{ section.settings.animation }}"
-    role="region"
-    aria-label="Hero Slider"
-    aria-roledescription="carousel"
-    style="--slider-height: {{ height_value }};"
-  >
+  <div class="zh-hero-slider__track" data-zh-slider-track>
     {%- for block in section.blocks -%}
-      {%- assign text_align = block.settings.text_align | default: 'center' -%}
-      {%- assign overlay_color = block.settings.overlay_color | default: '#000000' -%}
-      {%- assign overlay_opacity = block.settings.overlay_opacity | default: 40 | divided_by: 100.0 -%}
+      {%- assign is_first = false -%}
+      {%- if forloop.index0 == 0 -%}{%- assign is_first = true -%}{%- endif -%}
       <div
-        class="zh-slide zh-slide--{{ text_align }}"
-        role="group"
-        aria-roledescription="slide"
-        aria-label="{{ forloop.index }} of {{ section.blocks.size }}"
+        class="zh-hero-slider__slide{% if is_first %} is-active{% endif %}"
+        data-zh-slide
+        data-text-align="{{ block.settings.text_align }}"
+        data-content-pos="{{ block.settings.content_position }}"
         {{ block.shopify_attributes }}
       >
-        {%- if block.settings.image_desktop != blank -%}
-          <div class="zh-slide__bg">
-            {{ block.settings.image_desktop | image_url: width: 2000 | image_tag:
-              class: 'zh-slide__img zh-slide__img--desktop',
-              loading: 'eager',
-              fetchpriority: forloop.first | ternary: 'high', 'auto',
-              widths: '768,1200,1600,2000',
-              sizes: '100vw'
+        {%- comment -%} Desktop image {%- endcomment -%}
+        <div class="zh-hero-slider__media zh-hide-mobile">
+          {%- if block.settings.image_desktop != blank -%}
+            {{
+              block.settings.image_desktop
+              | image_url: width: 2000
+              | image_tag:
+                loading: 'lazy',
+                fetchpriority: 'auto',
+                widths: '800,1200,1600,2000',
+                sizes: '100vw',
+                class: 'zh-hero-slider__img',
+                alt: block.settings.heading | escape
             }}
-            {%- if block.settings.image_mobile != blank -%}
-              {{ block.settings.image_mobile | image_url: width: 800 | image_tag:
-                class: 'zh-slide__img zh-slide__img--mobile',
-                loading: 'eager',
-                widths: '375,480,768',
-                sizes: '100vw'
-              }}
+            {%- if is_first -%}
+              <link
+                rel="preload"
+                as="image"
+                href="{{ block.settings.image_desktop | image_url: width: 1600 }}"
+                fetchpriority="high"
+              >
             {%- endif -%}
-          </div>
-        {%- else -%}
-          <div class="zh-slide__bg zh-slide__bg--placeholder"></div>
-        {%- endif -%}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'zh-hero-slider__img zh-placeholder-img' }}
+          {%- endif -%}
+        </div>
 
-        <div class="zh-slide__overlay" style="background: {{ overlay_color }}; opacity: {{ overlay_opacity }};"></div>
+        {%- comment -%} Mobile image {%- endcomment -%}
+        <div class="zh-hero-slider__media zh-hide-desktop">
+          {%- if block.settings.image_mobile != blank -%}
+            {{
+              block.settings.image_mobile
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                widths: '400,600,800',
+                sizes: '100vw',
+                class: 'zh-hero-slider__img',
+                alt: block.settings.heading | escape
+            }}
+          {%- elsif block.settings.image_desktop != blank -%}
+            {{
+              block.settings.image_desktop
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                widths: '400,600,800',
+                sizes: '100vw',
+                class: 'zh-hero-slider__img',
+                alt: block.settings.heading | escape
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'zh-hero-slider__img zh-placeholder-img' }}
+          {%- endif -%}
+        </div>
 
-        <div class="zh-slide__content zh-container">
-          <div class="zh-slide__inner">
-            {%- if block.settings.subheading != blank -%}
-              <p class="zh-slide__eyebrow zh-anim zh-anim-delay-1">{{ block.settings.subheading }}</p>
-            {%- endif -%}
-            {%- if block.settings.heading != blank -%}
-              <h2 class="zh-slide__heading zh-anim zh-anim-delay-2">{{ block.settings.heading }}</h2>
-            {%- endif -%}
-            {%- if block.settings.text != blank -%}
-              <p class="zh-slide__text zh-anim zh-anim-delay-3">{{ block.settings.text }}</p>
-            {%- endif -%}
-            {%- if block.settings.cta1_text != blank or block.settings.cta2_text != blank -%}
-              <div class="zh-slide__ctas zh-anim zh-anim-delay-4">
-                {%- if block.settings.cta1_text != blank -%}
-                  <a href="{{ block.settings.cta1_url | default: '#' }}" class="zh-btn zh-btn--{{ block.settings.cta1_style | default: 'gold' }}">
-                    {{ block.settings.cta1_text }}
-                  </a>
-                {%- endif -%}
-                {%- if block.settings.cta2_text != blank -%}
-                  <a href="{{ block.settings.cta2_url | default: '#' }}" class="zh-btn zh-btn--{{ block.settings.cta2_style | default: 'outline-white' }}">
-                    {{ block.settings.cta2_text }}
-                  </a>
-                {%- endif -%}
-              </div>
-            {%- endif -%}
-          </div>
+        {%- comment -%} Overlay {%- endcomment -%}
+        {%- assign overlay_opacity_decimal = block.settings.overlay_opacity | divided_by: 100.0 -%}
+        <div
+          class="zh-hero-slider__overlay"
+          style="background-color: {{ block.settings.overlay_color }}; opacity: {{ overlay_opacity_decimal }};"
+        ></div>
+
+        {%- comment -%} Content {%- endcomment -%}
+        <div
+          class="zh-hero-slider__content zh-hero-slider__content--{{ block.settings.content_position }} zh-hero-slider__content--align-{{ block.settings.text_align }}"
+          style="color: {{ block.settings.text_color }};"
+        >
+          {%- if block.settings.eyebrow != blank -%}
+            <p class="zh-hero-slider__eyebrow">{{ block.settings.eyebrow }}</p>
+          {%- endif -%}
+
+          {%- if block.settings.heading != blank -%}
+            <h2 class="zh-hero-slider__heading">{{ block.settings.heading }}</h2>
+          {%- endif -%}
+
+          {%- if block.settings.subheading != blank -%}
+            <p class="zh-hero-slider__subheading">{{ block.settings.subheading }}</p>
+          {%- endif -%}
+
+          {%- if block.settings.cta1_text != blank or block.settings.cta2_text != blank -%}
+            <div class="zh-hero-slider__ctas">
+              {%- if block.settings.cta1_text != blank -%}
+                <a
+                  href="{{ block.settings.cta1_url | default: '#' }}"
+                  class="zh-btn zh-btn--{{ block.settings.cta1_style }}"
+                >
+                  {{- block.settings.cta1_text -}}
+                </a>
+              {%- endif -%}
+              {%- if block.settings.cta2_text != blank -%}
+                <a
+                  href="{{ block.settings.cta2_url | default: '#' }}"
+                  class="zh-btn zh-btn--{{ block.settings.cta2_style }}"
+                >
+                  {{- block.settings.cta2_text -}}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
         </div>
       </div>
     {%- endfor -%}
-
-    {%- if section.blocks.size > 1 -%}
-      {%- if section.settings.show_arrows -%}
-        <button class="zh-slider-arrow zh-slider-prev" aria-label="{{ 'general.slider.previous_slide' | t | default: 'Previous slide' }}">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="zh-slider-arrow zh-slider-next" aria-label="{{ 'general.slider.next_slide' | t | default: 'Next slide' }}">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-      {%- endif -%}
-      {%- if section.settings.show_dots -%}
-        <div class="zh-slider-dots" role="tablist" aria-label="Slides">
-          {%- for block in section.blocks -%}
-            <button class="zh-slider-dot" role="tab" aria-label="Go to slide {{ forloop.index }}" aria-selected="false"></button>
-          {%- endfor -%}
-        </div>
-      {%- endif -%}
-    {%- endif -%}
   </div>
+
+  {%- comment -%} Progress bar {%- endcomment -%}
+  {%- if section.settings.show_progress -%}
+    <div class="zh-hero-slider__progress" data-zh-progress>
+      <div class="zh-hero-slider__progress-bar" data-zh-progress-bar></div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Navigation Arrows {%- endcomment -%}
+  {%- if section.settings.show_arrows and section.blocks.size > 1 -%}
+    <button
+      class="zh-hero-slider__arrow zh-hero-slider__arrow--prev"
+      data-zh-prev
+      aria-label="{{ 'general.slider.previous_slide' | t | default: 'Previous slide' }}"
+      type="button"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <button
+      class="zh-hero-slider__arrow zh-hero-slider__arrow--next"
+      data-zh-next
+      aria-label="{{ 'general.slider.next_slide' | t | default: 'Next slide' }}"
+      type="button"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  {%- endif -%}
+
+  {%- comment -%} Dot indicators {%- endcomment -%}
+  {%- if section.settings.show_dots and section.blocks.size > 1 -%}
+    <div class="zh-hero-slider__dots" data-zh-dots role="tablist" aria-label="{{ 'general.slider.slide_indicator' | t | default: 'Slide indicators' }}">
+      {%- for block in section.blocks -%}
+        <button
+          class="zh-hero-slider__dot{% if forloop.index0 == 0 %} is-active{% endif %}"
+          data-zh-dot="{{ forloop.index0 }}"
+          role="tab"
+          type="button"
+          aria-label="{{ 'general.slider.slide_number' | t: number: forloop.index | default: 'Slide' | append: ' ' | append: forloop.index }}"
+          aria-selected="{% if forloop.index0 == 0 %}true{% else %}false{% endif %}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 </section>
 
 <style>
-  #zh-hero-slider-{{ section.id }} .zh-hero-slider {
+  #zh-hero-slider-{{ section.id }} {
+    padding-top: var(--pt, 0px);
+    padding-bottom: var(--pb, 0px);
     position: relative;
-    height: var(--slider-height, 550px);
     overflow: hidden;
-    background: var(--zh-dark, #1A1A2E);
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide {
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__track {
+    position: relative;
+    width: 100%;
+    height: var(--slider-height, 700px);
+    overflow: hidden;
+  }
+
+  /* Slide base */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__slide {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
     opacity: 0;
-    transition: opacity 0.7s cubic-bezier(.22,1,.36,1);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
+    z-index: 0;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide.active {
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__slide.is-active {
     opacity: 1;
     pointer-events: auto;
+    z-index: 1;
   }
-  {%- if section.settings.animation == 'slide' -%}
-  #zh-hero-slider-{{ section.id }} .zh-slide {
+
+  /* Zoom animation for active slide */
+  #zh-hero-slider-{{ section.id }}.zh-hero-slider--zoom .zh-hero-slider__slide.is-active .zh-hero-slider__img {
+    animation: zh-hero-zoom {{ section.settings.autoplay_speed }}s ease forwards;
+  }
+
+  @keyframes zh-hero-zoom {
+    from { transform: scale(1); }
+    to   { transform: scale(1.08); }
+  }
+
+  /* Slide animation */
+  #zh-hero-slider-{{ section.id }}.zh-hero-slider--slide .zh-hero-slider__slide {
     transform: translateX(100%);
-    transition: transform 0.7s cubic-bezier(.22,1,.36,1), opacity 0.7s;
-  }
-  #zh-hero-slider-{{ section.id }} .zh-slide.active {
-    transform: translateX(0);
     opacity: 1;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  {%- endif -%}
-  #zh-hero-slider-{{ section.id }} .zh-slide__bg {
-    position: absolute; inset: 0;
+
+  #zh-hero-slider-{{ section.id }}.zh-hero-slider--slide .zh-hero-slider__slide.is-active {
+    transform: translateX(0);
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide__img {
-    width: 100%; height: 100%;
+
+  #zh-hero-slider-{{ section.id }}.zh-hero-slider--slide .zh-hero-slider__slide.is-leaving {
+    transform: translateX(-100%);
+  }
+
+  [dir="rtl"] #zh-hero-slider-{{ section.id }}.zh-hero-slider--slide .zh-hero-slider__slide {
+    transform: translateX(-100%);
+  }
+  [dir="rtl"] #zh-hero-slider-{{ section.id }}.zh-hero-slider--slide .zh-hero-slider__slide.is-leaving {
+    transform: translateX(100%);
+  }
+
+  /* Media containers */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide__img--mobile { display: none; }
-  @media (max-width: 767px) {
-    #zh-hero-slider-{{ section.id }} .zh-slide__img--desktop { display: none; }
-    #zh-hero-slider-{{ section.id }} .zh-slide__img--mobile { display: block; }
+
+  #zh-hero-slider-{{ section.id }} .zh-placeholder-img {
+    width: 100%;
+    height: 100%;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide__bg--placeholder {
-    background: linear-gradient(135deg, var(--zh-dark, #1A1A2E) 0%, var(--zh-dark-light, #2A2A40) 100%);
-  }
-  #zh-hero-slider-{{ section.id }} .zh-slide__overlay {
-    position: absolute; inset: 0;
+
+  /* Overlay */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     pointer-events: none;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide__content {
-    position: relative; z-index: 2;
+
+  /* Content positioning */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content {
+    position: absolute;
+    z-index: 2;
+    padding: 2rem 2.5rem;
+    max-width: 700px;
     width: 100%;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide--center .zh-slide__inner {
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
-    max-width: 720px;
-    margin-inline: auto;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide--left .zh-slide__inner {
-    text-align: left;
-    max-width: 600px;
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--bottom-left {
+    bottom: 3.5rem;
+    left: 3.5rem;
   }
-  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slide--left .zh-slide__inner { text-align: right; }
-  #zh-hero-slider-{{ section.id }} .zh-slide--right .zh-slide__inner {
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--bottom-center {
+    bottom: 3.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--bottom-right {
+    bottom: 3.5rem;
+    right: 3.5rem;
+    left: auto;
     text-align: right;
-    max-width: 600px;
-    margin-inline-start: auto;
   }
-  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slide--right .zh-slide__inner { text-align: left; }
-  #zh-hero-slider-{{ section.id }} .zh-slide__eyebrow {
-    display: inline-block;
-    font-size: .75rem; font-weight: 600;
-    letter-spacing: .2em; text-transform: uppercase;
-    color: var(--zh-gold, #C9A84C);
-    margin-bottom: 16px;
+
+  /* Text alignment overrides */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--align-left  { text-align: left; }
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--align-center { text-align: center; }
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--align-right  { text-align: right; }
+
+  /* RTL positioning fixes */
+  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--bottom-left {
+    left: auto;
+    right: 3.5rem;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide__heading {
-    font-family: var(--zh-font-display, 'Cormorant Garant', serif);
-    font-size: clamp(2rem, 6vw, 5rem);
-    font-weight: 600; line-height: 1.1;
-    color: #fff;
-    margin: 0 0 20px;
-    text-shadow: 0 2px 20px rgba(0,0,0,.25);
+  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--bottom-right {
+    right: auto;
+    left: 3.5rem;
+    text-align: left;
   }
-  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slide__heading { font-family: var(--zh-font-ar, 'Cairo', sans-serif); }
-  #zh-hero-slider-{{ section.id }} .zh-slide__text {
-    font-size: clamp(.95rem, 1.8vw, 1.2rem);
-    color: rgba(255,255,255,.85);
-    line-height: 1.7;
-    margin: 0 0 32px;
+
+  /* Typography */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin: 0 0 0.85rem;
+    opacity: 0.85;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide__ctas {
-    display: flex; gap: 16px; flex-wrap: wrap;
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__heading {
+    font-size: clamp(2rem, 5vw, 3.75rem);
+    font-weight: 700;
+    line-height: 1.08;
+    margin: 0 0 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__subheading {
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    opacity: 0.88;
+    line-height: 1.65;
+    margin: 0 0 2rem;
+    max-width: 520px;
+  }
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--align-center .zh-hero-slider__subheading {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* CTA buttons row */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
     align-items: center;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide--center .zh-slide__ctas { justify-content: center; }
-  #zh-hero-slider-{{ section.id }} .zh-slide--right .zh-slide__ctas { justify-content: flex-end; }
-  /* Active slide content animation */
-  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim {
-    animation: zhSlideIn .7s cubic-bezier(.22,1,.36,1) both;
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--align-center .zh-hero-slider__ctas { justify-content: center; }
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--align-right  .zh-hero-slider__ctas { justify-content: flex-end; }
+
+  /* Button variants */
+  #zh-hero-slider-{{ section.id }} .zh-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+    cursor: pointer;
+    white-space: nowrap;
+    border: 2px solid transparent;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim-delay-1 { animation-delay: .15s; }
-  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim-delay-2 { animation-delay: .3s; }
-  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim-delay-3 { animation-delay: .45s; }
-  #zh-hero-slider-{{ section.id }} .zh-slide.active .zh-anim-delay-4 { animation-delay: .6s; }
-  @keyframes zhSlideIn {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: none; }
-  }
-  /* Arrows */
-  #zh-hero-slider-{{ section.id }} .zh-slider-arrow {
-    position: absolute; top: 50%; z-index: 10;
+
+  #zh-hero-slider-{{ section.id }} .zh-btn:hover { transform: translateY(-1px); }
+
+  #zh-hero-slider-{{ section.id }} .zh-btn--gold            { background: #C9A84C; color: #fff; border-color: #C9A84C; }
+  #zh-hero-slider-{{ section.id }} .zh-btn--gold:hover       { background: #b8942e; border-color: #b8942e; }
+  #zh-hero-slider-{{ section.id }} .zh-btn--white            { background: #fff; color: #111; border-color: #fff; }
+  #zh-hero-slider-{{ section.id }} .zh-btn--white:hover      { background: #f0f0f0; border-color: #f0f0f0; }
+  #zh-hero-slider-{{ section.id }} .zh-btn--outline-white    { background: transparent; color: #fff; border-color: #fff; }
+  #zh-hero-slider-{{ section.id }} .zh-btn--outline-white:hover { background: rgba(255,255,255,0.15); }
+  #zh-hero-slider-{{ section.id }} .zh-btn--outline-gold     { background: transparent; color: #C9A84C; border-color: #C9A84C; }
+  #zh-hero-slider-{{ section.id }} .zh-btn--outline-gold:hover { background: rgba(201,168,76,0.12); }
+
+  /* Navigation arrows */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow {
+    position: absolute;
+    top: 50%;
     transform: translateY(-50%);
-    width: 52px; height: 52px;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(255,255,255,.15);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,.3);
+    z-index: 10;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.28);
+    color: #fff;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
-    color: #fff; cursor: pointer;
-    transition: background .25s, transform .25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    padding: 0;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slider-arrow:hover {
-    background: var(--zh-gold, #C9A84C);
-    border-color: var(--zh-gold, #C9A84C);
-    transform: translateY(-50%) scale(1.05);
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow:hover {
+    background: rgba(255,255,255,0.28);
   }
-  #zh-hero-slider-{{ section.id }} .zh-slider-prev { left: 24px; }
-  #zh-hero-slider-{{ section.id }} .zh-slider-next { right: 24px; }
-  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slider-prev { left: auto; right: 24px; }
-  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-slider-next { right: auto; left: 24px; }
-  /* Dots */
-  #zh-hero-slider-{{ section.id }} .zh-slider-dots {
-    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 10px; z-index: 10;
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow--prev { left: 1.5rem; }
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow--next { right: 1.5rem; }
+
+  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow--prev { left: auto; right: 1.5rem; }
+  [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow--next { right: auto; left: 1.5rem; }
+
+  /* Dot indicators */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__dots {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slider-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: rgba(255,255,255,.4);
-    border: none; cursor: pointer; padding: 0;
-    transition: background .25s, transform .25s;
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.45);
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s, width 0.2s;
+    padding: 0;
+    flex-shrink: 0;
   }
-  #zh-hero-slider-{{ section.id }} .zh-slider-dot.active {
-    background: var(--zh-gold, #C9A84C);
-    transform: scale(1.4);
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__dot.is-active {
+    background: #C9A84C;
+    transform: scale(1.35);
   }
+
+  /* Progress bar */
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.18);
+    z-index: 10;
+    overflow: hidden;
+  }
+
+  #zh-hero-slider-{{ section.id }} .zh-hero-slider__progress-bar {
+    height: 100%;
+    background: #C9A84C;
+    width: 0%;
+    transform-origin: left;
+  }
+
+  /* Mobile overrides */
   @media (max-width: 767px) {
-    #zh-hero-slider-{{ section.id }} .zh-slider-arrow { width: 40px; height: 40px; }
-    #zh-hero-slider-{{ section.id }} .zh-slider-prev { left: 12px; }
-    #zh-hero-slider-{{ section.id }} .zh-slider-next { right: 12px; }
-    #zh-hero-slider-{{ section.id }} .zh-slide__ctas { flex-direction: column; align-items: stretch; }
+    #zh-hero-slider-{{ section.id }} .zh-hero-slider__track {
+      height: var(--slider-height-mobile, 400px);
+    }
+
+    #zh-hero-slider-{{ section.id }} .zh-hero-slider__content {
+      padding: 1.25rem 1.25rem;
+    }
+
+    #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--bottom-left,
+    #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--bottom-right {
+      bottom: 2.5rem;
+      left: 1.25rem;
+      right: 1.25rem;
+      text-align: start;
+    }
+
+    #zh-hero-slider-{{ section.id }} .zh-hero-slider__content--bottom-center {
+      bottom: 2.5rem;
+    }
+
+    #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow {
+      width: 40px;
+      height: 40px;
+    }
+
+    #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow--prev { left: 0.6rem; }
+    #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow--next { right: 0.6rem; }
+
+    [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow--prev { left: auto; right: 0.6rem; }
+    [dir="rtl"] #zh-hero-slider-{{ section.id }} .zh-hero-slider__arrow--next { right: auto; left: 0.6rem; }
+  }
+
+  /* Responsive image visibility */
+  .zh-hide-mobile  { display: block; }
+  .zh-hide-desktop { display: none; }
+
+  @media (max-width: 767px) {
+    .zh-hide-mobile  { display: none !important; }
+    .zh-hide-desktop { display: block !important; }
   }
 </style>
+
+<script src="{{ 'zh-premium.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
   "name": "ZH Hero Slider",
-  "class": "zh-hero-slider-section",
+  "tag": "section",
+  "class": "zh-section-hero-slider",
+  "max_blocks": 8,
   "settings": [
     {
       "type": "select",
       "id": "height",
-      "label": "Slider Height",
+      "label": "Desktop Height",
       "options": [
-        { "value": "small", "label": "Small (400px)" },
-        { "value": "medium", "label": "Medium (550px)" },
-        { "value": "large", "label": "Large (700px)" },
-        { "value": "full", "label": "Full Screen (100vh)" }
+        { "value": "400px", "label": "Small (400px)" },
+        { "value": "550px", "label": "Medium (550px)" },
+        { "value": "700px", "label": "Large (700px)" },
+        { "value": "100vh", "label": "Full Screen (100vh)" }
       ],
-      "default": "large"
+      "default": "700px"
+    },
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "label": "Mobile Height",
+      "options": [
+        { "value": "280px", "label": "Small (280px)" },
+        { "value": "400px", "label": "Medium (400px)" },
+        { "value": "100vh", "label": "Full Screen (100vh)" }
+      ],
+      "default": "400px"
     },
     {
       "type": "select",
       "id": "animation",
-      "label": "Transition Animation",
+      "label": "Slide Animation",
       "options": [
-        { "value": "fade", "label": "Fade" },
-        { "value": "slide", "label": "Slide" }
+        { "value": "fade",  "label": "Fade" },
+        { "value": "slide", "label": "Slide" },
+        { "value": "zoom",  "label": "Zoom" }
       ],
       "default": "fade"
     },
     {
       "type": "checkbox",
       "id": "autoplay",
-      "label": "Autoplay",
+      "label": "Enable Autoplay",
       "default": true
     },
     {
       "type": "range",
       "id": "autoplay_speed",
-      "label": "Autoplay Speed (seconds)",
-      "min": 3,
+      "label": "Autoplay Speed",
+      "min": 2,
       "max": 10,
       "step": 1,
+      "unit": "s",
       "default": 5
-    },
-    {
-      "type": "checkbox",
-      "id": "show_dots",
-      "label": "Show Navigation Dots",
-      "default": true
     },
     {
       "type": "checkbox",
       "id": "show_arrows",
       "label": "Show Navigation Arrows",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Dot Indicators",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_progress",
+      "label": "Show Progress Bar",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
     }
   ],
   "blocks": [
@@ -329,6 +622,10 @@
       "type": "slide",
       "name": "Slide",
       "settings": [
+        {
+          "type": "header",
+          "content": "Images"
+        },
         {
           "type": "image_picker",
           "id": "image_desktop",
@@ -340,79 +637,82 @@
           "label": "Mobile Image (optional)"
         },
         {
+          "type": "header",
+          "content": "Content"
+        },
+        {
           "type": "text",
-          "id": "subheading",
-          "label": "Eyebrow / Subheading",
+          "id": "eyebrow",
+          "label": "Eyebrow Text",
           "default": "New Collection"
         },
         {
-          "type": "textarea",
+          "type": "text",
           "id": "heading",
           "label": "Heading",
-          "default": "Luxury Home Decor for the Modern GCC Home"
+          "default": "Elevate Your Living Space"
         },
         {
           "type": "textarea",
-          "id": "text",
-          "label": "Description"
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "header",
+          "content": "Primary Button"
         },
         {
           "type": "text",
           "id": "cta1_text",
-          "label": "Button 1 Text",
+          "label": "Primary Button Text",
           "default": "Shop Now"
         },
         {
           "type": "url",
           "id": "cta1_url",
-          "label": "Button 1 URL"
+          "label": "Primary Button URL"
         },
         {
           "type": "select",
           "id": "cta1_style",
-          "label": "Button 1 Style",
+          "label": "Primary Button Style",
           "options": [
-            { "value": "gold", "label": "Gold (filled)" },
-            { "value": "primary", "label": "Dark (filled)" },
-            { "value": "white", "label": "White (filled)" },
-            { "value": "outline-gold", "label": "Gold (outline)" },
-            { "value": "outline-white", "label": "White (outline)" }
+            { "value": "gold",          "label": "Gold" },
+            { "value": "white",         "label": "White" },
+            { "value": "outline-white", "label": "Outline White" },
+            { "value": "outline-gold",  "label": "Outline Gold" }
           ],
           "default": "gold"
         },
         {
+          "type": "header",
+          "content": "Secondary Button (optional)"
+        },
+        {
           "type": "text",
           "id": "cta2_text",
-          "label": "Button 2 Text"
+          "label": "Secondary Button Text"
         },
         {
           "type": "url",
           "id": "cta2_url",
-          "label": "Button 2 URL"
+          "label": "Secondary Button URL"
         },
         {
           "type": "select",
           "id": "cta2_style",
-          "label": "Button 2 Style",
+          "label": "Secondary Button Style",
           "options": [
-            { "value": "gold", "label": "Gold (filled)" },
-            { "value": "primary", "label": "Dark (filled)" },
-            { "value": "white", "label": "White (filled)" },
-            { "value": "outline-gold", "label": "Gold (outline)" },
-            { "value": "outline-white", "label": "White (outline)" }
+            { "value": "gold",          "label": "Gold" },
+            { "value": "white",         "label": "White" },
+            { "value": "outline-white", "label": "Outline White" },
+            { "value": "outline-gold",  "label": "Outline Gold" }
           ],
           "default": "outline-white"
         },
         {
-          "type": "select",
-          "id": "text_align",
-          "label": "Text Alignment",
-          "options": [
-            { "value": "left", "label": "Left" },
-            { "value": "center", "label": "Center" },
-            { "value": "right", "label": "Right" }
-          ],
-          "default": "center"
+          "type": "header",
+          "content": "Overlay & Layout"
         },
         {
           "type": "color",
@@ -423,11 +723,41 @@
         {
           "type": "range",
           "id": "overlay_opacity",
-          "label": "Overlay Opacity (%)",
+          "label": "Overlay Opacity",
           "min": 0,
           "max": 80,
           "step": 5,
-          "default": 35
+          "unit": "%",
+          "default": 40
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text Alignment",
+          "options": [
+            { "value": "left",   "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right",  "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content Position",
+          "options": [
+            { "value": "center",        "label": "Center" },
+            { "value": "bottom-left",   "label": "Bottom Left" },
+            { "value": "bottom-center", "label": "Bottom Center" },
+            { "value": "bottom-right",  "label": "Bottom Right" }
+          ],
+          "default": "center"
         }
       ]
     }
@@ -439,21 +769,19 @@
         {
           "type": "slide",
           "settings": {
-            "subheading": "New Arrivals 2025",
+            "eyebrow": "New Collection",
             "heading": "Elevate Your Living Space",
-            "text": "Discover our curated collection of luxury home decor for the modern GCC home.",
-            "cta1_text": "Shop Collection",
-            "cta2_text": "View Lookbook",
-            "overlay_opacity": 40
+            "cta1_text": "Shop Now",
+            "cta1_style": "gold"
           }
         },
         {
           "type": "slide",
           "settings": {
-            "subheading": "Exclusive Deals",
-            "heading": "Up to 40% Off Selected Items",
-            "cta1_text": "Shop Sale",
-            "overlay_opacity": 35
+            "eyebrow": "Exclusive Design",
+            "heading": "Crafted for the Discerning Home",
+            "cta1_text": "Explore",
+            "cta1_style": "gold"
           }
         }
       ]
