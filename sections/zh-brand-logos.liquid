@@ -1,0 +1,127 @@
+{{ 'zh-premium.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'zh-premium.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign use_marquee = section.settings.use_marquee
+  assign speed = section.settings.speed | default: 30
+  assign show_gray = section.settings.show_grayscale
+  assign pt = section.settings.padding_top | default: 48
+  assign pb = section.settings.padding_bottom | default: 48
+  assign bg = section.settings.background | default: '#ffffff'
+  assign cols = section.settings.columns_static | default: 6
+-%}
+
+<section
+  class="zh-section zh-brands"
+  id="zh-brands-{{ section.id }}"
+  style="padding-top:{{ pt }}px;padding-bottom:{{ pb }}px;background:{{ bg }};"
+>
+  <div class="zh-container">
+    {%- if section.settings.eyebrow != blank or section.settings.title != blank -%}
+      <header class="zh-section-header zh-anim" style="margin-bottom:32px;">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="zh-section-title">{{ section.settings.title }}</h2>
+          <span class="zh-section-divider"></span>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- if use_marquee -%}
+      <div
+        class="zh-marquee {% if section.settings.pause_on_hover %}zh-marquee--pause-hover{% endif %}"
+        data-zh-marquee
+        style="--marquee-speed:{{ speed }}s;"
+        aria-label="{{ section.settings.eyebrow | default: 'Our Brands' }}"
+      >
+        <div class="zh-marquee__track">
+          {%- for block in section.blocks -%}
+            <div class="zh-marquee__item" {{ block.shopify_attributes }}>
+              {%- if block.settings.url != blank -%}
+                <a href="{{ block.settings.url }}" class="zh-brand-logo" target="_blank" rel="noopener" aria-label="{{ block.settings.name | escape }}">
+              {%- else -%}
+                <div class="zh-brand-logo">
+              {%- endif -%}
+                {%- if block.settings.logo != blank -%}
+                  {{ block.settings.logo | image_url: width: 280 | image_tag:
+                      class: 'zh-brand-logo__img' | append: (show_gray | ternary: ' zh-brand-logo__img--gray', ''),
+                      loading: 'lazy',
+                      alt: block.settings.name | escape,
+                      style: 'max-width:' | append: block.settings.width | default: 140 | append: 'px;'
+                  }}
+                {%- else -%}
+                  <span class="zh-brand-logo__text">{{ block.settings.name | default: 'Brand' }}</span>
+                {%- endif -%}
+              {%- if block.settings.url != blank -%}</a>{%- else -%}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- else -%}
+      <div class="zh-brands__grid" style="--cols:{{ cols }};--cols-mobile:3;">
+        {%- for block in section.blocks -%}
+          <div class="zh-brands__item zh-anim" {{ block.shopify_attributes }}>
+            {%- if block.settings.url != blank -%}
+              <a href="{{ block.settings.url }}" class="zh-brand-logo" target="_blank" rel="noopener" aria-label="{{ block.settings.name | escape }}">
+            {%- else -%}
+              <div class="zh-brand-logo">
+            {%- endif -%}
+              {%- if block.settings.logo != blank -%}
+                {{ block.settings.logo | image_url: width: 280 | image_tag:
+                    class: 'zh-brand-logo__img' | append: (show_gray | ternary: ' zh-brand-logo__img--gray', ''),
+                    loading: 'lazy',
+                    alt: block.settings.name | escape,
+                    style: 'max-width:' | append: block.settings.width | default: 140 | append: 'px;'
+                }}
+              {%- else -%}
+                <span class="zh-brand-logo__text">{{ block.settings.name | default: 'Brand' }}</span>
+              {%- endif -%}
+            {%- if block.settings.url != blank -%}</a>{%- else -%}</div>{%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand Logos",
+  "tag": "section",
+  "class": "zh-brands-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Trusted Brands" },
+    { "type": "text", "id": "title", "label": "Title" },
+    { "type": "checkbox", "id": "use_marquee", "label": "Infinite marquee scroll", "default": true },
+    { "type": "range", "id": "speed", "min": 15, "max": 60, "step": 5, "default": 30, "label": "Marquee speed", "unit": "s" },
+    { "type": "checkbox", "id": "pause_on_hover", "label": "Pause on hover", "default": true },
+    { "type": "checkbox", "id": "show_grayscale", "label": "Grayscale logos (color on hover)", "default": true },
+    { "type": "range", "id": "columns_static", "min": 3, "max": 8, "step": 1, "default": 6, "label": "Columns (grid mode)" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 8, "default": 48, "label": "Padding top", "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 8, "default": 48, "label": "Padding bottom", "unit": "px" }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        { "type": "image_picker", "id": "logo", "label": "Logo" },
+        { "type": "text", "id": "name", "label": "Brand name", "default": "Brand Name" },
+        { "type": "url", "id": "url", "label": "Link URL" },
+        { "type": "range", "id": "width", "min": 60, "max": 220, "step": 10, "default": 140, "label": "Logo width", "unit": "px" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Brand Logos", "blocks": [
+    { "type": "brand", "settings": { "name": "Brand 1" } },
+    { "type": "brand", "settings": { "name": "Brand 2" } },
+    { "type": "brand", "settings": { "name": "Brand 3" } },
+    { "type": "brand", "settings": { "name": "Brand 4" } },
+    { "type": "brand", "settings": { "name": "Brand 5" } },
+    { "type": "brand", "settings": { "name": "Brand 6" } }
+  ]}]
+}
+{% endschema %}

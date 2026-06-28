@@ -1,0 +1,160 @@
+{{ 'zh-premium.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'zh-premium.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign overall = section.settings.overall_rating | default: 4.8
+  assign total = section.settings.total_reviews | default: 1240
+  assign layout = section.settings.layout | default: 'carousel'
+  assign cols = section.settings.columns | default: 3
+  assign pt = section.settings.padding_top | default: 64
+  assign pb = section.settings.padding_bottom | default: 64
+  assign bg = section.settings.background | default: '#FAFAF8'
+-%}
+
+<section
+  class="zh-section zh-reviews"
+  id="zh-reviews-{{ section.id }}"
+  style="padding-top:{{ pt }}px;padding-bottom:{{ pb }}px;background:{{ bg }};"
+>
+  <div class="zh-container">
+    <header class="zh-section-header zh-anim">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="zh-section-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h2 class="zh-section-title">{{ section.settings.title | default: 'Customer Reviews' }}</h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="zh-section-subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+      <span class="zh-section-divider"></span>
+    </header>
+
+    <div class="zh-reviews__inner">
+      {%- if section.settings.show_rating_bars -%}
+        <div class="zh-reviews__summary zh-anim">
+          <div class="zh-reviews__overall">
+            <span class="zh-reviews__overall-num">{{ overall }}</span>
+            <div class="zh-reviews__overall-stars" aria-label="Rating {{ overall }} out of 5">
+              {%- assign full_stars = overall | floor -%}
+              {%- assign has_half = overall | minus: full_stars -%}
+              {%- for i in (1..5) -%}
+                {%- if i <= full_stars -%}
+                  <svg class="zh-star zh-star--full" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.39 4.84 5.34.78-3.86 3.76.91 5.32L10 13.27l-4.78 2.51.91-5.32L2.27 6.62l5.34-.78z"/></svg>
+                {%- elsif has_half >= 0.5 and i == full_stars | plus: 1 -%}
+                  <svg class="zh-star zh-star--half" width="20" height="20" viewBox="0 0 20 20"><defs><linearGradient id="half-{{ section.id }}"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="#ddd"/></linearGradient></defs><path d="M10 1l2.39 4.84 5.34.78-3.86 3.76.91 5.32L10 13.27l-4.78 2.51.91-5.32L2.27 6.62l5.34-.78z" fill="url(#half-{{ section.id }})"/></svg>
+                {%- else -%}
+                  <svg class="zh-star zh-star--empty" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 1l2.39 4.84 5.34.78-3.86 3.76.91 5.32L10 13.27l-4.78 2.51.91-5.32L2.27 6.62l5.34-.78z"/></svg>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            <p class="zh-reviews__overall-count">{{ 'sections.reviews.based_on' | t | default: 'Based on' }} {{ total | number_with_delimiter }} {{ 'sections.reviews.reviews' | t | default: 'reviews' }}</p>
+          </div>
+          <div class="zh-reviews__bars">
+            {%- assign rating_vals = '5,4,3,2,1' | split: ',' -%}
+            {%- assign rating_pcts = section.settings.rating_5 | append: ',' | append: section.settings.rating_4 | append: ',' | append: section.settings.rating_3 | append: ',' | append: section.settings.rating_2 | append: ',' | append: section.settings.rating_1 | split: ',' -%}
+            {%- for rv in rating_vals -%}
+              {%- assign rpct = rating_pcts[forloop.index0] | default: '0' -%}
+              <div class="zh-reviews__bar-row">
+                <span class="zh-reviews__bar-label">{{ rv }}
+                  <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.39 4.84 5.34.78-3.86 3.76.91 5.32L10 13.27l-4.78 2.51.91-5.32L2.27 6.62l5.34-.78z"/></svg>
+                </span>
+                <div class="zh-reviews__bar-track"><div class="zh-reviews__bar-fill" style="width:{{ rpct }}%;"></div></div>
+                <span class="zh-reviews__bar-pct">{{ rpct }}%</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="zh-reviews__cards {% if layout == 'carousel' %}zh-carousel{% endif %}" {% if layout == 'carousel' %}data-zh-carousel{% endif %} style="--cols:{{ cols }};--cols-mobile:1;">
+        {%- for block in section.blocks -%}
+          {%- assign rating_val = block.settings.rating | default: 5 -%}
+          <div class="zh-review-card zh-anim zh-anim-delay-{{ forloop.index | modulo: 4 | plus: 1 }}" {{ block.shopify_attributes }}>
+            <div class="zh-review-card__header">
+              <div class="zh-review-card__avatar">
+                {%- if block.settings.avatar != blank -%}
+                  {{ block.settings.avatar | image_url: width: 80 | image_tag: class: 'zh-review-card__avatar-img', loading: 'lazy', alt: block.settings.reviewer_name | escape }}
+                {%- else -%}
+                  <span class="zh-review-card__avatar-initial">{{ block.settings.reviewer_name | slice: 0 | upcase }}</span>
+                {%- endif -%}
+              </div>
+              <div class="zh-review-card__meta">
+                <strong class="zh-review-card__name">{{ block.settings.reviewer_name | default: 'Anonymous' }}</strong>
+                {%- if block.settings.location != blank -%}
+                  <span class="zh-review-card__location">{{ block.settings.location }}</span>
+                {%- endif -%}
+                <div class="zh-review-card__stars" aria-label="Rated {{ rating_val }} stars">
+                  {%- for i in (1..5) -%}
+                    <svg class="zh-star {% if i <= rating_val %}zh-star--full{% else %}zh-star--empty{% endif %}" width="14" height="14" viewBox="0 0 20 20" fill="{% if i <= rating_val %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="{% if i <= rating_val %}0{% else %}1.5{% endif %}"><path d="M10 1l2.39 4.84 5.34.78-3.86 3.76.91 5.32L10 13.27l-4.78 2.51.91-5.32L2.27 6.62l5.34-.78z"/></svg>
+                  {%- endfor -%}
+                </div>
+              </div>
+              {%- if block.settings.verified -%}
+                <span class="zh-review-card__verified" title="Verified Purchase">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  {{ 'sections.reviews.verified' | t | default: 'Verified' }}
+                </span>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.product_name != blank -%}
+              <p class="zh-review-card__product">{{ block.settings.product_name }}</p>
+            {%- endif -%}
+            <blockquote class="zh-review-card__text">{{ block.settings.review_text | default: 'Great product!' }}</blockquote>
+            <time class="zh-review-card__date">{{ block.settings.date }}</time>
+          </div>
+        {%- else -%}
+          <p class="zh-no-blocks">Add review blocks in the Theme Editor.</p>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Customer Reviews",
+  "tag": "section",
+  "class": "zh-reviews-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "What Our Customers Say" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Customer Reviews" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle" },
+    { "type": "number", "id": "overall_rating", "label": "Overall rating (e.g. 4.8)", "default": 4 },
+    { "type": "number", "id": "total_reviews", "label": "Total review count", "default": 1240 },
+    { "type": "checkbox", "id": "show_rating_bars", "label": "Show rating breakdown bars", "default": true },
+    { "type": "range", "id": "rating_5", "min": 0, "max": 100, "step": 1, "default": 72, "label": "5-star %", "unit": "%" },
+    { "type": "range", "id": "rating_4", "min": 0, "max": 100, "step": 1, "default": 18, "label": "4-star %", "unit": "%" },
+    { "type": "range", "id": "rating_3", "min": 0, "max": 100, "step": 1, "default": 6, "label": "3-star %", "unit": "%" },
+    { "type": "range", "id": "rating_2", "min": 0, "max": 100, "step": 1, "default": 2, "label": "2-star %", "unit": "%" },
+    { "type": "range", "id": "rating_1", "min": 0, "max": 100, "step": 1, "default": 2, "label": "1-star %", "unit": "%" },
+    { "type": "select", "id": "layout", "label": "Layout", "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "carousel", "label": "Carousel" }
+      ], "default": "carousel" },
+    { "type": "range", "id": "columns", "min": 1, "max": 4, "step": 1, "default": 3, "label": "Columns (desktop)" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#FAFAF8" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 8, "default": 64, "label": "Padding top", "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 8, "default": 64, "label": "Padding bottom", "unit": "px" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "text", "id": "reviewer_name", "label": "Name", "default": "Sarah M." },
+        { "type": "text", "id": "location", "label": "Location", "default": "Riyadh, KSA" },
+        { "type": "range", "id": "rating", "min": 1, "max": 5, "step": 1, "default": 5, "label": "Rating" },
+        { "type": "textarea", "id": "review_text", "label": "Review text", "default": "Absolutely love the quality of this piece. It transformed my living room completely!" },
+        { "type": "text", "id": "product_name", "label": "Product name" },
+        { "type": "text", "id": "date", "label": "Date", "default": "January 2025" },
+        { "type": "image_picker", "id": "avatar", "label": "Avatar photo" },
+        { "type": "checkbox", "id": "verified", "label": "Verified purchase", "default": true }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Customer Reviews", "blocks": [
+    { "type": "review" },
+    { "type": "review", "settings": { "reviewer_name": "Mohammed A.", "location": "Dubai, UAE", "review_text": "Premium quality, fast delivery. Will definitely order again." } },
+    { "type": "review", "settings": { "reviewer_name": "Fatima K.", "location": "Jeddah, KSA", "review_text": "Beautiful design, exactly as shown in the photos. Highly recommend!" } }
+  ]}]
+}
+{% endschema %}

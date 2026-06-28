@@ -1,0 +1,500 @@
+{{ 'zh-premium.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign coll = collections[section.settings.collection]
+  assign products_to_show = section.settings.products_to_show
+  assign show_countdown = section.settings.show_countdown
+  assign end_date = section.settings.end_date
+-%}
+
+<section
+  id="zh-hot-deals-{{ section.id }}"
+  class="zh-hot-deals"
+  style="
+    background-color: {{ section.settings.background }};
+    color: {{ section.settings.text_color }};
+    --accent: {{ section.settings.accent_color }};
+    --text: {{ section.settings.text_color }};
+    --bg: {{ section.settings.background }};
+    --pt: {{ section.settings.padding_top }}px;
+    --pb: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="zh-container">
+
+    {%- comment -%} Section header {%- endcomment -%}
+    <div class="zh-section-header zh-anim">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="zh-section-header__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="zh-section-header__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      <div class="zh-section-header__divider" aria-hidden="true">
+        <span class="zh-section-header__divider-line"></span>
+        <span class="zh-section-header__divider-diamond"></span>
+        <span class="zh-section-header__divider-line"></span>
+      </div>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="zh-section-header__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Countdown timer {%- endcomment -%}
+    {%- if show_countdown and end_date != blank -%}
+      <div
+        class="zh-hot-deals__countdown zh-anim"
+        data-zh-countdown
+        data-end-time="{{ end_date }}"
+        aria-label="{{ 'sections.hot_deals.countdown_label' | t | default: 'Deal ends in' }}"
+        role="timer"
+      >
+        <p class="zh-hot-deals__countdown-label">
+          {{ 'sections.hot_deals.ends_in' | t | default: 'Offer Ends In' }}
+        </p>
+        <div class="zh-hot-deals__countdown-units">
+          <div class="zh-hot-deals__countdown-unit" data-zh-days>
+            <span class="zh-hot-deals__countdown-num" data-zh-countdown-days>00</span>
+            <span class="zh-hot-deals__countdown-name">
+              {{ 'sections.hot_deals.days' | t | default: 'Days' }}
+            </span>
+          </div>
+          <span class="zh-hot-deals__countdown-sep" aria-hidden="true">:</span>
+          <div class="zh-hot-deals__countdown-unit" data-zh-hours>
+            <span class="zh-hot-deals__countdown-num" data-zh-countdown-hours>00</span>
+            <span class="zh-hot-deals__countdown-name">
+              {{ 'sections.hot_deals.hours' | t | default: 'Hours' }}
+            </span>
+          </div>
+          <span class="zh-hot-deals__countdown-sep" aria-hidden="true">:</span>
+          <div class="zh-hot-deals__countdown-unit" data-zh-mins>
+            <span class="zh-hot-deals__countdown-num" data-zh-countdown-minutes>00</span>
+            <span class="zh-hot-deals__countdown-name">
+              {{ 'sections.hot_deals.mins' | t | default: 'Mins' }}
+            </span>
+          </div>
+          <span class="zh-hot-deals__countdown-sep" aria-hidden="true">:</span>
+          <div class="zh-hot-deals__countdown-unit" data-zh-secs>
+            <span class="zh-hot-deals__countdown-num" data-zh-countdown-seconds>00</span>
+            <span class="zh-hot-deals__countdown-name">
+              {{ 'sections.hot_deals.secs' | t | default: 'Secs' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Product grid {%- endcomment -%}
+    <div class="zh-product-grid zh-anim">
+      {%- if coll != blank and coll.products.size > 0 -%}
+        {%- for product in coll.products limit: products_to_show -%}
+          {%- if product.compare_at_price > product.price -%}
+            <div class="zh-product-grid__item zh-hot-deals__product-item" style="--anim-delay: {{ forloop.index0 | times: 80 }}ms;">
+              {%- render 'zh-product-card',
+                product: product,
+                show_quick_add: true,
+                show_wishlist: true,
+                show_rating: true,
+                show_sale_badge: true,
+                show_countdown: true
+              -%}
+            </div>
+          {%- else -%}
+            <div class="zh-product-grid__item zh-hot-deals__product-item" style="--anim-delay: {{ forloop.index0 | times: 80 }}ms;">
+              {%- render 'zh-product-card',
+                product: product,
+                show_quick_add: true,
+                show_wishlist: true,
+                show_rating: true,
+                show_sale_badge: true,
+                show_countdown: true
+              -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..4) -%}
+          <div class="zh-product-grid__item zh-hot-deals__product-item zh-product-card zh-product-card--placeholder" style="--anim-delay: {{ forloop.index0 | times: 80 }}ms;">
+            <div class="zh-product-card__image-wrap">
+              <span class="zh-hot-deals__sale-badge zh-sale-badge--pulse">
+                {{ 'products.product.sale' | t | default: 'SALE' }}
+              </span>
+              {{ 'product-' | append: i | placeholder_svg_tag: 'zh-product-card__placeholder-img' }}
+            </div>
+            <div class="zh-product-card__info">
+              <p class="zh-product-card__title">{{ 'onboarding.product_title' | t | default: 'Hot Deal' }}</p>
+              <p class="zh-product-card__price">
+                <s style="opacity:0.6;">{{ 2990 | money }}</s>
+                <strong style="color: var(--accent);">{{ 1990 | money }}</strong>
+              </p>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #zh-hot-deals-{{ section.id }} {
+    padding-top: var(--pt, 60px);
+    padding-bottom: var(--pb, 60px);
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* Section header — light text on dark background */
+  #zh-hot-deals-{{ section.id }} .zh-section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-section-header__eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent, #C9A84C);
+    margin: 0 0 0.6rem;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-section-header__title {
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+    font-weight: 800;
+    color: var(--text, #fff);
+    margin: 0 0 1rem;
+    line-height: 1.1;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-section-header__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-section-header__divider-line {
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--accent, #C9A84C);
+    opacity: 0.6;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-section-header__divider-diamond {
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent, #C9A84C);
+    transform: rotate(45deg);
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-section-header__subtitle {
+    font-size: 1rem;
+    color: var(--text, #fff);
+    opacity: 0.75;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* Countdown */
+  #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent, #C9A84C);
+    margin: 0;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown-units {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 4px;
+    padding: 0.85rem 1.1rem;
+    min-width: 72px;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown-num {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text, #fff);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown-name {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent, #C9A84C);
+    margin-top: 0.35rem;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown-sep {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent, #C9A84C);
+    line-height: 1;
+    align-self: flex-start;
+    margin-top: 0.55rem;
+  }
+
+  /* Product grid */
+  #zh-hot-deals-{{ section.id }} .zh-product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+
+  /* Placeholder cards */
+  #zh-hot-deals-{{ section.id }} .zh-product-card--placeholder {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-product-card--placeholder .zh-product-card__image-wrap {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    background: rgba(255,255,255,0.06);
+    overflow: hidden;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-product-card--placeholder .zh-product-card__placeholder-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-product-card--placeholder .zh-product-card__info {
+    padding: 1rem;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-product-card--placeholder .zh-product-card__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text, #fff);
+    margin: 0 0 0.4rem;
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-product-card--placeholder .zh-product-card__price {
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  /* Sale badge with pulse */
+  #zh-hot-deals-{{ section.id }} .zh-hot-deals__sale-badge {
+    position: absolute;
+    top: 0.75rem;
+    inset-inline-start: 0.75rem;
+    z-index: 3;
+    background: #E53E3E;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  @keyframes zh-sale-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.55); }
+    50%       { box-shadow: 0 0 0 8px rgba(229, 62, 62, 0); }
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-sale-badge--pulse {
+    animation: zh-sale-pulse 1.8s ease infinite;
+  }
+
+  /* Animate on scroll */
+  #zh-hot-deals-{{ section.id }} .zh-anim {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+    transition-delay: var(--anim-delay, 0ms);
+  }
+
+  #zh-hot-deals-{{ section.id }} .zh-anim.zh-anim--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 1023px) {
+    #zh-hot-deals-{{ section.id }} .zh-product-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    #zh-hot-deals-{{ section.id }} .zh-product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown-unit {
+      min-width: 58px;
+      padding: 0.6rem 0.75rem;
+    }
+
+    #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown-num {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 399px) {
+    #zh-hot-deals-{{ section.id }} .zh-hot-deals__countdown-unit {
+      min-width: 48px;
+      padding: 0.5rem 0.5rem;
+    }
+  }
+</style>
+
+<script src="{{ 'zh-premium.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "ZH Hot Deals",
+  "tag": "section",
+  "class": "zh-section-hot-deals",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Limited Time"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Hot Deals"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Deals Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to Show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Countdown Timer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "Show Countdown Timer",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "Deal End Date & Time",
+      "placeholder": "YYYY-MM-DD HH:MM:SS",
+      "info": "Format: 2025-12-31 23:59:59 — uses store timezone"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background Color",
+      "default": "#1A1A2E"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent / Gold Color",
+      "default": "#C9A84C"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "ZH Hot Deals"
+    }
+  ]
+}
+{% endschema %}

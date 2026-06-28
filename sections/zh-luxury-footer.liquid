@@ -1,0 +1,715 @@
+{% comment %} ZenoHome – Luxury Footer section {% endcomment %}
+
+<link rel="stylesheet" href="{{ 'zh-premium.css' | asset_url }}">
+
+{%- liquid
+  assign dir = 'ltr'
+  if request.locale.iso_code == 'ar'
+    assign dir = 'rtl'
+  endif
+  assign s = section.settings
+-%}
+
+<footer
+  class="zh-luxury-footer"
+  data-zh-footer
+  dir="{{ dir }}"
+  style="
+    background-color: {{ s.background }};
+    color: {{ s.text_color }};
+    --footer-accent: {{ s.accent_color }};
+    --footer-text: {{ s.text_color }};
+    --footer-bg: {{ s.background }};
+  "
+>
+  <div class="zh-footer-top">
+    <div class="zh-footer-container">
+      <div class="zh-footer-grid" style="--footer-cols: {{ s.columns }};">
+
+        {%- comment -%} Brand column — always first (or last in RTL) {%- endcomment -%}
+        <div class="zh-footer-brand-col">
+
+          {%- if s.show_logo and s.logo != blank -%}
+            <a href="{{ routes.root_url }}" class="zh-footer-logo-link" aria-label="{{ shop.name }}">
+              {{
+                s.logo
+                | image_url: width: s.logo_width
+                | image_tag:
+                  class: 'zh-footer-logo',
+                  alt: shop.name,
+                  width: s.logo_width,
+                  loading: 'lazy'
+              }}
+            </a>
+          {%- else -%}
+            <a href="{{ routes.root_url }}" class="zh-footer-shop-name" style="color: {{ s.accent_color }};">
+              {{ shop.name }}
+            </a>
+          {%- endif -%}
+
+          {%- if s.tagline != blank -%}
+            <p class="zh-footer-tagline">{{ s.tagline }}</p>
+          {%- endif -%}
+
+          {%- if s.show_social -%}
+            <div class="zh-footer-social">
+              {%- if s.instagram_url != blank -%}
+                <a href="{{ s.instagram_url }}" target="_blank" rel="noopener" class="zh-footer-social-link" aria-label="Instagram" style="color: {{ s.text_color }};">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if s.facebook_url != blank -%}
+                <a href="{{ s.facebook_url }}" target="_blank" rel="noopener" class="zh-footer-social-link" aria-label="Facebook" style="color: {{ s.text_color }};">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if s.tiktok_url != blank -%}
+                <a href="{{ s.tiktok_url }}" target="_blank" rel="noopener" class="zh-footer-social-link" aria-label="TikTok" style="color: {{ s.text_color }};">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if s.twitter_url != blank -%}
+                <a href="{{ s.twitter_url }}" target="_blank" rel="noopener" class="zh-footer-social-link" aria-label="X (Twitter)" style="color: {{ s.text_color }};">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if s.youtube_url != blank -%}
+                <a href="{{ s.youtube_url }}" target="_blank" rel="noopener" class="zh-footer-social-link" aria-label="YouTube" style="color: {{ s.text_color }};">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="{{ s.background }}"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if s.snapchat_url != blank -%}
+                <a href="{{ s.snapchat_url }}" target="_blank" rel="noopener" class="zh-footer-social-link" aria-label="Snapchat" style="color: {{ s.text_color }};">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 2C9.2 2 7 4.1 7 6.8V9c-.6.1-1.2.3-1.7.5-.1 0-.1.1-.1.2s.1.2.2.2c.2 0 .4-.1.6-.1-.4.5-.7 1-.7 1.6 0 .4.1.7.3 1-.8.4-1.7.9-2.1 1.7-.1.2 0 .4.2.5.8.2 1.6.3 2.3.5.1.3.4.5.7.5.2 0 .5-.1.7-.2C7.8 16 9 17 12 17s4.2-1 4.6-2.1c.2.1.5.2.7.2.3 0 .6-.2.7-.5.7-.2 1.5-.3 2.3-.5.2-.1.3-.3.2-.5-.4-.8-1.3-1.3-2.1-1.7.2-.3.3-.6.3-1 0-.6-.3-1.1-.7-1.6.2 0 .4.1.6.1.1 0 .2-.1.2-.2s0-.2-.1-.2c-.5-.2-1.1-.4-1.7-.5V6.8C17 4.1 14.8 2 12 2z"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if s.pinterest_url != blank -%}
+                <a href="{{ s.pinterest_url }}" target="_blank" rel="noopener" class="zh-footer-social-link" aria-label="Pinterest" style="color: {{ s.text_color }};">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+        </div>
+
+        {%- comment -%} Schema block columns {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          <div class="zh-footer-col" {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <h4 class="zh-footer-col-heading" style="color: {{ s.accent_color }};">{{ block.settings.heading }}</h4>
+            {%- endif -%}
+            {%- if block.settings.menu != blank -%}
+              {%- assign nav = linklists[block.settings.menu] -%}
+              {%- if nav.links.size > 0 -%}
+                <ul class="zh-footer-nav" role="list">
+                  {%- for link in nav.links -%}
+                    <li>
+                      <a href="{{ link.url }}" class="zh-footer-nav-link" style="color: {{ s.text_color }};">{{ link.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            {%- endif -%}
+            {%- if block.settings.extra_html != blank -%}
+              <div class="zh-footer-col-extra">{{ block.settings.extra_html }}</div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+
+        {%- comment -%} Newsletter column {%- endcomment -%}
+        {%- if s.show_newsletter -%}
+          <div class="zh-footer-nl-col">
+            {%- if s.newsletter_title != blank -%}
+              <h4 class="zh-footer-col-heading" style="color: {{ s.accent_color }};">{{ s.newsletter_title }}</h4>
+            {%- endif -%}
+            <form
+              class="zh-footer-nl-form"
+              action="{{ routes.contact_url }}"
+              method="POST"
+              id="zh-footer-nl-{{ section.id }}"
+            >
+              <input type="hidden" name="form_type" value="customer">
+              <input type="hidden" name="utf8" value="✓">
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="zh-footer-nl-row">
+                <label for="zh-footer-nl-email-{{ section.id }}" class="visually-hidden">{{ s.newsletter_placeholder }}</label>
+                <input
+                  type="email"
+                  name="contact[email]"
+                  id="zh-footer-nl-email-{{ section.id }}"
+                  class="zh-footer-nl-input"
+                  placeholder="{{ s.newsletter_placeholder | escape }}"
+                  autocomplete="email"
+                  required
+                >
+                <button type="submit" class="zh-footer-nl-btn" aria-label="{{ s.newsletter_btn }}">
+                  {{ s.newsletter_btn }}
+                </button>
+              </div>
+            </form>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+
+  <div class="zh-footer-bottom" style="border-top: 1px solid rgba(255,255,255,0.1);">
+    <div class="zh-footer-container zh-footer-bottom-inner">
+
+      <div class="zh-footer-bottom-left">
+        {%- if s.copyright_text != blank -%}
+          <p class="zh-footer-copyright" style="color: {{ s.text_color }};">{{ s.copyright_text }}</p>
+        {%- endif -%}
+        {%- if s.show_locale_selector and localization.available_languages.size > 1 -%}
+          <div class="zh-footer-locale">
+            {%- form 'localization' -%}
+              <select name="locale_code" class="zh-footer-locale-select" onchange="this.form.submit();" aria-label="Language" style="color: {{ s.text_color }}; border-color: rgba(255,255,255,0.2); background: transparent;">
+                {%- for language in localization.available_languages -%}
+                  <option value="{{ language.iso_code }}"{% if language.iso_code == request.locale.iso_code %} selected{% endif %}>
+                    {{ language.endonym_name }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if s.show_payment_icons -%}
+        <div class="zh-footer-payment-icons" aria-label="Accepted payment methods">
+
+          {{%- comment -%}} Visa {%- endcomment -%}
+          <span class="zh-pay-icon" title="Visa">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" width="46" height="30" aria-hidden="true" role="img">
+              <rect width="60" height="40" rx="4" fill="#fff"/>
+              <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#1A1F71" letter-spacing="-0.5">VISA</text>
+            </svg>
+          </span>
+
+          {{%- comment -%}} Mastercard {%- endcomment -%}
+          <span class="zh-pay-icon" title="Mastercard">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" width="46" height="30" aria-hidden="true" role="img">
+              <rect width="60" height="40" rx="4" fill="#fff"/>
+              <circle cx="23" cy="20" r="10" fill="#EB001B"/>
+              <circle cx="37" cy="20" r="10" fill="#F79E1B"/>
+              <path d="M30 12.5a10 10 0 0 1 0 15 10 10 0 0 1 0-15z" fill="#FF5F00"/>
+            </svg>
+          </span>
+
+          {{%- comment -%}} Mada {%- endcomment -%}
+          <span class="zh-pay-icon" title="Mada">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" width="46" height="30" aria-hidden="true" role="img">
+              <rect width="60" height="40" rx="4" fill="#fff"/>
+              <rect x="4" y="10" width="52" height="20" rx="3" fill="#0B5CAB"/>
+              <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#fff" letter-spacing="0.5">mada</text>
+            </svg>
+          </span>
+
+          {{%- comment -%}} Apple Pay {%- endcomment -%}
+          <span class="zh-pay-icon" title="Apple Pay">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" width="46" height="30" aria-hidden="true" role="img">
+              <rect width="60" height="40" rx="4" fill="#fff"/>
+              <path d="M19.5 15.5c.9-1.1.8-2.2.7-2.6-.8.1-1.8.6-2.4 1.3-.5.6-1 1.6-.9 2.6.9.1 1.8-.4 2.6-1.3zm.7 1.4c-1.4-.1-2.7.8-3.3.8s-1.8-.8-3-.8c-1.5 0-2.9.9-3.7 2.2-1.6 2.7-.4 6.8 1.1 9 .8 1.1 1.7 2.3 2.9 2.2 1.1 0 1.6-.7 3-.7s1.8.7 3 .7 2-.1 2.8-2.2c.3-.8.5-1.3.5-1.3-.1 0-2.7-1-2.7-4.1 0-2.5 2-3.7 2.1-3.8-.9-1.5-2.4-1.9-2.7-2z" fill="#1a1a1a"/>
+              <text x="38" y="24" dominant-baseline="middle" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="600" fill="#1a1a1a">Pay</text>
+            </svg>
+          </span>
+
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</footer>
+
+<style>
+  #shopify-section-{{ section.id }} .zh-luxury-footer {
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-top {
+    padding: 72px 0 48px;
+  }
+
+  /* Footer grid */
+  #shopify-section-{{ section.id }} .zh-footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(calc(var(--footer-cols, 4) - 1), 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media (max-width: 1023px) {
+    #shopify-section-{{ section.id }} .zh-footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+    }
+    #shopify-section-{{ section.id }} .zh-footer-brand-col {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 639px) {
+    #shopify-section-{{ section.id }} .zh-footer-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    #shopify-section-{{ section.id }} .zh-footer-container {
+      padding: 0 20px;
+    }
+  }
+
+  /* Brand column */
+  #shopify-section-{{ section.id }} .zh-footer-logo-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    line-height: 0;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-logo {
+    max-width: {{ s.logo_width }}px;
+    height: auto;
+    display: block;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-shop-name {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-tagline {
+    font-size: 14px;
+    line-height: 1.7;
+    opacity: 0.65;
+    margin-bottom: 28px;
+    max-width: 300px;
+  }
+
+  /* Social icons */
+  #shopify-section-{{ section.id }} .zh-footer-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  [dir="rtl"] #shopify-section-{{ section.id }} .zh-footer-social {
+    flex-direction: row-reverse;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-social-link:hover {
+    background: {{ s.accent_color }};
+    border-color: {{ s.accent_color }};
+    color: #1a1a1a !important;
+  }
+
+  /* Nav columns */
+  #shopify-section-{{ section.id }} .zh-footer-col-heading {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-nav-link {
+    font-size: 14px;
+    text-decoration: none;
+    opacity: 0.65;
+    transition: opacity 0.2s, color 0.2s;
+    display: inline-block;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-nav-link:hover {
+    opacity: 1;
+    color: {{ s.accent_color }} !important;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-col-extra {
+    margin-top: 20px;
+    font-size: 14px;
+    opacity: 0.7;
+    line-height: 1.6;
+  }
+
+  /* Newsletter column */
+  #shopify-section-{{ section.id }} .zh-footer-nl-form {
+    margin-top: 4px;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-nl-row {
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-nl-input {
+    flex: 1;
+    height: 44px;
+    padding: 0 14px;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    color: {{ s.text_color }};
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-nl-input::placeholder {
+    color: rgba(255,255,255,0.4);
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-nl-btn {
+    height: 44px;
+    padding: 0 16px;
+    background: {{ s.accent_color }};
+    color: #1a1a1a;
+    border: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-nl-btn:hover {
+    opacity: 0.85;
+  }
+
+  /* Bottom bar */
+  #shopify-section-{{ section.id }} .zh-footer-bottom {
+    padding: 20px 0;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-bottom-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  #shopify-section-{{ section.id }} .zh-footer-copyright {
+    font-size: 13px;
+    opacity: 0.55;
+    margin: 0;
+  }
+
+  /* Locale selector */
+  #shopify-section-{{ section.id }} .zh-footer-locale-select {
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    outline-color: {{ s.accent_color }};
+  }
+
+  /* Payment icons */
+  #shopify-section-{{ section.id }} .zh-footer-payment-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #shopify-section-{{ section.id }} .zh-pay-icon {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  /* RTL */
+  [dir="rtl"] #shopify-section-{{ section.id }} .zh-footer-bottom-inner {
+    flex-direction: row-reverse;
+  }
+
+  [dir="rtl"] #shopify-section-{{ section.id }} .zh-footer-tagline {
+    text-align: right;
+  }
+
+  [dir="rtl"] #shopify-section-{{ section.id }} .zh-footer-nav-link {
+    text-align: right;
+  }
+
+  /* Mobile footer bottom */
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} .zh-footer-bottom-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    #shopify-section-{{ section.id }} .zh-footer-bottom-inner {
+      padding: 0 20px;
+    }
+  }
+</style>
+
+<script src="{{ 'zh-premium.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Luxury Footer",
+  "tag": "section",
+  "class": "zh-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_logo",
+      "label": "Show Logo",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo Width",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "default": 160,
+      "unit": "px"
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Brand Tagline",
+      "default": "Elevating homes across the Gulf with curated luxury furniture & decor."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background Color",
+      "default": "#1A1A2E"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent / Gold Color",
+      "default": "#C9A84C"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Total Columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show Social Icons",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "url",
+      "id": "twitter_url",
+      "label": "Twitter / X URL"
+    },
+    {
+      "type": "url",
+      "id": "youtube_url",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "url",
+      "id": "snapchat_url",
+      "label": "Snapchat URL"
+    },
+    {
+      "type": "url",
+      "id": "pinterest_url",
+      "label": "Pinterest URL"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show Newsletter Signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Column Title",
+      "default": "Stay in Touch"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Email Placeholder",
+      "default": "Your email"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_btn",
+      "label": "Subscribe Button Text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Bar"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text",
+      "default": "© 2025 Zeno Home. All rights reserved."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show Payment Icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_locale_selector",
+      "label": "Show Language Selector",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Footer Column",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Column Heading"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Navigation Menu"
+        },
+        {
+          "type": "html",
+          "id": "extra_html",
+          "label": "Extra HTML (shown below links)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxury Footer",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "heading": "Shop"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "heading": "Help"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "heading": "About"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
