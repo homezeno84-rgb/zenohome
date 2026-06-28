@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "purchase_code": "258f383b-6299-4e25-a64d-418e3cde0ee3",
@@ -95,6 +104,7 @@
     "after_action_atc": "4",
     "cart_type": "disable",
     "free_ship_pr": "free-shipping-amount",
+    "enable_shipbar": true,
     "des_shipbar": "4",
     "des_shipbar_cl_2": "#f59e0b",
     "gift_wrap_pr": "gift-wrapping",
@@ -151,6 +161,7 @@
     "use_vimg": true,
     "sticky_atc": true,
     "fnt_fm_button": "1",
+    "sticky_header": true,
     "sections": {
       "footer-bottom": {
         "type": "footer-bottom",
@@ -507,48 +518,8 @@
       },
       "announcement-bar": {
         "type": "announcement-bar",
-        "blocks": {
-          "announcement-bar-0": {
-            "type": "announcement",
-            "settings": {
-              "link": "",
-              "content": "<p>🎁 A gift for you: <strong>10% OFF</strong> with code <strong>WELCOME10</strong>.<br/><br/></p>",
-              "adding_border": false,
-              "countdown": "2023/12/26",
-              "txt_day": "days",
-              "dayx": 0
-            }
-          },
-          "announcement-bar-1": {
-            "type": "announcement",
-            "settings": {
-              "link": "",
-              "content": "<p>🚚 Free Delivery for orders above <strong>50 USD</strong></p>",
-              "adding_border": false,
-              "countdown": "2023/12/26",
-              "txt_day": "days",
-              "dayx": 0
-            }
-          },
-          "announcement-bar-2": {
-            "type": "announcement",
-            "settings": {
-              "link": "",
-              "content": "<p>Today deal sale off <strong>50%</strong>. End in <strong>[countdown]</strong>. Hurry Up [icon_arrow]</p>",
-              "adding_border": false,
-              "countdown": "2023/12/26",
-              "txt_day": "days",
-              "dayx": 0
-            }
-          }
-        },
-        "block_order": [
-          "announcement-bar-0",
-          "announcement-bar-1",
-          "announcement-bar-2"
-        ],
         "settings": {
-          "show_announcement": true,
+          "show_announcement": false,
           "design": "slider",
           "effect": "1",
           "au_time": 4.5,
@@ -568,63 +539,8 @@
       },
       "top-bar": {
         "type": "top-bar",
-        "blocks": {
-          "b855f86d-0fa1-47d0-82aa-bb105a26eab9": {
-            "type": "social",
-            "settings": {
-              "social": "2",
-              "social_style": "2",
-              "bd_radius": 30,
-              "use_color_set": false,
-              "icon_cl": "#ffffff",
-              "bg_cl": "#b59677",
-              "hide": true,
-              "text_align": "start",
-              "col": "4"
-            }
-          },
-          "b7e96bb9-e8b3-4ccf-862d-a5f5896a3a60": {
-            "type": "text",
-            "settings": {
-              "text": "<p>Summer sale discount off <a href=\"#cr\" title=\"#cr\"><strong>50%</strong></a>! <a href=\"/collections/clothing\" title=\"Clothing\">Shop Now</a>;;; MADE WITH LOVE</p>",
-              "adding_border": false,
-              "countdown": "2023/12/26",
-              "txt_day": "days",
-              "dayx": 0,
-              "effect": "fade t4s-slide-eff-translate",
-              "au_time": 2.5,
-              "fw_bold": 400,
-              "cl_a": "#ffffff",
-              "cl_bold": "#b59677",
-              "cl_a_tr": "#ffffff",
-              "cl_bold_tr": "#b59677",
-              "hide": false,
-              "text_align": "center",
-              "col": "4"
-            }
-          },
-          "top-bar-2": {
-            "type": "cur",
-            "settings": {
-              "show_currency": true,
-              "show_language": true,
-              "use_location": false,
-              "txt_location": "Location",
-              "url_location": "shopify://blogs/lingeries/5-best-swimsuits-for-big-busts",
-              "open_link": "_self",
-              "hide": true,
-              "text_align": "center",
-              "col": "4"
-            }
-          }
-        },
-        "block_order": [
-          "b855f86d-0fa1-47d0-82aa-bb105a26eab9",
-          "b7e96bb9-e8b3-4ccf-862d-a5f5896a3a60",
-          "top-bar-2"
-        ],
         "settings": {
-          "show_topbar": true,
+          "show_topbar": false,
           "topbar_transparent": false,
           "height": 20,
           "fontsize": 12,
@@ -2604,38 +2520,21 @@
     },
     "content_for_index": [],
     "blocks": {
-      "21474836472147483647": {
-        "type": "shopify://apps/ecomposer-landing-page-builder/blocks/app-embed/a0fc26e1-7741-4773-8b27-39389b4fb4a0",
-        "disabled": false,
-        "settings": {}
-      },
-      "11532412952436166569": {
-        "type": "shopify://apps/loox-reviews/blocks/loox-inject/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e",
-        "disabled": false,
-        "settings": {}
-      },
-      "18423266570658624584": {
-        "type": "shopify://apps/beast-currency-converter/blocks/doubly/267afa86-a419-4d5b-a61b-556038e7294d",
-        "disabled": true,
-        "settings": {}
-      },
       "15683396631634586217": {
         "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
         "disabled": false,
         "settings": {
+          "greeting_message": "",
           "button_color": "#000000",
           "secondary_color": "#FFFFFF",
           "ternary_color": "#6A6A6A",
           "button_icon": "chat_bubble",
           "button_text": "chat_with_us",
           "button_horizontal_position": "bottom_right",
-          "button_vertical_position": "lowest",
-          "greeting_message": ""
+          "button_vertical_position": "lowest"
         }
       }
-    },
-    "sticky_header": true,
-    "enable_shipbar": true
+    }
   },
   "platform_customizations": {
     "custom_css": [
