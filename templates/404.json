@@ -1,1 +1,106 @@
-{"sections":{"main":{"type":"main-404","settings":{}}},"order":["main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "zh_hero_slider_gRRKjW": {
+      "type": "zh-hero-slider",
+      "blocks": {
+        "slide_e4TUaN": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/Decor_Accessories.jpg",
+            "image_mobile": "shopify://shop_images/Decor_Accessories.jpg",
+            "eyebrow": "New Collection",
+            "heading": "Elevate Your Living Space",
+            "subheading": "",
+            "cta1_text": "Shop Now",
+            "cta1_url": "",
+            "cta1_style": "gold",
+            "cta2_text": "",
+            "cta2_url": "",
+            "cta2_style": "outline-white",
+            "overlay_color": "#000000",
+            "overlay_opacity": 40,
+            "text_align": "center",
+            "text_color": "#ffffff",
+            "content_position": "center"
+          }
+        },
+        "slide_VaEAyR": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "New Collection",
+            "heading": "Elevate Your Living Space",
+            "subheading": "",
+            "cta1_text": "Shop Now",
+            "cta1_url": "",
+            "cta1_style": "gold",
+            "cta2_text": "",
+            "cta2_url": "",
+            "cta2_style": "outline-white",
+            "overlay_color": "#000000",
+            "overlay_opacity": 40,
+            "text_align": "center",
+            "text_color": "#ffffff",
+            "content_position": "center"
+          }
+        },
+        "slide_dYUeYw": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "New Collection",
+            "heading": "Elevate Your Living Space",
+            "subheading": "",
+            "cta1_text": "Shop Now",
+            "cta1_url": "",
+            "cta1_style": "gold",
+            "cta2_text": "",
+            "cta2_url": "",
+            "cta2_style": "outline-white",
+            "overlay_color": "#000000",
+            "overlay_opacity": 40,
+            "text_align": "center",
+            "text_color": "#ffffff",
+            "content_position": "center"
+          }
+        }
+      },
+      "block_order": [
+        "slide_e4TUaN",
+        "slide_VaEAyR",
+        "slide_dYUeYw"
+      ],
+      "name": "ZH Hero Slider",
+      "settings": {
+        "height": "700px",
+        "mobile_height": "400px",
+        "animation": "fade",
+        "autoplay": true,
+        "autoplay_speed": 5,
+        "show_arrows": true,
+        "show_dots": true,
+        "show_progress": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-404",
+      "disabled": true,
+      "settings": {
+        "link": ""
+      }
+    }
+  },
+  "order": [
+    "zh_hero_slider_gRRKjW",
+    "main"
+  ]
+}
